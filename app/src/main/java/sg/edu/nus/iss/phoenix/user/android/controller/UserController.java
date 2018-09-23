@@ -50,6 +50,7 @@ public class UserController {
 
         Intent intent = new Intent(MainController.getApp(), MaintainUserScreen.class);
 /*        Bundle b = new Bundle();
+        b.putString("Id", user.getId());
         b.putString("Name", user.getUserName());
         b.putString("Password", user.getUserPassword());
         b.putString("Roles", user.getUserRoles());
@@ -71,7 +72,7 @@ public class UserController {
     }
 
     public void selectDeleteUser(User user) {
-        new DeleteUserDelegate(this).execute(user.getUserName());
+        new DeleteUserDelegate(this).execute(user.getId());
     }
 
     public void userDeleted(boolean success) {

@@ -18,11 +18,12 @@ public class MaintainUserScreen extends AppCompatActivity {
     // Tag for logging
     private static final String TAG = MaintainUserScreen.class.getName();
 
-    private EditText mRPNameEditText;
-    private EditText mRPPasswordEditText;
+    private EditText mUserIDEditText;
+    private EditText mUserNameEditText;
+    private EditText mUserPasswordEditText;
     private EditText mRoleEditText;
     private User user2edit = null;
-    KeyListener mRPNameEditTextKeyListener = null;
+    KeyListener mUserNameEditTextKeyListener = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +31,12 @@ public class MaintainUserScreen extends AppCompatActivity {
         setContentView(R.layout.activity_user);
 
         // Find all relevant views that we will need to read user input from
-        mRPNameEditText = (EditText) findViewById(R.id.maintain_user_name_text_view);
-        mRPPasswordEditText = (EditText) findViewById(R.id.maintain_user_password_text_view);
+        mUserIDEditText = (EditText) findViewById(R.id.maintain_user_id_text_view);
+        mUserNameEditText = (EditText) findViewById(R.id.maintain_user_name_text_view);
+        mUserPasswordEditText = (EditText) findViewById(R.id.maintain_user_password_text_view);
         mRoleEditText = (EditText) findViewById(R.id.maintain_user_roles_text_view);
         // Keep the KeyListener for name EditText so as to enable editing after disabling it.
-        mRPNameEditTextKeyListener = mRPNameEditText.getKeyListener();
+        mUserNameEditTextKeyListener = mUserNameEditText.getKeyListener();
     }
 
     @Override
@@ -74,14 +76,15 @@ public class MaintainUserScreen extends AppCompatActivity {
             case R.id.action_save:
                 // Save  user.
                 if (user2edit == null) { // Newly created.
-                    Log.v(TAG, "Saving user" + mRPNameEditText.getText().toString() + "...");
-                    User user = new User(mRPNameEditText.getText().toString(),
-                            mRPPasswordEditText.getText().toString(), mRoleEditText.getText().toString());
+                    Log.v(TAG, "Saving user" + mUserNameEditText.getText().toString() + "...");
+                    User user = new User(mUserIDEditText.getText().toString(),mUserNameEditText.getText().toString(),
+                            mUserPasswordEditText.getText().toString(), mRoleEditText.getText().toString());
                     ControlFactory.getUserController().selectCreateUser(user);
                 }
                 else { // Edited.
                     Log.v(TAG, "Saving user " + user2edit.getUserName() + "...");
-                    user2edit.setUserPassword(mRPPasswordEditText.getText().toString());
+                    user2edit.setUserName(mUserIDEditText.getText().toString());
+                    user2edit.setUserPassword(mUserPasswordEditText.getText().toString());
                     user2edit.setUserRoles(mRoleEditText.getText().toString());
                     ControlFactory.getUserController().selectUpdateUser(user2edit);
                 }
@@ -109,19 +112,21 @@ public class MaintainUserScreen extends AppCompatActivity {
 
     public void createUser() {
         this.user2edit = null;
-        mRPNameEditText.setText("", TextView.BufferType.EDITABLE);
-        mRPPasswordEditText.setText("", TextView.BufferType.EDITABLE);
+        mUserIDEditText.setText("", TextView.BufferType.EDITABLE);
+        mUserNameEditText.setText("", TextView.BufferType.EDITABLE);
+        mUserPasswordEditText.setText("", TextView.BufferType.EDITABLE);
         mRoleEditText.setText("", TextView.BufferType.EDITABLE);
-        mRPNameEditText.setKeyListener(mRPNameEditTextKeyListener);
+        mUserNameEditText.setKeyListener(mUserNameEditTextKeyListener);
     }
 
     public void editUser(User user2edit) {
         this.user2edit = user2edit;
         if (user2edit != null) {
-            mRPNameEditText.setText(user2edit.getUserName(), TextView.BufferType.NORMAL);
-            mRPPasswordEditText.setText(user2edit.getUserPassword(), TextView.BufferType.EDITABLE);
+            mUserIDEditText.setText(user2edit.getId(), TextView.BufferType.NORMAL);
+            mUserNameEditText.setText(user2edit.getUserName(), TextView.BufferType.NORMAL);
+            mUserPasswordEditText.setText(user2edit.getUserPassword(), TextView.BufferType.EDITABLE);
             mRoleEditText.setText(user2edit.getUserRoles(), TextView.BufferType.EDITABLE);
-            mRPNameEditText.setKeyListener(null);
+            mUserNameEditText.setKeyListener(null);
         }
     }
 }

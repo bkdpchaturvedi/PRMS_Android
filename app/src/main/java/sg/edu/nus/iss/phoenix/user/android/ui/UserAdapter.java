@@ -30,18 +30,22 @@ public class UserAdapter extends ArrayAdapter<User> {
                     R.layout.activity_user, parent, false);
         }
         //    Word currentWord = getItem(position);
-        User currentRP = getItem(position);
+        User currentUser = getItem(position);
+
+        EditText userId = (EditText)listItemView.findViewById(R.id.maintain_user_id_text_view);
+        userId.setText(currentUser.getId(), TextView.BufferType.NORMAL);
+        userId.setKeyListener(null);
 
         EditText userName = (EditText)listItemView.findViewById(R.id.maintain_user_name_text_view);
-        userName.setText(currentRP.getUserName(), TextView.BufferType.NORMAL);
+        userName.setText(currentUser.getUserName(), TextView.BufferType.NORMAL);
         userName.setKeyListener(null); // This disables editing.
 
         EditText userPassword = (EditText)listItemView.findViewById(R.id.maintain_user_password_text_view);
-        userPassword.setText(currentRP.getUserPassword(), TextView.BufferType.NORMAL);
+        userPassword.setText(currentUser.getUserPassword(), TextView.BufferType.NORMAL);
         userPassword.setKeyListener(null);
 
         EditText userRoles = (EditText)listItemView.findViewById(R.id.maintain_user_roles_text_view);
-        userRoles.setText(currentRP.getUserRoles(), TextView.BufferType.NORMAL);
+        userRoles.setText(currentUser.getUserRoles(), TextView.BufferType.NORMAL);
         userRoles.setKeyListener(null);
 
         return listItemView;

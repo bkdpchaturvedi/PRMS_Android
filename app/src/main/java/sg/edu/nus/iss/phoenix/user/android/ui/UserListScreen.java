@@ -23,6 +23,7 @@ public class UserListScreen extends AppCompatActivity {
     // Tag for logging
     private static final String TAG = UserListScreen.class.getName();
 
+    // private EditText mUserIDEditText;
     // private EditText mUserNameEditText;
     // private EditText mUserPasswordEditText;
     // private EditText mRolesEditText;
@@ -35,6 +36,7 @@ public class UserListScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
 
+        // mUserIDEditText = (EditText) findViewById(R.id.maintain_user_id_text_view);
         // mUserNameEditText = (EditText) findViewById(R.id.maintain_user_name_text_view);
         // mUserPasswordEditText = (EditText) findViewById(R.id.maintain_user_password_text_view);
         // mRolesEditText = (EditText) findViewById(R.id.maintain_user_roles_text_view);
