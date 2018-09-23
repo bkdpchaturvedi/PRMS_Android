@@ -30,6 +30,7 @@ public class CreateUserDelegate extends AsyncTask<User, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(User... params) {
+        boolean success = false;
         Uri builtUri = Uri.parse(PRMS_BASE_URL_USER).buildUpon().build();
         builtUri = Uri.withAppendedPath(builtUri,"create").buildUpon().build();
         Log.v(TAG, builtUri.toString());
@@ -51,7 +52,6 @@ public class CreateUserDelegate extends AsyncTask<User, Void, Boolean> {
             Log.v(TAG, e.getMessage());
         }
 
-        boolean success = false;
         HttpURLConnection httpURLConnection = null;
         DataOutputStream dos = null;
         try {
@@ -59,11 +59,12 @@ public class CreateUserDelegate extends AsyncTask<User, Void, Boolean> {
             httpURLConnection.setInstanceFollowRedirects(false);
             httpURLConnection.setRequestMethod("PUT");
             httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
-            httpURLConnection.setDoInput(true);
+            //httpURLConnection.setDoInput(true);
             httpURLConnection.setDoOutput(true);
-            dos = new DataOutputStream(httpURLConnection.getOutputStream());
-            dos.writeUTF(json.toString());
-            dos.write(256);
+            httpURLConnection.getOutputStream().write(json.toString().getBytes());
+            //dos = new DataOutputStream(httpURLConnection.getOutputStream());
+            //dos.writeUTF(json.toString());
+            //dos.write(256);
             Log.v(TAG, "Http PUT response " + httpURLConnection.getResponseCode());
             success = true;
         } catch (IOException exception) {

@@ -70,7 +70,8 @@ public class RetrieveUsersDelegate extends AsyncTask<String, Void, String> {
         if (result != null && !result.equals("")) {
             try {
                 JSONObject reader = new JSONObject(result);
-                JSONArray userArray = reader.getJSONArray("userList");
+                //JSONArray userArray = reader.getJSONArray("userList");
+                JSONArray userArray = reader.getJSONArray("data");
 
                 for (int i = 0; i < userArray.length(); i++) {
                     JSONObject userJson = userArray.getJSONObject(i);
