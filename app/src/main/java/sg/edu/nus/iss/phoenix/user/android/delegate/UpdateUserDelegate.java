@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.phoenix.radioprogram.android.delegate;
+package sg.edu.nus.iss.phoenix.user.android.delegate;
 
 import android.net.Uri;
 import android.os.AsyncTask;

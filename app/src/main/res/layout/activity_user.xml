@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".user.ui.MaintainUserScreen">
+    tools:context=".user.android.ui.MaintainUserScreen">
 
 
         <TextView
@@ -18,7 +18,7 @@
         android:id="@+id/maintain_user_name_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Name" />
+        tools:text="User Name" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,13 +33,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Role"
-            tools:text="Role" />
+            android:text="Roles"
+            tools:text="Roles" />
 
         <EditText
-            android:id="@+id/maintain_user_role_text_view"
+            android:id="@+id/maintain_user_roles_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="producer"
-            tools:text="producer" />
+            android:text="Presenter"
+            tools:text="Presenter" />
     </LinearLayout>

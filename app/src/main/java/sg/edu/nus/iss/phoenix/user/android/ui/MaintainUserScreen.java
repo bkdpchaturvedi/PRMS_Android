@@ -120,7 +120,7 @@ public class MaintainUserScreen extends AppCompatActivity {
         if (user2edit != null) {
             mRPNameEditText.setText(user2edit.getUserName(), TextView.BufferType.NORMAL);
             mRPPasswordEditText.setText(user2edit.getUserPassword(), TextView.BufferType.EDITABLE);
-            mRoleEditText.setText(user2edit.getUserRole(), TextView.BufferType.EDITABLE);
+            mRoleEditText.setText(user2edit.getUserRoles(), TextView.BufferType.EDITABLE);
             mRPNameEditText.setKeyListener(null);
         }
     }

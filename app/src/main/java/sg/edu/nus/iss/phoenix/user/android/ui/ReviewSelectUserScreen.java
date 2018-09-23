@@ -1,9 +1,8 @@
 package sg.edu.nus.iss.phoenix.user.android.ui;
 
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,39 +18,26 @@ import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 
-public class UserListScreen extends AppCompatActivity {
+public class ReviewSelectUserScreen extends AppCompatActivity {
     // Tag for logging
-    private static final String TAG = UserListScreen.class.getName();
+    private static final String TAG = ReviewSelectUserScreen.class.getName();
 
-    // private EditText mUserNameEditText;
-    // private EditText mUserPasswordEditText;
-    // private EditText mRolesEditText;
-    private ListView mListView;
     private UserAdapter mUserAdapter;
+    // private ArrayAdapter<String> adapter = null;
+    private ListView mListView;
     private User selectedUser = null;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_list);
-
-        // mUserNameEditText = (EditText) findViewById(R.id.maintain_user_name_text_view);
-        // mUserPasswordEditText = (EditText) findViewById(R.id.maintain_user_password_text_view);
-        // mRolesEditText = (EditText) findViewById(R.id.maintain_user_roles_text_view);
+        setContentView(R.layout.activity_review_select_user);
 
         ArrayList<User> users = new ArrayList<User>();
+        // ArrayList<String> userNames = new ArrayList<String>();
+        // mUserAdapter = new ArrayAdapter<String>(this, R.layout.activity_review_select_user,
+        //        R.id.maintain_user_name_text_view, userNames);
         mUserAdapter = new UserAdapter(this, users);
 
-        // Setup FAB to open EditorActivity
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ControlFactory.getUserController().selectCreateUser();
-            }
-        });
-
-        mListView = (ListView) findViewById(R.id.user_list);
+        mListView = (ListView) findViewById(R.id.review_select_pm_list);
         mListView.setAdapter(mUserAdapter);
 
         // Setup the item selection listener
@@ -61,7 +47,7 @@ public class UserListScreen extends AppCompatActivity {
                 // Log.v(TAG, "User at position " + position + " selected.");
                 User user = (User) adapterView.getItemAtPosition(position);
                 // Log.v(TAG, "User name is " + user.getUserName());
-                selectedUser = user;
+                selectedUser =user;
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -76,14 +62,14 @@ public class UserListScreen extends AppCompatActivity {
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mListView.setSelection(0);
 
-        ControlFactory.getUserController().onDisplayUserList(this);
+        ControlFactory.getReviewSelectUserController().onDisplay(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/menu_editor.xml file.
         // This adds menu items to the app bar.
-        getMenuInflater().inflate(R.menu.menu_list, menu);
+        getMenuInflater().inflate(R.menu.menu_review_select, menu);
         return true;
     }
 
@@ -92,15 +78,15 @@ public class UserListScreen extends AppCompatActivity {
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
             // Respond to a click on the "View" menu option
-            case R.id.action_view:
+            case R.id.action_select:
                 if (selectedUser == null) {
                     // Prompt for the selection of a user.
                     Toast.makeText(this, "Select a user first! Use arrow keys on emulator", Toast.LENGTH_SHORT).show();
                     Log.v(TAG, "There is no selected user.");
                 }
                 else {
-                    Log.v(TAG, "Viewing user: " + selectedUser.getUserName() + "...");
-                    ControlFactory.getUserController().selectEditUser(selectedUser);
+                    Log.v(TAG, "Selected user: " + selectedUser.getUserName() + "...");
+                    ControlFactory.getReviewSelectUserController().selectUser(selectedUser);
                 }
         }
 
@@ -109,7 +95,7 @@ public class UserListScreen extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        ControlFactory.getUserController().maintainedUser();
+        ControlFactory.getReviewSelectUserController().selectCancel();
     }
 
     public void showUsers(List<User> users) {

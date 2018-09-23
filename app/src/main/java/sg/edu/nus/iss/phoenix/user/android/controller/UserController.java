@@ -8,7 +8,7 @@ import java.util.List;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
-import sg.edu.nus.iss.phoenix.radioprogram.android.delegate.UpdateUserDelegate;
+import sg.edu.nus.iss.phoenix.user.android.delegate.UpdateUserDelegate;
 import sg.edu.nus.iss.phoenix.user.android.delegate.CreateUserDelegate;
 import sg.edu.nus.iss.phoenix.user.android.delegate.DeleteUserDelegate;
 import sg.edu.nus.iss.phoenix.user.android.delegate.RetrieveUsersDelegate;
@@ -70,8 +70,8 @@ public class UserController {
         new UpdateUserDelegate(this).execute(user);
     }
 
-    public void selectDeleteUser(User rp) {
-        new DeleteUserDelegate(this).execute(rp.getUserName());
+    public void selectDeleteUser(User user) {
+        new DeleteUserDelegate(this).execute(user.getUserName());
     }
 
     public void userDeleted(boolean success) {
