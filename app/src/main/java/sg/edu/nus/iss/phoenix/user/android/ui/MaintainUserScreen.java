@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.phoenix.radioprogram.android.ui;
+package sg.edu.nus.iss.phoenix.user.android.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
-import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 
 public class MaintainUserScreen extends AppCompatActivity {
@@ -22,7 +21,7 @@ public class MaintainUserScreen extends AppCompatActivity {
     private EditText mRPNameEditText;
     private EditText mRPPasswordEditText;
     private EditText mRoleEditText;
-    private User rp2edit = null;
+    private User user2edit = null;
     KeyListener mRPNameEditTextKeyListener = null;
 
     @Override
@@ -41,7 +40,7 @@ public class MaintainUserScreen extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        ControlFactory.getProgramController().onDisplayProgram(this);
+        ControlFactory.getUserController().onDisplayUser(this);
     }
 
     @Override
@@ -59,8 +58,8 @@ public class MaintainUserScreen extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        // If this is a new radioprogram, hide the "Delete" menu item.
-        if (rp2edit == null) {
+        // If this is a new user, hide the "Delete" menu item.
+        if (user2edit == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
         }
@@ -74,28 +73,28 @@ public class MaintainUserScreen extends AppCompatActivity {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 // Save  user.
-                if (rp2edit == null) { // Newly created.
+                if (user2edit == null) { // Newly created.
                     Log.v(TAG, "Saving user" + mRPNameEditText.getText().toString() + "...");
                     User user = new User(mRPNameEditText.getText().toString(),
                             mRPPasswordEditText.getText().toString(), mRoleEditText.getText().toString());
-                    ControlFactory.getLoginController().selectCreateProgram(user);
+                    ControlFactory.getUserController().selectCreateUser(user);
                 }
                 else { // Edited.
-                    Log.v(TAG, "Saving user " + rp2edit.getRadioProgramName() + "...");
-                    rp2edit.setRadioProgramDescription(mRPPasswordEditText.getText().toString());
-                    rp2edit.setRadioProgramDuration(mRoleEditText.getText().toString());
-                    ControlFactory.getProgramController().selectUpdateProgram(rp2edit);
+                    Log.v(TAG, "Saving user " + user2edit.getUserName() + "...");
+                    user2edit.setUserPassword(mRPPasswordEditText.getText().toString());
+                    user2edit.setUserRoles(mRoleEditText.getText().toString());
+                    ControlFactory.getUserController().selectUpdateUser(user2edit);
                 }
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
-                Log.v(TAG, "Deleting user " + rp2edit.getRadioProgramName() + "...");
-                ControlFactory.getProgramController().selectDeleteProgram(rp2edit);
+                Log.v(TAG, "Deleting user " + user2edit.getUserName() + "...");
+                ControlFactory.getUserController().selectDeleteUser(user2edit);
                 return true;
             // Respond to a click on the "Cancel" menu option
             case R.id.action_cancel:
                 Log.v(TAG, "Canceling creating/editing user...");
-                ControlFactory.getProgramController().selectCancelCreateEditProgram();
+                ControlFactory.getUserController().selectCancelCreateEditUser();
                 return true;
         }
 
@@ -105,23 +104,23 @@ public class MaintainUserScreen extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Log.v(TAG, "Canceling creating/editing user...");
-        ControlFactory.getProgramController().selectCancelCreateEditProgram();
+        ControlFactory.getUserController().selectCancelCreateEditUser();
     }
 
     public void createUser() {
-        this.rp2edit = null;
+        this.user2edit = null;
         mRPNameEditText.setText("", TextView.BufferType.EDITABLE);
         mRPPasswordEditText.setText("", TextView.BufferType.EDITABLE);
         mRoleEditText.setText("", TextView.BufferType.EDITABLE);
         mRPNameEditText.setKeyListener(mRPNameEditTextKeyListener);
     }
 
-    public void editProgram(RadioProgram rp2edit) {
-        this.rp2edit = rp2edit;
-        if (rp2edit != null) {
-            mRPNameEditText.setText(rp2edit.getRadioProgramName(), TextView.BufferType.NORMAL);
-            mRPPasswordEditText.setText(rp2edit.getRadioProgramDescription(), TextView.BufferType.EDITABLE);
-            mRoleEditText.setText(rp2edit.getRadioProgramDuration(), TextView.BufferType.EDITABLE);
+    public void editUser(User user2edit) {
+        this.user2edit = user2edit;
+        if (user2edit != null) {
+            mRPNameEditText.setText(user2edit.getUserName(), TextView.BufferType.NORMAL);
+            mRPPasswordEditText.setText(user2edit.getUserPassword(), TextView.BufferType.EDITABLE);
+            mRoleEditText.setText(user2edit.getUserRole(), TextView.BufferType.EDITABLE);
             mRPNameEditText.setKeyListener(null);
         }
     }

@@ -8,7 +8,11 @@ import java.util.List;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
-import sg.edu.nus.iss.phoenix.radioprogram.android.ui.MaintainUserScreen;
+import sg.edu.nus.iss.phoenix.radioprogram.android.delegate.UpdateUserDelegate;
+import sg.edu.nus.iss.phoenix.user.android.delegate.CreateUserDelegate;
+import sg.edu.nus.iss.phoenix.user.android.delegate.DeleteUserDelegate;
+import sg.edu.nus.iss.phoenix.user.android.delegate.RetrieveUsersDelegate;
+import sg.edu.nus.iss.phoenix.user.android.ui.MaintainUserScreen;
 import sg.edu.nus.iss.phoenix.user.android.ui.UserListScreen;
 
 public class UserController {
@@ -25,8 +29,8 @@ public class UserController {
         MainController.displayScreen(intent);
     }
 
-    public void onDisplayUserList(UserListScreen programListScreen) {
-        this.userListScreen = programListScreen;
+    public void onDisplayUserList(UserListScreen userListScreen) {
+        this.userListScreen = userListScreen;
         new RetrieveUsersDelegate(this).execute("all");
     }
 
