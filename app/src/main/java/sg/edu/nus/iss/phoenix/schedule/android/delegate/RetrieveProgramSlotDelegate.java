@@ -13,11 +13,15 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 
@@ -65,7 +69,7 @@ public class RetrieveProgramSlotDelegate extends AsyncTask<String,Void,String> {
 
     @Override
     protected void onPostExecute(String result) {
-        List<ProgramSlot> programSlots = new ArrayList<>();
+        ArrayList<ProgramSlot> programSlots = new ArrayList<>();
 
         if (result != null && !result.equals("")) {
             try {
@@ -74,11 +78,33 @@ public class RetrieveProgramSlotDelegate extends AsyncTask<String,Void,String> {
 
                 for (int i = 0; i < rpArray.length(); i++) {
                     JSONObject rpJson = rpArray.getJSONObject(i);
-                    String description = rpJson.getString("description");
-                    String name = rpJson.getString("name");
-                    String typicalDuration = rpJson.getString("typicalDuration");
+                    JSONObject rp = rpJson.getJSONObject("radioProgram");
+                    RadioProgram radioProgram=new RadioProgram(rp.getString("name"),"","");
+                    JSONObject presenterJson = rpJson.getJSONObject("presenter");
+                    User presenter =new User(presenterJson.getString("id"),"","","");
+                    JSONObject producerJson = rpJson.getJSONObject("producer");
+                    User producer =new User(producerJson.getString("id"),"","","");
 
-                    programSlots.add(new ProgramSlot());
+                    String duration=rpJson.getString("duration");
+                    String dateOfProgram=rpJson.getString("dateOfProgram");
+                    String assignedBy=rpJson.getString("assignedBy");
+
+                   ProgramSlot temProgramSlot=new ProgramSlot();
+                   temProgramSlot.setAssignedBy(assignedBy);
+                   // String dateString = "03/26/2012 11:49:00 AM";
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-mm-dd hh:mm:ss aa");
+                    Date convertedDate = new Date();
+                    try {
+                        convertedDate = dateFormat.parse(dateOfProgram);
+                    } catch (ParseException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                   temProgramSlot.setDateOfProgram(convertedDate);
+                    temProgramSlot.setPresenter(presenter);
+                    temProgramSlot.setProducer(producer);
+                    temProgramSlot.setRadioProgram(radioProgram);
+                    programSlots.add(temProgramSlot);
                 }
             } catch (JSONException e) {
                 Log.v(TAG, e.getMessage());
@@ -88,7 +114,7 @@ public class RetrieveProgramSlotDelegate extends AsyncTask<String,Void,String> {
         }
 
         if (scheduleController != null)
-            scheduleController.programsRetrieved(programSlots);
+            scheduleController.programSlotsRetrieved(programSlots);
 
     }
 }
