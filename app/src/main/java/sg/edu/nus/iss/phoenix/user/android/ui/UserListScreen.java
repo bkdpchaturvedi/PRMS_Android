@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.phoenix.radioprogram.android.ui;
+package sg.edu.nus.iss.phoenix.user.android.ui;
 
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,51 +17,53 @@ import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
-import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 
-public class ProgramListScreen extends AppCompatActivity {
+public class UserListScreen extends AppCompatActivity {
     // Tag for logging
-    private static final String TAG = ProgramListScreen.class.getName();
+    private static final String TAG = UserListScreen.class.getName();
 
-    // private EditText mRPNameEditText;
-    // private EditText mRPDescEditText;
-    // private EditText mDurationEditText;
+    // private EditText mUserIDEditText;
+    // private EditText mUserNameEditText;
+    // private EditText mUserPasswordEditText;
+    // private EditText mRolesEditText;
     private ListView mListView;
-    private RadioProgramAdapter mRPAdapter;
-    private RadioProgram selectedRP = null;
+    private UserAdapter mUserAdapter;
+    private User selectedUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_program_list);
+        setContentView(R.layout.activity_user_list);
 
-        // mRPNameEditText = (EditText) findViewById(R.id.maintain_program_name_text_view);
-        // mRPDescEditText = (EditText) findViewById(R.id.maintain_program_desc_text_view);
-        // mDurationEditText = (EditText) findViewById(R.id.maintain_program_duration_text_view);
+        // mUserIDEditText = (EditText) findViewById(R.id.maintain_user_id_text_view);
+        // mUserNameEditText = (EditText) findViewById(R.id.maintain_user_name_text_view);
+        // mUserPasswordEditText = (EditText) findViewById(R.id.maintain_user_password_text_view);
+        // mRolesEditText = (EditText) findViewById(R.id.maintain_user_roles_text_view);
 
-        ArrayList<RadioProgram> radioPrograms = new ArrayList<RadioProgram>();
-        mRPAdapter = new RadioProgramAdapter(this, radioPrograms);
+        ArrayList<User> users = new ArrayList<User>();
+        mUserAdapter = new UserAdapter(this, users);
 
         // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ControlFactory.getProgramController().selectCreateProgram();
+                ControlFactory.getUserController().selectCreateUser();
             }
         });
 
-        mListView = (ListView) findViewById(R.id.radio_pm_list);
-        mListView.setAdapter(mRPAdapter);
+        mListView = (ListView) findViewById(R.id.user_list);
+        mListView.setAdapter(mUserAdapter);
 
         // Setup the item selection listener
         mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                // Log.v(TAG, "Radio program at position " + position + " selected.");
-                RadioProgram rp = (RadioProgram) adapterView.getItemAtPosition(position);
-                // Log.v(TAG, "Radio program name is " + rp.getRadioProgramName());
-                selectedRP = rp;
+                // Log.v(TAG, "User at position " + position + " selected.");
+                User user = (User) adapterView.getItemAtPosition(position);
+                // Log.v(TAG, "User name is " + user.getUserName());
+                selectedUser = user;
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -76,7 +78,7 @@ public class ProgramListScreen extends AppCompatActivity {
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mListView.setSelection(0);
 
-        ControlFactory.getProgramController().onDisplayProgramList(this);
+        ControlFactory.getUserController().onDisplayUserList(this);
     }
 
     @Override
@@ -93,14 +95,14 @@ public class ProgramListScreen extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "View" menu option
             case R.id.action_view:
-                if (selectedRP == null) {
-                    // Prompt for the selection of a radio program.
-                    Toast.makeText(this, "Select a radio program first! Use arrow keys on emulator", Toast.LENGTH_SHORT).show();
-                    Log.v(TAG, "There is no selected radio program.");
+                if (selectedUser == null) {
+                    // Prompt for the selection of a user.
+                    Toast.makeText(this, "Select a user first! Use arrow keys on emulator", Toast.LENGTH_SHORT).show();
+                    Log.v(TAG, "There is no selected user.");
                 }
                 else {
-                    Log.v(TAG, "Viewing radio program: " + selectedRP.getRadioProgramName() + "...");
-                    ControlFactory.getProgramController().selectEditProgram(selectedRP);
+                    Log.v(TAG, "Viewing user: " + selectedUser.getUserName() + "...");
+                    ControlFactory.getUserController().selectEditUser(selectedUser);
                 }
         }
 
@@ -109,13 +111,13 @@ public class ProgramListScreen extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        ControlFactory.getProgramController().maintainedProgram();
+        ControlFactory.getUserController().maintainedUser();
     }
 
-    public void showPrograms(List<RadioProgram> radioPrograms) {
-        mRPAdapter.clear();
-        for (int i = 0; i < radioPrograms.size(); i++) {
-            mRPAdapter.add(radioPrograms.get(i));
+    public void showUsers(List<User> users) {
+        mUserAdapter.clear();
+        for (int i = 0; i < users.size(); i++) {
+            mUserAdapter.add(users.get(i));
         }
     }
 }

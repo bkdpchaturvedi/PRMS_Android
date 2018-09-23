@@ -8,7 +8,7 @@ import java.util.List;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
 import sg.edu.nus.iss.phoenix.radioprogram.android.ui.ProgramListScreen;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.radioprogram.android.delegate.RetrieveProgramsDelegate;
 import sg.edu.nus.iss.phoenix.radioprogram.android.delegate.UpdateProgramDelegate;
 import sg.edu.nus.iss.phoenix.radioprogram.android.delegate.CreateProgramDelegate;

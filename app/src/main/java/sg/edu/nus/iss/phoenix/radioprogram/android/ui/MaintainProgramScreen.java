@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
 
 public class MaintainProgramScreen extends AppCompatActivity {
     // Tag for logging

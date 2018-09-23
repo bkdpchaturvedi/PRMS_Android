@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.phoenix.radioprogram.android.delegate;
+package sg.edu.nus.iss.phoenix.user.android.delegate;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,24 +13,24 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ProgramController;
-import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.user.android.controller.UserController;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 
-import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_RADIO_PROGRAM;
+import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_USER;
 
-public class UpdateProgramDelegate extends AsyncTask<RadioProgram, Void, Boolean> {
+public class UpdateUserDelegate extends AsyncTask<User, Void, Boolean> {
     // Tag for logging
-    private static final String TAG = UpdateProgramDelegate.class.getName();
+    private static final String TAG = UpdateUserDelegate.class.getName();
 
-    private final ProgramController programController;
+    private final UserController userController;
 
-    public UpdateProgramDelegate(ProgramController programController) {
-        this.programController = programController;
+    public UpdateUserDelegate(UserController userController) {
+        this.userController = userController;
     }
 
     @Override
-    protected Boolean doInBackground(RadioProgram... params) {
-        Uri builtUri = Uri.parse(PRMS_BASE_URL_RADIO_PROGRAM).buildUpon().build();
+    protected Boolean doInBackground(User... params) {
+        Uri builtUri = Uri.parse(PRMS_BASE_URL_USER).buildUpon().build();
         builtUri = Uri.withAppendedPath(builtUri,"update").buildUpon().build();
         Log.v(TAG, builtUri.toString());
         URL url = null;
@@ -43,9 +43,10 @@ public class UpdateProgramDelegate extends AsyncTask<RadioProgram, Void, Boolean
 
         JSONObject json = new JSONObject();
         try {
-            json.put("name", params[0].getRadioProgramName());
-            json.put("description", params[0].getRadioProgramDescription());
-            json.put("typicalDuration", params[0].getRadioProgramDuration());
+            json.put("id", params[0].getId());
+            json.put("name", params[0].getUserName());
+            json.put("password", params[0].getUserPassword());
+            json.put("roles", params[0].getUserRoles());
         } catch (JSONException e) {
             Log.v(TAG, e.getMessage());
         }
@@ -60,10 +61,9 @@ public class UpdateProgramDelegate extends AsyncTask<RadioProgram, Void, Boolean
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
             httpURLConnection.setDoOutput(true);
-            httpURLConnection.getOutputStream().write(json.toString().getBytes());
-            /*dos = new DataOutputStream(httpURLConnection.getOutputStream());
+            dos = new DataOutputStream(httpURLConnection.getOutputStream());
             dos.writeUTF(json.toString());
-            dos.write(512);*/
+            dos.write(512);
             Log.v(TAG, "Http POST response " + httpURLConnection.getResponseCode());
             success = true;
         } catch (IOException exception) {
@@ -84,6 +84,6 @@ public class UpdateProgramDelegate extends AsyncTask<RadioProgram, Void, Boolean
 
     @Override
     protected void onPostExecute(Boolean result) {
-        programController.programUpdated(result.booleanValue());
+        userController.userUpdated(result.booleanValue());
     }
 }

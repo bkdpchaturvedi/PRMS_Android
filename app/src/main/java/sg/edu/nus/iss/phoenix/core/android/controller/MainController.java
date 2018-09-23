@@ -3,8 +3,9 @@ package sg.edu.nus.iss.phoenix.core.android.controller;
 import android.app.Application;
 import android.content.Intent;
 
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.core.android.ui.MainScreen;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
 
 public class MainController {
     private static Application app = null;
@@ -40,7 +41,15 @@ public class MainController {
         ControlFactory.getProgramController().startUseCase();
     }
 
+    public void selectMaintainUser() {
+        ControlFactory.getUserController().startUseCase();
+    }
+
     public void maintainedProgram() {
+        startUseCase(username);
+    }
+
+    public void maintainedUser() {
         startUseCase(username);
     }
 
@@ -57,6 +66,10 @@ public class MainController {
 
     // This is a dummy operation to test the invocation of Review Select Radio Program use case.
     public void selectedProgram(RadioProgram rpSelected) {
+        startUseCase(username);
+    }
+
+    public void selectedUser(User userSelected) {
         startUseCase(username);
     }
 }
