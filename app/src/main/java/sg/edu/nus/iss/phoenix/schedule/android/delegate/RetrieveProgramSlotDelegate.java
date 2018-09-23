@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.phoenix.radioprogram.android.delegate;
+package sg.edu.nus.iss.phoenix.schedule.android.delegate;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,35 +14,27 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ProgramController;
-import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ReviewSelectProgramController;
-import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
+import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 
-import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_RADIO_PROGRAM;
+import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
-public class RetrieveProgramsDelegate extends AsyncTask<String, Void, String> {
-    // Tag for logging
-    private static final String TAG = RetrieveProgramsDelegate.class.getName();
+public class RetrieveProgramSlotDelegate extends AsyncTask<String,Void,String> {
+    private static final String TAG = RetrieveProgramSlotDelegate.class.getName();
 
-    private ProgramController programController = null;
-    private ReviewSelectProgramController reviewSelectProgramController = null;
+    private ScheduleController scheduleController = null;
 
-    public RetrieveProgramsDelegate(ProgramController programController) {
-        this.reviewSelectProgramController = null;
-        this.programController = programController;
+    public RetrieveProgramSlotDelegate(ScheduleController scheduleController) {
+
+        this.scheduleController = scheduleController;
     }
-
-    public RetrieveProgramsDelegate(ReviewSelectProgramController reviewSelectProgramController) {
-        this.programController = null;
-        this.reviewSelectProgramController = reviewSelectProgramController;
-    }
-
     @Override
     protected String doInBackground(String... params) {
-        Uri builtUri1 = Uri.parse( PRMS_BASE_URL_RADIO_PROGRAM).buildUpon().build();
+        Uri builtUri1 = Uri.parse( PRMS_BASE_URL_SCHEDULE).buildUpon().build();
         Uri builtUri = Uri.withAppendedPath(builtUri1, params[0]).buildUpon().build();
         Log.v(TAG, builtUri.toString());
         URL url = null;
@@ -73,7 +65,7 @@ public class RetrieveProgramsDelegate extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        List<RadioProgram> radioPrograms = new ArrayList<>();
+        List<ProgramSlot> programSlots = new ArrayList<>();
 
         if (result != null && !result.equals("")) {
             try {
@@ -86,7 +78,7 @@ public class RetrieveProgramsDelegate extends AsyncTask<String, Void, String> {
                     String name = rpJson.getString("name");
                     String typicalDuration = rpJson.getString("typicalDuration");
 
-                    radioPrograms.add(new RadioProgram(name, description, typicalDuration));
+                    programSlots.add(new ProgramSlot());
                 }
             } catch (JSONException e) {
                 Log.v(TAG, e.getMessage());
@@ -95,9 +87,8 @@ public class RetrieveProgramsDelegate extends AsyncTask<String, Void, String> {
             Log.v(TAG, "JSON response error.");
         }
 
-        if (programController != null)
-            programController.programsRetrieved(radioPrograms);
-        else if (reviewSelectProgramController != null)
-            reviewSelectProgramController.programsRetrieved(radioPrograms);
+        if (scheduleController != null)
+            scheduleController.programsRetrieved(programSlots);
+
     }
 }

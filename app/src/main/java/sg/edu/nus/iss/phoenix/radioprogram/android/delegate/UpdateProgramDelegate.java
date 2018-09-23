@@ -60,9 +60,10 @@ public class UpdateProgramDelegate extends AsyncTask<RadioProgram, Void, Boolean
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
             httpURLConnection.setDoOutput(true);
-            dos = new DataOutputStream(httpURLConnection.getOutputStream());
+            httpURLConnection.getOutputStream().write(json.toString().getBytes());
+            /*dos = new DataOutputStream(httpURLConnection.getOutputStream());
             dos.writeUTF(json.toString());
-            dos.write(512);
+            dos.write(512);*/
             Log.v(TAG, "Http POST response " + httpURLConnection.getResponseCode());
             success = true;
         } catch (IOException exception) {

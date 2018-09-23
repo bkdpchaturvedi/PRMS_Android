@@ -38,6 +38,7 @@
     <string name="action_save">Save</string>
     <string name="action_delete">Delete</string>
     <string name="action_select">Select</string>
+    <string name="title_activity_schedule_programs_list_screen">ScheduleProgramsListScreen</string>
     <string name="title_activity_user_list_screen">UserListScreen</string>
 
 </resources>
