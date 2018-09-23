@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import sg.edu.nus.iss.phoenix.user.android.controller.ReviewSelectUserController;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.user.android.controller.UserController;
 
@@ -28,16 +27,9 @@ public class RetrieveUsersDelegate extends AsyncTask<String, Void, String> {
     private static final String TAG = RetrieveUsersDelegate.class.getName();
 
     private UserController userController = null;
-    private ReviewSelectUserController reviewSelectUserController = null;
 
     public RetrieveUsersDelegate(UserController userController) {
-        this.reviewSelectUserController = null;
         this.userController = userController;
-    }
-
-    public RetrieveUsersDelegate(ReviewSelectUserController reviewSelectUserController) {
-        this.userController = null;
-        this.reviewSelectUserController = reviewSelectUserController;
     }
 
     @Override
@@ -98,7 +90,5 @@ public class RetrieveUsersDelegate extends AsyncTask<String, Void, String> {
 
         if (userController != null)
             userController.usersRetrieved(users);
-        else if (reviewSelectUserController != null)
-            reviewSelectUserController.usersRetrieved(users);
     }
 }
