@@ -10,9 +10,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -36,8 +38,9 @@ public class RetrieveRolesDelegate extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        Uri builtUri1 = Uri.parse( PRMS_BASE_URL_USER).buildUpon().build();
-        Uri builtUri = Uri.withAppendedPath(builtUri1, params[0]).buildUpon().build();
+        Uri builtUri = Uri.parse(PRMS_BASE_URL_USER).buildUpon().build();
+        builtUri = Uri.withAppendedPath(builtUri,"getAllRoles").buildUpon().build();
+
         Log.v(TAG, builtUri.toString());
         URL url = null;
         try {
