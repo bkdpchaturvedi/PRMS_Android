@@ -4,6 +4,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,6 +33,7 @@ public class CreateProgramDelegate extends AsyncTask<RadioProgram, Void, Boolean
 
     @Override
     protected Boolean doInBackground(RadioProgram... params) {
+         boolean success = false;
         Uri builtUri = Uri.parse(PRMS_BASE_URL_RADIO_PROGRAM).buildUpon().build();
         builtUri = Uri.withAppendedPath(builtUri,"create").buildUpon().build();
         Log.v(TAG, builtUri.toString());
@@ -50,7 +54,6 @@ public class CreateProgramDelegate extends AsyncTask<RadioProgram, Void, Boolean
             Log.v(TAG, e.getMessage());
         }
 
-        boolean success = false;
         HttpURLConnection httpURLConnection = null;
         DataOutputStream dos = null;
         try {
@@ -58,11 +61,12 @@ public class CreateProgramDelegate extends AsyncTask<RadioProgram, Void, Boolean
             httpURLConnection.setInstanceFollowRedirects(false);
             httpURLConnection.setRequestMethod("PUT");
             httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
-            httpURLConnection.setDoInput(true);
+           // httpURLConnection.setDoInput(true);
             httpURLConnection.setDoOutput(true);
-            dos = new DataOutputStream(httpURLConnection.getOutputStream());
-            dos.writeUTF(json.toString());
-            dos.write(256);
+            httpURLConnection.getOutputStream().write(json.toString().getBytes());
+            //dos = new DataOutputStream(httpURLConnection.getOutputStream());
+            //dos.writeUTF(json.toString());
+            //dos.write(256);
             Log.v(TAG, "Http PUT response " + httpURLConnection.getResponseCode());
             success = true;
         } catch (IOException exception) {
@@ -78,7 +82,7 @@ public class CreateProgramDelegate extends AsyncTask<RadioProgram, Void, Boolean
             }
             if (httpURLConnection != null) httpURLConnection.disconnect();
         }
-        return new Boolean(success);
+       return new Boolean(success);
     }
 
     @Override

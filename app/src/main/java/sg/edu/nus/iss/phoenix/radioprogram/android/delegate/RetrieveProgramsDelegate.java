@@ -78,7 +78,7 @@ public class RetrieveProgramsDelegate extends AsyncTask<String, Void, String> {
         if (result != null && !result.equals("")) {
             try {
                 JSONObject reader = new JSONObject(result);
-                JSONArray rpArray = reader.getJSONArray("rpList");
+                JSONArray rpArray = reader.getJSONArray("data");
 
                 for (int i = 0; i < rpArray.length(); i++) {
                     JSONObject rpJson = rpArray.getJSONObject(i);
