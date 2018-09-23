@@ -32,7 +32,7 @@ public class MaintainUserScreen extends AppCompatActivity {
         // Find all relevant views that we will need to read user input from
         mRPNameEditText = (EditText) findViewById(R.id.maintain_user_name_text_view);
         mRPPasswordEditText = (EditText) findViewById(R.id.maintain_user_password_text_view);
-        mRoleEditText = (EditText) findViewById(R.id.maintain_user_role_text_view);
+        mRoleEditText = (EditText) findViewById(R.id.maintain_user_roles_text_view);
         // Keep the KeyListener for name EditText so as to enable editing after disabling it.
         mRPNameEditTextKeyListener = mRPNameEditText.getKeyListener();
     }
