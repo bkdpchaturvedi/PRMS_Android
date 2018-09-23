@@ -39,7 +39,7 @@ public class RetrieveRolesDelegate extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         Uri builtUri = Uri.parse(PRMS_BASE_URL_USER).buildUpon().build();
-        builtUri = Uri.withAppendedPath(builtUri,"getAllRoles").buildUpon().build();
+        builtUri = Uri.withAppendedPath(builtUri,"roles").buildUpon().build();
 
         Log.v(TAG, builtUri.toString());
         URL url = null;
@@ -75,8 +75,8 @@ public class RetrieveRolesDelegate extends AsyncTask<String, Void, String> {
         if (result != null && !result.equals("")) {
             try {
                 JSONObject reader = new JSONObject(result);
-                JSONArray roleArray = reader.getJSONArray("roleList");
-
+                //JSONArray roleArray = reader.getJSONArray("roleList");
+                JSONArray roleArray = reader.getJSONArray("data");
                 for (int i = 0; i < roleArray.length(); i++) {
                     JSONObject roleJson = roleArray.getJSONObject(i);
                     String role = roleJson.getString("role");
