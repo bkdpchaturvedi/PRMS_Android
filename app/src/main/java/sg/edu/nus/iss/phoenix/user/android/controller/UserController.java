@@ -7,6 +7,7 @@ import java.util.List;
 
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.Role;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.user.android.delegate.UpdateUserDelegate;
 import sg.edu.nus.iss.phoenix.user.android.delegate.CreateUserDelegate;
@@ -36,6 +37,10 @@ public class UserController {
 
     public void usersRetrieved(List<User> users) {
        userListScreen.showUsers(users);
+    }
+
+    public void rolesRetrieved(List<Role> roles) {
+        maintainUserScreen.showRoles(roles);
     }
 
     public void selectCreateUser() {

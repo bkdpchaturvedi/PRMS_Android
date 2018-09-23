@@ -10,9 +10,12 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.List;
+
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.Role;
 
 public class MaintainUserScreen extends AppCompatActivity {
     // Tag for logging
@@ -128,5 +131,9 @@ public class MaintainUserScreen extends AppCompatActivity {
             mRoleEditText.setText(user2edit.getUserRoles(), TextView.BufferType.EDITABLE);
             mUserNameEditText.setKeyListener(null);
         }
+    }
+
+    public void showRoles(List<Role> roles) {
+//YIJIE TODO
     }
 }
