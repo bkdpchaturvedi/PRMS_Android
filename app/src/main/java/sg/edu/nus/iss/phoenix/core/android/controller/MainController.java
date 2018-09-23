@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Intent;
 
 import sg.edu.nus.iss.phoenix.core.android.ui.MainScreen;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
 
 public class MainController {
     private static Application app = null;

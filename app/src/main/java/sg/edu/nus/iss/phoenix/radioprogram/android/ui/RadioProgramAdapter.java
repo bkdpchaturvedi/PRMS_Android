@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import sg.edu.nus.iss.phoenix.R;
-import sg.edu.nus.iss.phoenix.radioprogram.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
 
 public class RadioProgramAdapter extends ArrayAdapter<RadioProgram> {
 

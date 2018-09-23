@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.phoenix.radioprogram.entity;
+package sg.edu.nus.iss.phoenix.core.android.controller.entity;
 
 public class RadioProgram {
 

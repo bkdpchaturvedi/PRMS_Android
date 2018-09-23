@@ -9,6 +9,7 @@ public class ControlFactory {
     private static LoginController loginController = null;
     private static ProgramController programController = null;
     private static ReviewSelectProgramController reviewSelectProgramController = null;
+    private static UserController userController = null;
 
     public static MainController getMainController() {
         if (mainController == null) mainController = new MainController();
@@ -28,5 +29,10 @@ public class ControlFactory {
     public static ReviewSelectProgramController getReviewSelectProgramController() {
         if (reviewSelectProgramController == null) reviewSelectProgramController = new ReviewSelectProgramController();
         return reviewSelectProgramController;
+    }
+
+    public static UserController getUserController() {
+        if (userController == null) userController = new UserController();
+        return userController;
     }
 }
