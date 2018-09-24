@@ -1,24 +1,27 @@
 package sg.edu.nus.iss.phoenix.schedule.android.entity;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 
-public class ProgramSlot {
+public class ProgramSlot implements Serializable {
 
-    public Date getDateOfProgram() {
+    public LocalDateTime getDateOfProgram() {
         return dateOfProgram;
     }
 
-    public void setDateOfProgram(Date dateOfProgram) {
+    public void setDateOfProgram(LocalDateTime dateOfProgram) {
         this.dateOfProgram = dateOfProgram;
     }
 
-    public String getDuration() {
+    public LocalTime getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(LocalTime duration) {
         this.duration = duration;
     }
 
@@ -54,8 +57,8 @@ public class ProgramSlot {
         this.assignedBy = assignedBy;
     }
 
-    private Date dateOfProgram;
-    private String duration;
+    private LocalDateTime dateOfProgram;
+    private LocalTime duration;
     private RadioProgram radioProgram;
     private User presenter;
     private User producer;
