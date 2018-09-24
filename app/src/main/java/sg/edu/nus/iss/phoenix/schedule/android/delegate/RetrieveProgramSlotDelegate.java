@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,13 +94,8 @@ public class RetrieveProgramSlotDelegate extends AsyncTask<String,Void,String> {
                    temProgramSlot.setAssignedBy(assignedBy);
                    // String dateString = "03/26/2012 11:49:00 AM";
                     SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-mm-dd hh:mm:ss aa");
-                    Date convertedDate = new Date();
-                    try {
-                        convertedDate = dateFormat.parse(dateOfProgram);
-                    } catch (ParseException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    LocalDateTime convertedDate;
+                    convertedDate = LocalDateTime.parse(dateOfProgram);
                    temProgramSlot.setDateOfProgram(convertedDate);
                     temProgramSlot.setPresenter(presenter);
                     temProgramSlot.setProducer(producer);
