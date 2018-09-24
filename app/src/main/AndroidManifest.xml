@@ -40,15 +40,14 @@
         <activity
             android:name=".schedule.android.ui.ScheduleProgramsListScreen"
             android:label="@string/title_activity_schedule_programs_list_screen">
-
-
         </activity>
-
-
         <activity
             android:name=".user.android.ui.UserListScreen"
-            android:label="@string/title_activity_user_list_screen"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_user_list_screen">
+        </activity>
+        <activity
+            android:name=".user.android.ui.MaintainUserScreen"
+            android:label="@string/title_activity_user_screen"></activity>
     </application>
 
 </manifest>

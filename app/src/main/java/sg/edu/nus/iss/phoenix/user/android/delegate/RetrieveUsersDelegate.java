@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.Role;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.user.android.controller.UserController;
 
@@ -78,7 +79,13 @@ public class RetrieveUsersDelegate extends AsyncTask<String, Void, String> {
                     String password = userJson.getString("password");
                     String id = userJson.getString("id");
                     String name = userJson.getString("name");
-                    String roles = userJson.getString("roles");
+                    ArrayList<Role> roles = new ArrayList<>();
+                    JSONArray jArray = (JSONArray)userJson.get("roles");
+                    if (jArray != null) {
+                        for (int a=0;a<jArray.length();a++){
+                            roles.add(new Role(jArray.getString(a)));
+                        }
+                    }
 
                     users.add( new User(id,name, password, roles));
                 }

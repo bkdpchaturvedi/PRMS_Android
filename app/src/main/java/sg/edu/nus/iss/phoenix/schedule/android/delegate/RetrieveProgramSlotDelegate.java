@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.Role;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
@@ -81,9 +82,9 @@ public class RetrieveProgramSlotDelegate extends AsyncTask<String,Void,String> {
                     JSONObject rp = rpJson.getJSONObject("radioProgram");
                     RadioProgram radioProgram=new RadioProgram(rp.getString("name"),"","");
                     JSONObject presenterJson = rpJson.getJSONObject("presenter");
-                    User presenter =new User(presenterJson.getString("id"),"","","");
+                    User presenter =new User(presenterJson.getString("id"),"","",new ArrayList<Role>());
                     JSONObject producerJson = rpJson.getJSONObject("producer");
-                    User producer =new User(producerJson.getString("id"),"","","");
+                    User producer =new User(producerJson.getString("id"),"","",new ArrayList<Role>());
 
                     String duration=rpJson.getString("duration");
                     String dateOfProgram=rpJson.getString("dateOfProgram");

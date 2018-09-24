@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
@@ -78,17 +79,22 @@ public class MaintainUserScreen extends AppCompatActivity {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 // Save  user.
+                //YIJI TODO CONVERT CHECK BOX ROLES TO ARRAYLIST<ROLE>
+
+                ArrayList<Role> roles = new ArrayList<Role>();
+                roles.add(new Role(mRoleEditText.getText().toString()));
+
                 if (user2edit == null) { // Newly created.
                     Log.v(TAG, "Saving user" + mUserNameEditText.getText().toString() + "...");
                     User user = new User(mUserIDEditText.getText().toString(),mUserNameEditText.getText().toString(),
-                            mUserPasswordEditText.getText().toString(), mRoleEditText.getText().toString());
+                            mUserPasswordEditText.getText().toString(), roles);
                     ControlFactory.getUserController().selectCreateUser(user);
                 }
                 else { // Edited.
                     Log.v(TAG, "Saving user " + user2edit.getUserName() + "...");
                     user2edit.setUserName(mUserIDEditText.getText().toString());
                     user2edit.setUserPassword(mUserPasswordEditText.getText().toString());
-                    user2edit.setUserRoles(mRoleEditText.getText().toString());
+                    user2edit.setUserRoles(roles);
                     ControlFactory.getUserController().selectUpdateUser(user2edit);
                 }
                 return true;
@@ -128,12 +134,14 @@ public class MaintainUserScreen extends AppCompatActivity {
             mUserIDEditText.setText(user2edit.getId(), TextView.BufferType.NORMAL);
             mUserNameEditText.setText(user2edit.getUserName(), TextView.BufferType.NORMAL);
             mUserPasswordEditText.setText(user2edit.getUserPassword(), TextView.BufferType.EDITABLE);
-            mRoleEditText.setText(user2edit.getUserRoles(), TextView.BufferType.EDITABLE);
+            //YIJIE TODO
+            mRoleEditText.setText(user2edit.getUserRoles().get(0).getRole(), TextView.BufferType.EDITABLE);
             mUserNameEditText.setKeyListener(null);
         }
     }
 
     public void showRoles(List<Role> roles) {
 //YIJIE TODO
+        mRoleEditText.setText(roles.get(0).getRole(), TextView.BufferType.EDITABLE);
     }
 }

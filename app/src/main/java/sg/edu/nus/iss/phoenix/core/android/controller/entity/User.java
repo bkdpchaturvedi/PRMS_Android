@@ -1,13 +1,15 @@
 package sg.edu.nus.iss.phoenix.core.android.controller.entity;
 
+import java.util.ArrayList;
+
 public class User {
 
     private String id;
     private String userName;
     private String userPassword;
-    private String userRoles;
+    private ArrayList<Role> userRoles;
 
-    public User(String id,String userName, String userPassword, String userRoles) {
+    public User(String id,String userName, String userPassword, ArrayList<Role> userRoles) {
         this.id=id;
         this.userName = userName;
         this.userPassword= userPassword;
@@ -26,7 +28,7 @@ public class User {
         return userPassword;
     }
 
-    public String getUserRoles() {
+    public ArrayList<Role> getUserRoles() {
         return userRoles;
     }
 
@@ -42,7 +44,7 @@ public class User {
         this.userPassword = userPassword;
     }
 
-    public void setUserRoles(String userRoles) {
+    public void setUserRoles(ArrayList<Role> userRoles) {
         this.userRoles = userRoles;
     }
 }
