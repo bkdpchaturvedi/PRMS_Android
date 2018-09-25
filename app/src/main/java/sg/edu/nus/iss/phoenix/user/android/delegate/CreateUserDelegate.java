@@ -50,8 +50,7 @@ public class CreateUserDelegate extends AsyncTask<User, Void, Boolean> {
             json.put("id", params[0].getId());
             json.put("name", params[0].getUserName());
             json.put("password", params[0].getUserPassword());
-            JSONArray roles = toJson(params[0].getUserRoles());
-            json.put("roles",roles);
+            json.put("roles",toJson(params[0].getUserRoles()));
         } catch (JSONException e) {
             Log.v(TAG, e.getMessage());
         }

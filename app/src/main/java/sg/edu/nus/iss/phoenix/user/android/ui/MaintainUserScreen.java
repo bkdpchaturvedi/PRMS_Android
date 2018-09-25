@@ -27,7 +27,7 @@ public class MaintainUserScreen extends AppCompatActivity {
     private EditText mUserPasswordEditText;
     private EditText mRoleEditText;
     private User user2edit = null;
-    KeyListener mUserNameEditTextKeyListener = null;
+    KeyListener mUserIDEditTextKeyListener = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class MaintainUserScreen extends AppCompatActivity {
         mUserPasswordEditText = (EditText) findViewById(R.id.maintain_user_password_text_view);
         mRoleEditText = (EditText) findViewById(R.id.maintain_user_roles_text_view);
         // Keep the KeyListener for name EditText so as to enable editing after disabling it.
-        mUserNameEditTextKeyListener = mUserNameEditText.getKeyListener();
+        mUserIDEditTextKeyListener = mUserIDEditText.getKeyListener();
     }
 
     @Override
@@ -125,7 +125,7 @@ public class MaintainUserScreen extends AppCompatActivity {
         mUserNameEditText.setText("", TextView.BufferType.EDITABLE);
         mUserPasswordEditText.setText("", TextView.BufferType.EDITABLE);
         mRoleEditText.setText("", TextView.BufferType.EDITABLE);
-        mUserNameEditText.setKeyListener(mUserNameEditTextKeyListener);
+        mUserNameEditText.setKeyListener(mUserIDEditTextKeyListener);
     }
 
     public void editUser(User user2edit) {
