@@ -45,7 +45,8 @@ public class UserAdapter extends ArrayAdapter<User> {
         userPassword.setKeyListener(null);
 
         EditText userRoles = (EditText)listItemView.findViewById(R.id.maintain_user_roles_text_view);
-        userRoles.setText(currentUser.getUserRoles(), TextView.BufferType.NORMAL);
+        //YIJIE TODO
+        userRoles.setText(currentUser.getUserRoles().get(0).getRole(), TextView.BufferType.NORMAL);
         userRoles.setKeyListener(null);
 
         return listItemView;

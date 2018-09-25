@@ -13,6 +13,7 @@ import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 public class MainScreen extends AppCompatActivity {
     private Button mbtn_radio_program;
     private Button mbtn_schedule;
+    private Button mbtn_user;
     private Button mbtn_logout;
 
     @Override
@@ -28,7 +29,6 @@ public class MainScreen extends AppCompatActivity {
             public void onClick(View view) {
                 ControlFactory.getMainController().selectMaintainProgram();
             }
-
         });
 
         mbtn_schedule = (Button) findViewById(R.id.button_schedule);
@@ -38,6 +38,17 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ControlFactory.getMainController().selectMaintainSchedule();
+            }
+
+        });
+
+        mbtn_user = (Button) findViewById(R.id.button_user);
+        // Set a click listener on Maintain Schedule Button.
+        mbtn_user.setOnClickListener(new View.OnClickListener() {
+            // The code in this method will be executed when the numbers category is clicked on.
+            @Override
+            public void onClick(View view) {
+                ControlFactory.getMainController().selectMaintainUser();
             }
 
         });

@@ -40,6 +40,7 @@
     <string name="action_select">Select</string>
     <string name="title_activity_schedule_programs_list_screen">ScheduleProgramsListScreen</string>
     <string name="title_activity_user_list_screen">UserListScreen</string>
+    <string name="title_activity_user_screen">UserScreen</string>
     <string name="no_records_found">No items found</string>
     <string name="title_activity_program_slot">ProgramSlot</string>
     <string name="no_records_selected">No item selected</string>
