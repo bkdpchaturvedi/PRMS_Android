@@ -67,7 +67,7 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
 
     private void mm() {
 
-        DateTimePickerDialog confirm_dialog = new DateTimePickerDialog(this, LocalDateTime.now(), LocalDateTime.now(), 30);
+        DateTimePickerDialog confirm_dialog = new DateTimePickerDialog(this, LocalDateTime.now(), LocalDateTime.now().plusDays(6), 60);
         confirm_dialog.show(this.getSupportFragmentManager(), DateTimePickerDialog.TAG);
 
 //        final View dialogView = View.inflate(this, R.layout.dialog_date_time, null);

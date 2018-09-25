@@ -10,11 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,9 @@ public class DateTimePickerDialog extends DialogFragment {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private Integer interval;
+
+    private DatePicker datePicker;
+    private TimePicker timePicker;
 
     public DateTimePickerDialog() {
         super();
@@ -57,8 +63,17 @@ public class DateTimePickerDialog extends DialogFragment {
                 caller.onDateTimeSet();
             }
         });
+        datePicker = (DatePicker)  view.findViewById(R.id.dp_datetimedialog);
+        timePicker = (TimePicker)  view.findViewById(R.id.tp_datetimedialog);
+        timePicker.setIs24HourView(true);
+        if (startDateTime != null) {
+            datePicker.setMinDate(startDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        }
+        if (endDateTime != null) {
+            datePicker.setMaxDate(endDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        }
 
-        setTimePickerInterval(((TimePicker)  view.findViewById(R.id.tp_datetimedialog)));
+        setTimePickerInterval(timePicker);
 
         return view;
     }

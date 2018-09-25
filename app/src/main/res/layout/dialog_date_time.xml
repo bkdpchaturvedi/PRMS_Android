@@ -1,31 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:padding="8dp"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="8dp">
 
     <DatePicker
         android:id="@+id/dp_datetimedialog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="280dp"
+        android:layout_height="420dp"
         android:layout_weight="6"
         android:calendarViewShown="true"
-        android:spinnersShown="false" />
+        android:datePickerMode="calendar"
+        android:forceHasOverlappingRendering="false"
+        android:spinnersShown="false"
+        tools:layout_editor_absoluteX="12dp"
+        tools:layout_editor_absoluteY="16dp" />
 
     <TimePicker
         android:id="@+id/tp_datetimedialog"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:timePickerMode="spinner" />
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dp_datetimedialog" />
 
     <Button
         android:id="@+id/btn_datetimedialog_set"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_weight="1"
-        android:text="Set" />
+        android:text="Set"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tp_datetimedialog"/>
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
