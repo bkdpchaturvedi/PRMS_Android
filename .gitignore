@@ -6,4 +6,3 @@
 build/
 /captures
 .externalNativeBuild
-app/src/main/java/sg/edu/nus/iss/phoenix/core/android/delegate/DelegateHelper.java
