@@ -42,10 +42,15 @@
     <string name="title_activity_user_list_screen">UserListScreen</string>
     <string name="title_activity_user_screen">UserScreen</string>
     <string name="no_records_found">No items found</string>
-    <string name="title_activity_program_slot">ProgramSlot</string>
     <string name="no_records_selected">No item selected</string>
-    <string name="radioprogram">Radio Program</string>
+    <string name="radio_program">Radio Program</string>
     <string name="preseenter">Presenter</string>
     <string name="prodcuer">Producer</string>
+    <string name="start_date_of_program">Start Date of Program</string>
+    <string name="end_date_of_program">End Date of Program</string>
+    <string name="no_date_selected">No date selected</string>
+    <string name="presenter_producer"><![CDATA[Presenter & Producer]]></string>
+    <string name="action_set">Set</string>
+    <string name="action_assign">Assign</string>
 
 </resources>

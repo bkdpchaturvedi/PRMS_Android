@@ -1,50 +1,135 @@
 package sg.edu.nus.iss.phoenix.schedule.android.ui;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
+import android.widget.TextView;
 
 
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 import sg.edu.nus.iss.phoenix.R;
+import sg.edu.nus.iss.phoenix.core.android.controller.ConstantHelper;
+import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.utilities.DateHelper;
 
-public class MaintainScheduleScreen extends AppCompatActivity implements DateTimePickerDialog.DateTimePickerDialogCompliant {
+public class MaintainScheduleScreen extends AppCompatActivity implements DateTimePickerDialog.DateTimeSetListener {
     private static final String TAG = MaintainScheduleScreen.class.getName();
+    private static final String START_DATETIME = "START_DATETIME";
+    private static final String END_DATETIME = "END_DATETIME";
+
     private LocalDate originalDateOfProgram;
     private ProgramSlot currentProgramSlot;
+
+
+    public void createProgramSlot(ProgramSlot programSlot) {
+        this.currentProgramSlot = programSlot;
+        displayProgramSlot();
+    }
+
+    public void editProgramSlot(ProgramSlot programSlot) {
+        this.currentProgramSlot = programSlot;
+        displayProgramSlot();
+    }
+
+    private void displayProgramSlot() {
+        if (currentProgramSlot.getRadioProgram() != null) {
+            ((TextView) findViewById(R.id.tv_programslot_radioprogram_name))
+                    .setText(currentProgramSlot.getRadioProgram().getRadioProgramName());
+            ((TextView) findViewById(R.id.tv_programslot_radioprogram_description))
+                    .setText(currentProgramSlot.getRadioProgram().getRadioProgramDescription());
+        }
+        if (currentProgramSlot.getPresenter() != null) {
+            ((TextView) findViewById(R.id.tv_programslot_presenter_name))
+                    .setText(currentProgramSlot.getPresenter().getUserName());
+        }
+        if (currentProgramSlot.getProducer() != null) {
+            ((TextView) findViewById(R.id.tv_programslot_producer_name))
+                    .setText(currentProgramSlot.getProducer().getUserName());
+        }
+        if (currentProgramSlot.getDateOfProgram() != null) {
+            ((TextView) findViewById(R.id.tv_programslot_dateofprogram_start))
+                    .setText(currentProgramSlot.getDateOfProgram().toString());
+        }
+        if (currentProgramSlot.getDateOfProgram() != null && currentProgramSlot.getDuration() != null) {
+            ((TextView) findViewById(R.id.tv_programslot_dateofprogram_start))
+                    .setText(currentProgramSlot.getDateOfProgram()
+                            .plusSeconds(currentProgramSlot.getDuration()
+                            .getSeconds()).toString()
+                    );
+        }
+    }
+
+    public void selectRadioProgram(){
+        ControlFactory.getScheduleController().selectRadioProgram(currentProgramSlot.getRadioProgram());
+    }
+
+    private void showDateTimePickerDialog(String field, ZonedDateTime selectedDateTime, ZonedDateTime startDateTime, ZonedDateTime endDateTime) {
+        DateTimePickerDialog confirm_dialog = new DateTimePickerDialog(selectedDateTime
+                , startDateTime
+                , endDateTime
+                , 1
+                , 30
+                , field);
+        confirm_dialog.setOnDateTimeSetListener(this);
+        confirm_dialog.show(this.getSupportFragmentManager()
+                , DateTimePickerDialog.TAG);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_program_slot);
-        ((Button) findViewById(R.id.btn_programslot_radioprogram)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mm();
-            }
-        });
+        currentProgramSlot = (ProgramSlot) getIntent().getSerializableExtra(ConstantHelper.PROGRAM_SLOT);
+
+        ((Button) findViewById(R.id.btn_programslot_radioprogram)).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectRadioProgram();
+                    }
+                }
+        );
+
+        ((Button) findViewById(R.id.btn_programslot_dateofprogram_start)).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (currentProgramSlot.getDateOfProgram() != null) {
+                            showDateTimePickerDialog(START_DATETIME
+                                    , currentProgramSlot.getDateOfProgram()
+                                    , DateHelper.getWeekStartDate(currentProgramSlot.getDateOfProgram()
+                                            .toLocalDate()).atStartOfDay(ZoneOffset.UTC)
+                                    , DateHelper.getWeekEndDate(currentProgramSlot.getDateOfProgram()
+                                            .toLocalDate()).atStartOfDay(ZoneOffset.UTC));
+                        } else {
+                            showDateTimePickerDialog(START_DATETIME
+                                    , null
+                                    , null
+                                    , null);
+                        }
+                    }
+                }
+        );
     }
 
     @Override
-    public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onPostCreate(savedInstanceState, persistentState);
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        ControlFactory.getScheduleController().onDisplayMaintainScheduleScreen(this, currentProgramSlot);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu options from the res/menu/menu_editor.xml file.
-        // This adds menu items to the app bar.
         getMenuInflater().inflate(R.menu.menu_editor, menu);
         return true;
     }
@@ -61,36 +146,15 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
 
 
     @Override
-    public void onDateTimeSet() {
-
-    }
-
-    private void mm() {
-
-        DateTimePickerDialog confirm_dialog = new DateTimePickerDialog(this, LocalDateTime.now(), LocalDateTime.now().plusDays(6), 60);
-        confirm_dialog.show(this.getSupportFragmentManager(), DateTimePickerDialog.TAG);
-
-//        final View dialogView = View.inflate(this, R.layout.dialog_date_time, null);
-//        final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-//
-//        dialogView.findViewById(R.id.date_time_set).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.date_picker);
-//                TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.time_picker);
-//
-////                Calendar calendar = new GregorianCalendar(datePicker.getYear(),
-////                        datePicker.getMonth(),
-////                        datePicker.getDayOfMonth(),
-////                        timePicker.getCurrentHour(),
-////                        timePicker.getCurrentMinute());
-////
-////                time = calendar.getTimeInMillis();
-//                alertDialog.dismiss();
-//            }});
-//        alertDialog.setView(dialogView);
-//        alertDialog.show();
+    public void onDateTimeSet(ZonedDateTime value, String field) {
+        switch (field) {
+            case START_DATETIME:
+                currentProgramSlot.setDateOfProgram(value);
+                break;
+            case END_DATETIME:
+                currentProgramSlot.setDuration(Duration.between(currentProgramSlot.getDateOfProgram(), value));
+                break;
+        }
     }
 
     @Override
@@ -126,6 +190,10 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
         return true;
     }
 
+    public void radioProgramSelected(RadioProgram radioProgram) {
+        currentProgramSlot.setRadioProgram(radioProgram);
+        displayProgramSlot();
+    }
 
 //    @Override
 //    public void onBackPressed() {

@@ -2,8 +2,10 @@ package sg.edu.nus.iss.phoenix.schedule.android.ui;
 
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,45 +16,64 @@ import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
-import java.lang.reflect.Field;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.LocalTime;
+import java.time.Period;
+import java.time.ZonedDateTime;
+import java.time.chrono.ChronoLocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjuster;
 import java.util.ArrayList;
 import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
 
 
-public class DateTimePickerDialog extends DialogFragment {
+public class DateTimePickerDialog extends DialogFragment implements DatePicker.OnDateChangedListener {
 
-    public static String TAG = "Confirm Dialog";
+    public static final String TAG = DateTimePickerDialog.class.getName();
 
-    public interface DateTimePickerDialogCompliant {
-        void onDateTimeSet();
+    public interface DateTimeSetListener {
+        void onDateTimeSet(ZonedDateTime value, String field);
     }
 
-    private DateTimePickerDialogCompliant caller;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
-    private Integer interval;
+    private DateTimeSetListener onDateTimeSetListener;
+    private int minuteInterval = 1;
+    private int hourInterval = 1;
+
+    private ZonedDateTime selectedDateTime;
+    private ZonedDateTime startDateTime;
+    private ZonedDateTime endDateTime;
 
     private DatePicker datePicker;
     private TimePicker timePicker;
+
+    private  String field;
 
     public DateTimePickerDialog() {
         super();
     }
 
     @SuppressLint("ValidFragment")
-    public DateTimePickerDialog(DateTimePickerDialogCompliant caller, LocalDateTime startDateTime, LocalDateTime endDateTime, Integer interval){
+    public DateTimePickerDialog(ZonedDateTime selectedDateTime, ZonedDateTime startDateTime, ZonedDateTime endDateTime, Integer hourInterval, Integer minuteInterval, String field)
+    {
         super();
-        this.caller = caller;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
-        this.interval = interval;
+        if (selectedDateTime == null) {
+            selectedDateTime = ZonedDateTime.now();
+        }
+        this.selectedDateTime = selectedDateTime;
+        this.hourInterval = hourInterval;
+        this.minuteInterval = minuteInterval;
+        this.field = field;
     }
 
+    public void setOnDateTimeSetListener(DateTimeSetListener dateTimeSetListener) {
+        this.onDateTimeSetListener = dateTimeSetListener;
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,63 +81,99 @@ public class DateTimePickerDialog extends DialogFragment {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         view.findViewById(R.id.btn_datetimedialog_set).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                caller.onDateTimeSet();
+                if (onDateTimeSetListener!=null) {
+                    onDateTimeSetListener.onDateTimeSet(selectedDateTime, field);
+                }
+                dismiss();
             }
         });
-        datePicker = (DatePicker)  view.findViewById(R.id.dp_datetimedialog);
-        timePicker = (TimePicker)  view.findViewById(R.id.tp_datetimedialog);
+        datePicker = (DatePicker) view.findViewById(R.id.dp_datetimedialog);
+        timePicker = (TimePicker) view.findViewById(R.id.tp_datetimedialog);
         timePicker.setIs24HourView(true);
+        if (selectedDateTime != null) {
+            datePicker.init(selectedDateTime.getYear(), selectedDateTime.getMonthValue() - 1, selectedDateTime.getDayOfMonth(), this);
+            timePicker.setHour(selectedDateTime.getHour());
+            timePicker.setMinute(selectedDateTime.getMinute());
+        }
         if (startDateTime != null) {
-            datePicker.setMinDate(startDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+            datePicker.setMinDate(startDateTime.toInstant().toEpochMilli());
         }
         if (endDateTime != null) {
-            datePicker.setMaxDate(endDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+            datePicker.setMaxDate(endDateTime.toInstant().toEpochMilli());
         }
 
-        setTimePickerInterval(timePicker);
+        onDateChanged(datePicker, 0, 0, 0);
 
         return view;
     }
-    private void setTimePickerInterval(TimePicker timePicker) {
-        try {
 
-            NumberPicker minutePicker = (NumberPicker) timePicker.findViewById(Resources.getSystem().getIdentifier(
-                    "minute", "id", "android"));
-            minutePicker.setMinValue(0);
-            minutePicker.setMaxValue((60 / interval) - 1);
-            List<String> displayedValues = new ArrayList<String>();
-            for (int i = 0; i < 60; i += interval) {
-                displayedValues.add(String.format("%02d", i));
+    @Override
+    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        selectedDateTime = selectedDateTime.with(LocalDateTime.of(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth(), timePicker.getHour(), timePicker.getMinute(), 0, 0));
+        if (endDateTime != null) {
+            if (Period.between(selectedDateTime.toLocalDate(), endDateTime.toLocalDate()).getDays() == 0) {
+                if (endDateTime.getHour() - selectedDateTime.getHour() < 1) {
+                    setTimePickerInterval(timePicker, 0, endDateTime.getHour(), hourInterval, 0, endDateTime.getMinute(), minuteInterval);
+                    return;
+                } else {
+                    setTimePickerInterval(timePicker, 0, endDateTime.getHour(), hourInterval, 0, 59, minuteInterval);
+                    return;
+                }
             }
-            minutePicker.setDisplayedValues(displayedValues.toArray(new String[0]));
+        }
+        if (startDateTime != null) {
+            if (Period.between(selectedDateTime.toLocalDate(), startDateTime.toLocalDate()).getDays() == 0) {
+                if (startDateTime.getHour() - selectedDateTime.getHour() < 1) {
+                    setTimePickerInterval(timePicker, startDateTime.getHour(), 23, hourInterval, startDateTime.getMinute() - startDateTime.getMinute(), 59, minuteInterval);
+                    return;
+                } else {
+                    setTimePickerInterval(timePicker, startDateTime.getHour(), 23, hourInterval, 0, 59, minuteInterval);
+                    return;
+                }
+            }
+        }
+        setTimePickerInterval(timePicker, 0, 23, 1, 0, 59, minuteInterval);
+    }
+
+    private void setTimePickerInterval(TimePicker timePicker, Integer minHour, Integer maxHour, Integer intervalHour, Integer minMinute, Integer maxMinute, Integer intervalMinute) {
+        NumberPicker hourPicker = (NumberPicker) timePicker.findViewById(Resources.getSystem().getIdentifier(
+                "hour", "id", "android"));
+        setNunberpickerDisplay(hourPicker, minHour, maxHour, intervalHour);
+
+        NumberPicker minutePicker = (NumberPicker) timePicker.findViewById(Resources.getSystem().getIdentifier(
+                "minute", "id", "android"));
+        setNunberpickerDisplay(minutePicker, minMinute, maxMinute, intervalMinute);
+    }
+
+    private void setNunberpickerDisplay(NumberPicker numberPicker, Integer min, Integer max, Integer interval) {
+        try {
+            Integer newValue;
+            List<String> displayValues = new ArrayList<String>();
+
+            for (int i = min; i <= max; i += interval) {
+                displayValues.add(String.format("%02d", i));
+            }
+
+            numberPicker.setMinValue(0);
+            if (numberPicker.getMaxValue() >= displayValues.size()) {
+                if (numberPicker.getValue() >= displayValues.size()) {
+                    newValue = ((displayValues.size() - 1)  - numberPicker.getMaxValue()) + numberPicker.getValue();
+                } else {
+                    newValue = displayValues.size() - 1;
+                }
+
+                numberPicker.setValue(newValue);
+                numberPicker.setMaxValue(displayValues.size() - 1);
+                numberPicker.setDisplayedValues(displayValues.toArray(new String[0]));
+            } else {
+                newValue = ((displayValues.size() - 1)  - numberPicker.getMaxValue()) + numberPicker.getValue();
+                numberPicker.setDisplayedValues(displayValues.toArray(new String[0]));
+                numberPicker.setMaxValue(displayValues.size() - 1);
+                numberPicker.setValue(newValue);
+            }
         } catch (Exception e) {
             Log.e(TAG, "Exception: " + e);
         }
     }
-//
-//    @SuppressLint("NewApi")
-//    private void setTimePickerInterval(TimePicker timePicker) {
-//        try {
-//            Class<?> classForid = Class.forName("com.android.internal.R$id");
-//            // Field timePickerField = classForid.getField("timePicker");
-//
-//            Field field = classForid.getField("minute");
-//            NumberPicker minutePicker = (NumberPicker) timePicker
-//                    .findViewById(field.getInt(null));
-//
-//            minutePicker.setMinValue(0);
-//            minutePicker.setMaxValue(2);
-//            List<String> displayedValues = new ArrayList<String>();
-//            for (int i = 0; i < 60; i += interval) {
-//                displayedValues.add(String.format("%02d", i));
-//            }
-//            for (int i = 0; i < 60; i += interval) {
-//                displayedValues.add(String.format("%02d", i));
-//            }
-//            minutePicker.setDisplayedValues(displayedValues
-//                    .toArray(new String[0]));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+
 }

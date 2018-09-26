@@ -116,8 +116,6 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
-
-        ControlFactory.getScheduleController().onDisplayProgramSlotList(this);
+        ControlFactory.getScheduleController().onDisplayProgramListScreen(this);
     }
 }

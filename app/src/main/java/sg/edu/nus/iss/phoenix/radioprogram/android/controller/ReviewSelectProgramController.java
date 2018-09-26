@@ -16,10 +16,10 @@ public class ReviewSelectProgramController {
     private static final String TAG = ReviewSelectProgramController.class.getName();
 
     private ReviewSelectProgramScreen reviewSelectProgramScreen;
-    private RadioProgram rpSelected = null;
+    private ReviewSelectRadioProgramReturnable caller;
 
-    public void startUseCase() {
-        rpSelected = null;
+    public void startUseCase(ReviewSelectRadioProgramReturnable caller) {
+        this.caller = caller;
         Intent intent = new Intent(MainController.getApp(), ReviewSelectProgramScreen.class);
         MainController.displayScreen(intent);
     }
@@ -34,18 +34,17 @@ public class ReviewSelectProgramController {
     }
 
     public void selectProgram(RadioProgram radioProgram) {
-        rpSelected = radioProgram;
         Log.v(TAG, "Selected radio program: " + radioProgram.getRadioProgramName() + ".");
         // To call the base use case controller with the selected radio program.
         // At present, call the MainController instead.
-        ControlFactory.getMainController().selectedProgram(rpSelected);
+        caller.radioProgramSelected(radioProgram);
+        reviewSelectProgramScreen.unloadDispayScreen();
     }
 
     public void selectCancel() {
-        rpSelected = null;
         Log.v(TAG, "Cancelled the seleciton of radio program.");
         // To call the base use case controller without selection;
         // At present, call the MainController instead.
-        ControlFactory.getMainController().selectedProgram(rpSelected);
+        //ControlFactory.getMainController().selectedProgram(rpSelected);
     }
 }
