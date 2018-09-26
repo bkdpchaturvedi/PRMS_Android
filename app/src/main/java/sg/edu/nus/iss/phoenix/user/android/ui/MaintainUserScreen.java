@@ -1,5 +1,6 @@
 package sg.edu.nus.iss.phoenix.user.android.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,11 +8,16 @@ import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
@@ -25,7 +31,9 @@ public class MaintainUserScreen extends AppCompatActivity {
     private EditText mUserIDEditText;
     private EditText mUserNameEditText;
     private EditText mUserPasswordEditText;
-    private EditText mRoleEditText;
+    private LinearLayout mRolesLinearLayout;
+    private List<CheckBox> rolesList = new ArrayList<>();
+    private Map<String, Role> allRoles = new HashMap<>();
     private User user2edit = null;
     KeyListener mUserIDEditTextKeyListener = null;
 
@@ -38,7 +46,6 @@ public class MaintainUserScreen extends AppCompatActivity {
         mUserIDEditText = (EditText) findViewById(R.id.maintain_user_id_text_view);
         mUserNameEditText = (EditText) findViewById(R.id.maintain_user_name_text_view);
         mUserPasswordEditText = (EditText) findViewById(R.id.maintain_user_password_text_view);
-        mRoleEditText = (EditText) findViewById(R.id.maintain_user_roles_text_view);
         // Keep the KeyListener for name EditText so as to enable editing after disabling it.
         mUserIDEditTextKeyListener = mUserIDEditText.getKeyListener();
     }
@@ -81,8 +88,7 @@ public class MaintainUserScreen extends AppCompatActivity {
                 // Save  user.
                 //YIJI TODO CONVERT CHECK BOX ROLES TO ARRAYLIST<ROLE>
 
-                ArrayList<Role> roles = new ArrayList<Role>();
-                roles.add(new Role(mRoleEditText.getText().toString()));
+                ArrayList<Role> roles = getSelectedRolesFromCheckbox();
 
                 if (user2edit == null) { // Newly created.
                     Log.v(TAG, "Saving user" + mUserNameEditText.getText().toString() + "...");
@@ -124,7 +130,6 @@ public class MaintainUserScreen extends AppCompatActivity {
         mUserIDEditText.setText("", TextView.BufferType.EDITABLE);
         mUserNameEditText.setText("", TextView.BufferType.EDITABLE);
         mUserPasswordEditText.setText("", TextView.BufferType.EDITABLE);
-        mRoleEditText.setText("", TextView.BufferType.EDITABLE);
         mUserNameEditText.setKeyListener(mUserIDEditTextKeyListener);
     }
 
@@ -134,14 +139,60 @@ public class MaintainUserScreen extends AppCompatActivity {
             mUserIDEditText.setText(user2edit.getId(), TextView.BufferType.NORMAL);
             mUserNameEditText.setText(user2edit.getUserName(), TextView.BufferType.NORMAL);
             mUserPasswordEditText.setText(user2edit.getUserPassword(), TextView.BufferType.EDITABLE);
-            //YIJIE TODO
-            mRoleEditText.setText(user2edit.getUserRoles().get(0).getRole(), TextView.BufferType.EDITABLE);
+            //YIJIE: no need following method as long as showRoles(roles) is called
+            //mRoleEditText.setText(user2edit.getUserRoles().get(0).getRole(), TextView.BufferType.EDITABLE);
             mUserNameEditText.setKeyListener(null);
         }
     }
 
     public void showRoles(List<Role> roles) {
-//YIJIE TODO
-        mRoleEditText.setText(roles.get(0).getRole(), TextView.BufferType.EDITABLE);
+        //YIJIE: initing checkbox list on the page
+        mRolesLinearLayout = (LinearLayout) findViewById(R.id.maintain_user_roles_linear_layout);
+        for (Role role : roles) {
+            allRoles.put(role.getRole(), role);
+            int index = 0;
+            if (user2edit != null && !user2edit.getUserRoles().isEmpty() && hasRole(role, user2edit.getUserRoles())) {
+                dynamicCreateCheckbox(index, role.getRole(), true);
+            } else {
+                dynamicCreateCheckbox(index, role.getRole(), false);
+            }
+            index++;
+        }
+    }
+
+    public void dynamicCreateCheckbox(int index, String role, boolean isChecked){
+        CheckBox checkBox = new CheckBox(getApplicationContext());
+        checkBox.setText(role);
+        checkBox.setTextColor(Color.BLACK);
+        checkBox.setTextSize(20);
+        checkBox.setPadding(20, 7, 0, 7);
+        checkBox.setChecked(isChecked);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //YIJIE: may be used, do not remove
+            }
+        });
+        mRolesLinearLayout.addView(checkBox, index);
+        rolesList.add(checkBox);
+    }
+
+    public boolean hasRole(Role role, List<Role> roleList){
+        for (Role roleFromList : roleList){
+            if (role.getRole().equals(roleFromList.getRole())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ArrayList<Role> getSelectedRolesFromCheckbox() {
+        ArrayList<Role> result = new ArrayList<>();
+        for (CheckBox checkbox : rolesList) {
+            if (checkbox.isChecked() && allRoles.get(checkbox.getText()) != null) {
+                result.add(allRoles.get(checkbox.getText()));
+            }
+        }
+        return result;
     }
 }
