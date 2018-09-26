@@ -52,5 +52,7 @@
     <string name="presenter_producer"><![CDATA[Presenter & Producer]]></string>
     <string name="action_set">Set</string>
     <string name="action_assign">Assign</string>
+    <string name="action_done">Done</string>
+    <string name="filter">Filter</string>
 
 </resources>

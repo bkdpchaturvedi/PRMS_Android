@@ -73,6 +73,11 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
         ControlFactory.getScheduleController().selectRadioProgram(currentProgramSlot.getRadioProgram());
     }
 
+    public void selectPresenterProducer() {
+        ControlFactory.getScheduleController().selectPresenterProducer(currentProgramSlot.getPresenter(), currentProgramSlot.getProducer());
+    }
+
+
     private void showDateTimePickerDialog(String field, ZonedDateTime selectedDateTime, ZonedDateTime startDateTime, ZonedDateTime endDateTime) {
         DateTimePickerDialog confirm_dialog = new DateTimePickerDialog(selectedDateTime
                 , startDateTime
@@ -96,6 +101,15 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
                     @Override
                     public void onClick(View v) {
                         selectRadioProgram();
+                    }
+                }
+        );
+
+        ((Button) findViewById(R.id.btn_programslot_presenterproducer)).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectPresenterProducer();
                     }
                 }
         );
