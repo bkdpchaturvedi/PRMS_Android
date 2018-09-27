@@ -1,5 +1,6 @@
 package sg.edu.nus.iss.phoenix.user.android.ui;
 
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -56,18 +57,24 @@ public class UserListScreen extends AppCompatActivity {
 
         mListView = (ListView) findViewById(R.id.user_list);
         mListView.setAdapter(mUserAdapter);
-        // Setup the item selection listener
-        mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                Log.v(TAG, "User at position " + position + " selected.");
+            public void onItemClick(AdapterView<?> adapterView, View v, int position,
+                                    long arg3)
+            {
+                Log.v(TAG, "User at position " + position + " clicked.");
                 User user = (User) adapterView.getItemAtPosition(position);
                 // Log.v(TAG, "User name is " + user.getUserName());
                 selectedUser = user;
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                // your stuff
+
+                for (int i = 0; i < mListView.getChildCount(); i++) {
+                    if(position == i ){
+                        mListView.getChildAt(i).setBackgroundColor(Color.LTGRAY);
+                    }else{
+                        mListView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+                    }
+                }
             }
         });
     }
@@ -115,7 +122,6 @@ public class UserListScreen extends AppCompatActivity {
     }
 
     public void showUsers(List<User> users) {
-        selectedUser=users.get(0);
         mUserAdapter.clear();
         for (int i = 0; i < users.size(); i++) {
             mUserAdapter.add(users.get(i));

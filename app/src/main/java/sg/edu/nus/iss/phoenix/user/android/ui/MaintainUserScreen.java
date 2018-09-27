@@ -98,7 +98,7 @@ public class MaintainUserScreen extends AppCompatActivity {
                 }
                 else { // Edited.
                     Log.v(TAG, "Saving user " + user2edit.getUserName() + "...");
-                    user2edit.setUserName(mUserIDEditText.getText().toString());
+                    user2edit.setUserName(mUserNameEditText.getText().toString());
                     user2edit.setUserPassword(mUserPasswordEditText.getText().toString());
                     user2edit.setUserRoles(roles);
                     ControlFactory.getUserController().selectUpdateUser(user2edit);
@@ -141,7 +141,7 @@ public class MaintainUserScreen extends AppCompatActivity {
             mUserPasswordEditText.setText(user2edit.getUserPassword(), TextView.BufferType.EDITABLE);
             //YIJIE: no need following method as long as showRoles(roles) is called
             //mRoleEditText.setText(user2edit.getUserRoles().get(0).getRole(), TextView.BufferType.EDITABLE);
-            mUserNameEditText.setKeyListener(null);
+            mUserIDEditText.setKeyListener(null);
         }
     }
 

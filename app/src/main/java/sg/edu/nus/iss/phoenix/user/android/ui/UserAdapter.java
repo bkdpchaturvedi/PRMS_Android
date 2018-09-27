@@ -27,22 +27,18 @@ public class UserAdapter extends ArrayAdapter<User> {
         View listItemView = convertView;
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.activity_user, parent, false);
+                    R.layout.activity_user_list_item, parent, false);
         }
         //    Word currentWord = getItem(position);
         User currentUser = getItem(position);
 
-        EditText userId = (EditText)listItemView.findViewById(R.id.maintain_user_id_text_view);
+        TextView userId = (TextView)listItemView.findViewById(R.id.list_item_user_id_text_view);
         userId.setText(currentUser.getId(), TextView.BufferType.NORMAL);
         userId.setKeyListener(null);
 
-        EditText userName = (EditText)listItemView.findViewById(R.id.maintain_user_name_text_view);
+        TextView userName = (TextView)listItemView.findViewById(R.id.list_item_user_name_text_view);
         userName.setText(currentUser.getUserName(), TextView.BufferType.NORMAL);
         userName.setKeyListener(null); // This disables editing.
-
-        EditText userPassword = (EditText)listItemView.findViewById(R.id.maintain_user_password_text_view);
-        userPassword.setText(currentUser.getUserPassword(), TextView.BufferType.NORMAL);
-        userPassword.setKeyListener(null);
 
         return listItemView;
     }
