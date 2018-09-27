@@ -2,15 +2,16 @@ package sg.edu.nus.iss.phoenix.core.android.controller.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class User implements Serializable {
 
     private String id;
     private String userName;
     private String userPassword;
-    private ArrayList<Role> userRoles;
+    private List<Role> userRoles;
 
-    public User(String id,String userName, String userPassword, ArrayList<Role> userRoles) {
+    public User(String id,String userName, String userPassword, List<Role> userRoles) {
         this.id=id;
         this.userName = userName;
         this.userPassword= userPassword;
@@ -29,7 +30,7 @@ public class User implements Serializable {
         return userPassword;
     }
 
-    public ArrayList<Role> getUserRoles() {
+    public List<Role> getUserRoles() {
         return userRoles;
     }
 

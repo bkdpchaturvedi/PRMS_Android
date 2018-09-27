@@ -54,5 +54,6 @@
     <string name="action_assign">Assign</string>
     <string name="action_done">Done</string>
     <string name="filter">Filter</string>
+    <string name="filter_by">Filter by</string>
 
 </resources>

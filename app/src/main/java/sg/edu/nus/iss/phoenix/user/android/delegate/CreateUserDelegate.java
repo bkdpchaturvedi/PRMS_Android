@@ -14,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.Role;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
@@ -91,7 +92,7 @@ public class CreateUserDelegate extends AsyncTask<User, Void, Boolean> {
         userController.userCreated(result.booleanValue());
     }
 
-    private  JSONArray toJson(ArrayList<Role> list) throws JSONException {
+    private  JSONArray toJson(List<Role> list) throws JSONException {
         JSONArray jsonArray = new JSONArray();
         for (Role obj : list) {
             JSONObject item = new JSONObject();
