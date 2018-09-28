@@ -87,6 +87,6 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
 
     @Override
     public void presenterProducerSelected(User presenter, User producer) {
-
+        maintainScheduleScreen.presenterProducerSelected(presenter, producer);
     }
 }

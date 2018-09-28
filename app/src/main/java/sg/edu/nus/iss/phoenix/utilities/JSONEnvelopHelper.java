@@ -21,14 +21,14 @@ public class JSONEnvelopHelper {
 
     private static final String TAG = RetrieveUsersDelegate.class.getName();
 
-    public static JSONEnvelop<List<User>> parseEnvelopUser(String response) {
+    public static JSONEnvelop<List<User>> parseEnvelopUsers(String response) {
         JSONEnvelop<List<User>> result = new JSONEnvelop<>();
         try {
             JSONObject jsonObject = new JSONObject(response);
             result.setData(parseUsers(jsonObject.getJSONArray("data")));
             result.setError(parseError(jsonObject.getJSONObject("error")));
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         }
         return result;
     }

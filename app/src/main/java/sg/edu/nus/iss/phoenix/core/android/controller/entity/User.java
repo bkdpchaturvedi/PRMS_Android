@@ -9,13 +9,13 @@ public class User implements Serializable {
     private String id;
     private String userName;
     private String userPassword;
-    private List<Role> userRoles;
+    private List<Role> roles;
 
-    public User(String id,String userName, String userPassword, List<Role> userRoles) {
+    public User(String id,String userName, String userPassword, List<Role> roles) {
         this.id=id;
         this.userName = userName;
         this.userPassword= userPassword;
-        this.userRoles = userRoles;
+        this.roles = roles;
     }
 
     public String getId() {
@@ -30,8 +30,8 @@ public class User implements Serializable {
         return userPassword;
     }
 
-    public List<Role> getUserRoles() {
-        return userRoles;
+    public List<Role> getRoles() {
+        return roles;
     }
 
     public void setId(String id) {
@@ -46,7 +46,7 @@ public class User implements Serializable {
         this.userPassword = userPassword;
     }
 
-    public void setUserRoles(ArrayList<Role> userRoles) {
-        this.userRoles = userRoles;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

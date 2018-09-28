@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="@string/preseenter"
+        android:text="@string/no_records_selected"
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="@+id/textView5"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,12 +46,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/tv_reviewselectpresenterproducer_producer_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:text="@string/prodcuer"
+        android:text="@string/no_records_selected"
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="@+id/textView4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +81,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6">
+        app:layout_constraintTop_toBottomOf="@+id/tv_reviewselectpresenterproducer_producer_name">
 
         <RadioButton
             android:id="@+id/rdo_reviewselectpresenterproducer_presenter"
@@ -109,11 +109,26 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rdo_reviewselectpresenterproducer_filter" />
+        app:layout_constraintTop_toBottomOf="@+id/rdo_reviewselectpresenterproducer_filter">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/tv_reviewselectpresenterproducer_norecoundfound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/no_records_found"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/rv_reviewselectpresenterproducer_list"
+        app:layout_constraintStart_toStartOf="@+id/rv_reviewselectpresenterproducer_list"
+        app:layout_constraintTop_toTopOf="@+id/rv_reviewselectpresenterproducer_list" />
+
 </android.support.constraint.ConstraintLayout>

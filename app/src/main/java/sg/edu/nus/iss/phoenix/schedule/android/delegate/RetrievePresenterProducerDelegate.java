@@ -23,6 +23,8 @@ import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_B
 import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_USER;
 
 public class RetrievePresenterProducerDelegate extends AsyncTask<String, Void, String> {
+
+    private String param = "";
     private static final String TAG = RetrieveProgramSlotDelegate.class.getName();
     private ReviewSelectPresenterProducerController reviewSelectPresenterProducerController = null;
 
@@ -33,8 +35,9 @@ public class RetrievePresenterProducerDelegate extends AsyncTask<String, Void, S
 
     @Override
     protected String doInBackground(String... params) {
+        this.param  = params[0];
         Uri builtUri1 = Uri.parse(PRMS_BASE_URL_USER).buildUpon().build();
-        Uri builtUri = Uri.withAppendedPath(builtUri1, params[0]).buildUpon().build();
+        Uri builtUri = Uri.withAppendedPath(builtUri1, param).buildUpon().build();
         Log.v(TAG, builtUri.toString());
         URL url = null;
         try {
@@ -64,12 +67,17 @@ public class RetrievePresenterProducerDelegate extends AsyncTask<String, Void, S
 
 
     @Override
-    protected void onPostExecute(String result) {
-        JSONEnvelopHelper.parseEnvelopUser(result);
+    protected void onPostExecute(String response) {
         if (reviewSelectPresenterProducerController != null) {
+            switch (param) {
+                case "presenters":
+                    reviewSelectPresenterProducerController.presentersRetrieved(JSONEnvelopHelper.parseEnvelopUsers(response));
+                    break;
+                case "producers":
+                    reviewSelectPresenterProducerController.producersRetrieved(JSONEnvelopHelper.parseEnvelopUsers(response));
+                    break;
+            }
 
         }
-            //reviewSelectPresenterProducerController.(programSlots);
-
     }
 }

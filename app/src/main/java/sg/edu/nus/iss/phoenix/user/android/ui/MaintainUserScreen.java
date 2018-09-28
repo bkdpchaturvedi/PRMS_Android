@@ -100,7 +100,7 @@ public class MaintainUserScreen extends AppCompatActivity {
                     Log.v(TAG, "Saving user " + user2edit.getUserName() + "...");
                     user2edit.setUserName(mUserNameEditText.getText().toString());
                     user2edit.setUserPassword(mUserPasswordEditText.getText().toString());
-                    user2edit.setUserRoles(roles);
+                    user2edit.setRoles(roles);
                     ControlFactory.getUserController().selectUpdateUser(user2edit);
                 }
                 return true;
@@ -140,7 +140,7 @@ public class MaintainUserScreen extends AppCompatActivity {
             mUserNameEditText.setText(user2edit.getUserName(), TextView.BufferType.NORMAL);
             mUserPasswordEditText.setText(user2edit.getUserPassword(), TextView.BufferType.EDITABLE);
             //YIJIE: no need following method as long as showRoles(roles) is called
-            //mRoleEditText.setText(user2edit.getUserRoles().get(0).getRole(), TextView.BufferType.EDITABLE);
+            //mRoleEditText.setText(user2edit.getRoles().get(0).getRole(), TextView.BufferType.EDITABLE);
             mUserIDEditText.setKeyListener(null);
         }
     }
@@ -151,7 +151,7 @@ public class MaintainUserScreen extends AppCompatActivity {
         for (Role role : roles) {
             allRoles.put(role.getRole(), role);
             int index = 0;
-            if (user2edit != null && !user2edit.getUserRoles().isEmpty() && hasRole(role, user2edit.getUserRoles())) {
+            if (user2edit != null && !user2edit.getRoles().isEmpty() && hasRole(role, user2edit.getRoles())) {
                 dynamicCreateCheckbox(index, role.getRole(), true);
             } else {
                 dynamicCreateCheckbox(index, role.getRole(), false);

@@ -19,6 +19,7 @@ import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ConstantHelper;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.utilities.DateHelper;
 
@@ -90,11 +91,27 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
                 , DateTimePickerDialog.TAG);
     }
 
+    public void radioProgramSelected(RadioProgram radioProgram) {
+        currentProgramSlot.setRadioProgram(radioProgram);
+        displayProgramSlot();
+    }
+
+    public void presenterProducerSelected(User presenter, User producer) {
+        currentProgramSlot.setPresenter(presenter);
+        currentProgramSlot.setProducer(producer);
+        displayProgramSlot();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_program_slot);
         currentProgramSlot = (ProgramSlot) getIntent().getSerializableExtra(ConstantHelper.PROGRAM_SLOT);
+
+        setupControls();
+    }
+
+    private void setupControls() {
 
         ((Button) findViewById(R.id.btn_programslot_radioprogram)).setOnClickListener(
                 new View.OnClickListener() {
@@ -118,7 +135,7 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (currentProgramSlot.getDateOfProgram() != null) {
+                        if (currentProgramSlot.getDateOfProgram() != null && currentProgramSlot.getAssignedBy() != null) {
                             showDateTimePickerDialog(START_DATETIME
                                     , currentProgramSlot.getDateOfProgram()
                                     , DateHelper.getWeekStartDate(currentProgramSlot.getDateOfProgram()
@@ -134,7 +151,32 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
                     }
                 }
         );
+
+        ((Button) findViewById(R.id.btn_programslot_dateofprogram_end)).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (currentProgramSlot.getDateOfProgram() != null && currentProgramSlot.getAssignedBy() != null) {
+                            long duration = 0;
+                            if (currentProgramSlot.getDuration() != null) {
+                                duration = currentProgramSlot.getDuration().getSeconds();
+                            }
+                            showDateTimePickerDialog(END_DATETIME
+                                    , currentProgramSlot.getDateOfProgram().plusSeconds(duration)
+                                    , currentProgramSlot.getDateOfProgram()
+                                    , DateHelper.getWeekEndDate(currentProgramSlot.getDateOfProgram()
+                                            .toLocalDate()).atStartOfDay(ZoneOffset.UTC));
+                        } else {
+                            showDateTimePickerDialog(END_DATETIME
+                                    , null
+                                    , null
+                                    , null);
+                        }
+                    }
+                }
+        );
     }
+
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
@@ -202,11 +244,6 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
 //        }
 //
         return true;
-    }
-
-    public void radioProgramSelected(RadioProgram radioProgram) {
-        currentProgramSlot.setRadioProgram(radioProgram);
-        displayProgramSlot();
     }
 
 //    @Override
