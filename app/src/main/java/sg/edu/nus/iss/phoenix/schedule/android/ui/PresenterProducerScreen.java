@@ -32,7 +32,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
     private RecyclerView recyclerView;
     private User selectedPresenter;
     private User selectedProducer;
-    private String mode;
+    private String field;
 
     public void displayProducer(final List<User> producers) {
         presenterProducerListAdapter.setUsers(producers);
@@ -46,19 +46,21 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
         recyclerView = (RecyclerView) findViewById(R.id.rv_reviewselectpresenterproducer_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         presenterProducerListAdapter = new PresenterProducerListAdapter(new ArrayList<User>());
+        presenterProducerListAdapter.setSelectionMode(presenterProducerListAdapter.SINGLE_MODE);
         presenterProducerListAdapter.setPresenterProducerViewHolderClick(this);
         recyclerView.setAdapter(presenterProducerListAdapter);
 
         ((RadioGroup) findViewById(R.id.rdo_reviewselectpresenterproducer_filter)).setOnCheckedChangeListener(this);
+
     }
 
     public void selectGetAllPresenters() {
-        mode = ConstantHelper.PRESENTERS;
+        field = ConstantHelper.PRESENTERS;
         ControlFactory.getReviewSelectPresenterProducerController().selectGetAllPresenters();
     }
 
     public void selectGetAllProducers() {
-        mode = ConstantHelper.PRODUCERS;
+        field = ConstantHelper.PRODUCERS;
         ControlFactory.getReviewSelectPresenterProducerController().selectGetAllProducers();
     }
 
@@ -87,22 +89,22 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
     }
 
     public void displayErrorMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     public void displaySuccessMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     public void displayPresenters(List<User> presenters) {
         if (presenters != null && presenters.size() > 0) {
             ((TextView) findViewById(R.id.tv_reviewselectpresenterproducer_norecoundfound))
                     .setVisibility(View.GONE);
-            presenterProducerListAdapter.getSelectedItems().clear();
+            presenterProducerListAdapter.cleareSelected();
             if (selectedPresenter != null) {
                 for (int i =0; i<presenters.size(); i++) {
                     if (presenters.get(i).getId().equals(selectedPresenter.getId())) {
-                        presenterProducerListAdapter.getSelectedItems().put(i, true);
+                        presenterProducerListAdapter.addSelected(i);
                     }
                 }
             }
@@ -118,11 +120,11 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
         if (producers != null && producers.size() > 0) {
             ((TextView) findViewById(R.id.tv_reviewselectpresenterproducer_norecoundfound))
                     .setVisibility(View.GONE);
-            presenterProducerListAdapter.getSelectedItems().clear();
+            presenterProducerListAdapter.cleareSelected();
             if (selectedProducer != null) {
                 for (int i =0; i<producers.size(); i++) {
                     if (producers.get(i).getId().equals(selectedProducer.getId())) {
-                        presenterProducerListAdapter.getSelectedItems().put(i, true);
+                        presenterProducerListAdapter.addSelected(i);
                     }
                 }
             }
@@ -138,16 +140,24 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_select_presenter_producer);
+        selectedPresenter = (User) getIntent().getSerializableExtra(ConstantHelper.PRESENTER);
+        selectedProducer = (User) getIntent().getSerializableExtra(ConstantHelper.PRODUCER);
+        field = getIntent().getStringExtra(ConstantHelper.FIELD);
         setupControls();
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        this.selectedPresenter = (User) getIntent().getSerializableExtra(ConstantHelper.PRESENTER);
-        this.selectedProducer = (User) getIntent().getSerializableExtra(ConstantHelper.PRODUCER);
         ControlFactory.getReviewSelectPresenterProducerController().onDisplayScreen(this, this.selectedPresenter, this.selectedProducer);
-        selectGetAllPresenters();
+        switch (field) {
+            case ConstantHelper.PRESENTER:
+                ((RadioButton) findViewById(R.id.rdo_reviewselectpresenterproducer_presenter)).setChecked(true);
+                break;
+            case ConstantHelper.PRODUCER:
+                ((RadioButton) findViewById(R.id.rdo_reviewselectpresenterproducer_producer)).setChecked(true);
+                break;
+        }
     }
 
     @Override
@@ -163,6 +173,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
         switch (item.getItemId()) {
             case R.id.action_done:
                 ControlFactory.getReviewSelectPresenterProducerController().selectReturnResult(selectedPresenter, selectedProducer);
+                break;
         }
         return true;
     }
@@ -181,7 +192,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
 
     @Override
     public void onItemClick(PresenterProducerListAdapter.PresenterProducerViewHolder viewHolder) {
-        switch (mode) {
+        switch (field) {
             case ConstantHelper.PRESENTERS:
                 selectPresenter(presenterProducerListAdapter.getUsers()
                         .get(viewHolder.getAdapterPosition()));

@@ -17,11 +17,13 @@ public class ReviewSelectPresenterProducerController {
     private  ReviewSelectPresenterProducerReturnable caller;
     private PresenterProducerScreen presenterProducerScreen;
 
-    public void startUseCase(ReviewSelectPresenterProducerReturnable caller, User presenter, User producer) {
+    public void startUseCase(ReviewSelectPresenterProducerReturnable caller, User presenter, User producer, String field) {
         this.caller = caller;
         Intent intent = new Intent(MainController.getApp(), PresenterProducerScreen.class);
         intent.putExtra(ConstantHelper.PRESENTER, presenter);
         intent.putExtra(ConstantHelper.PRODUCER, producer);
+        intent.putExtra(ConstantHelper.FIELD, field);
+
         MainController.displayScreen(intent);
     }
 

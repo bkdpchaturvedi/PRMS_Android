@@ -30,10 +30,14 @@ import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
-public class DateTimePickerDialog extends DialogFragment implements DatePicker.OnDateChangedListener {
+
+public class DateTimePickerDialog extends DialogFragment implements DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener {
 
     public static final String TAG = DateTimePickerDialog.class.getName();
+
 
     public interface DateTimeSetListener {
         void onDateTimeSet(ZonedDateTime value, String field);
@@ -89,6 +93,8 @@ public class DateTimePickerDialog extends DialogFragment implements DatePicker.O
         });
         datePicker = (DatePicker) view.findViewById(R.id.dp_datetimedialog);
         timePicker = (TimePicker) view.findViewById(R.id.tp_datetimedialog);
+        datePicker.setOnDateChangedListener(this);
+        timePicker.setOnTimeChangedListener(this);
         timePicker.setIs24HourView(true);
         if (selectedDateTime != null) {
             datePicker.init(selectedDateTime.getYear(), selectedDateTime.getMonthValue() - 1, selectedDateTime.getDayOfMonth(), this);
@@ -109,7 +115,11 @@ public class DateTimePickerDialog extends DialogFragment implements DatePicker.O
 
     @Override
     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        selectedDateTime = selectedDateTime.with(LocalDateTime.of(datePicker.getYear(), datePicker.getMonth() + 1, datePicker.getDayOfMonth(), timePicker.getHour(), timePicker.getMinute(), 0, 0));
+        onDateTimeChanged();
+    }
+
+    private void onDateTimeChanged() {
+        refreshSelectedDateTime();
         if (endDateTime != null) {
             if (Period.between(selectedDateTime.toLocalDate(), endDateTime.toLocalDate()).getDays() == 0) {
                 if (endDateTime.getHour() - selectedDateTime.getHour() < 1) {
@@ -123,8 +133,8 @@ public class DateTimePickerDialog extends DialogFragment implements DatePicker.O
         }
         if (startDateTime != null) {
             if (Period.between(selectedDateTime.toLocalDate(), startDateTime.toLocalDate()).getDays() == 0) {
-                if (startDateTime.getHour() - selectedDateTime.getHour() < 1) {
-                    setTimePickerInterval(timePicker, startDateTime.getHour(), 23, hourInterval, startDateTime.getMinute() - startDateTime.getMinute(), 59, minuteInterval);
+                if (startDateTime.getHour() - selectedDateTime.getHour() >= 0) {
+                    setTimePickerInterval(timePicker, startDateTime.getHour(), 23, hourInterval, startDateTime.getMinute(), 59, minuteInterval);
                     return;
                 } else {
                     setTimePickerInterval(timePicker, startDateTime.getHour(), 23, hourInterval, 0, 59, minuteInterval);
@@ -135,6 +145,36 @@ public class DateTimePickerDialog extends DialogFragment implements DatePicker.O
         setTimePickerInterval(timePicker, 0, 23, 1, 0, 59, minuteInterval);
     }
 
+
+    @Override
+    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+        onDateTimeChanged();
+    }
+
+    private void refreshSelectedDateTime() {
+        Integer hour = Integer.valueOf(getDisplayValue( (NumberPicker) timePicker
+                .findViewById(Resources.getSystem().getIdentifier("hour",
+                        "id", "android"))));
+        Integer minute = Integer.valueOf(getDisplayValue( (NumberPicker) timePicker
+                .findViewById(Resources.getSystem().getIdentifier("minute",
+                        "id", "android"))));
+        selectedDateTime = selectedDateTime.with(LocalDateTime.of(datePicker.getYear()
+                , datePicker.getMonth() + 1
+                , datePicker.getDayOfMonth()
+                , hour
+                , minute
+                , 0
+                , 0));
+        Log.i(TAG, selectedDateTime.toString());
+    }
+
+    private String getDisplayValue(NumberPicker numberPicker) {
+        if (numberPicker.getDisplayedValues() != null) {
+            return numberPicker.getDisplayedValues()[numberPicker.getValue()];
+        }
+        return String.valueOf(numberPicker.getValue());
+    }
+
     private void setTimePickerInterval(TimePicker timePicker, Integer minHour, Integer maxHour, Integer intervalHour, Integer minMinute, Integer maxMinute, Integer intervalMinute) {
         NumberPicker hourPicker = (NumberPicker) timePicker.findViewById(Resources.getSystem().getIdentifier(
                 "hour", "id", "android"));
@@ -143,6 +183,7 @@ public class DateTimePickerDialog extends DialogFragment implements DatePicker.O
         NumberPicker minutePicker = (NumberPicker) timePicker.findViewById(Resources.getSystem().getIdentifier(
                 "minute", "id", "android"));
         setNunberpickerDisplay(minutePicker, minMinute, maxMinute, intervalMinute);
+        refreshSelectedDateTime();
     }
 
     private void setNunberpickerDisplay(NumberPicker numberPicker, Integer min, Integer max, Integer interval) {

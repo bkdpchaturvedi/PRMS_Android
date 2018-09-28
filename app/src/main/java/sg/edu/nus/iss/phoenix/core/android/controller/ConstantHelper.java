@@ -6,4 +6,5 @@ public class ConstantHelper {
     public static final String PRODUCER = "PRODUCER";
     public static final String PRESENTERS = "PRESENTERS";
     public static final String PRODUCERS = "PRODUCERS";
+    public static final String FIELD = "FIELD";
 }

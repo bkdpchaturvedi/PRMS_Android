@@ -21,12 +21,18 @@ import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 public class PresenterProducerListAdapter  extends RecyclerView.Adapter<PresenterProducerListAdapter.PresenterProducerViewHolder>  {
     private List<User> users;
     private PresenterProducerViewHolderClick userViewHolderClick;
-    private SparseBooleanArray selectedItems  = new SparseBooleanArray();;
+    private SparseBooleanArray selectedItems;
+
     private int currentSelected = -1;
+    private int selectionMode = MULTIPLE_MODE;
+
+    public static final int SINGLE_MODE = 1;
+    public static final int MULTIPLE_MODE = 0;
 
     public PresenterProducerListAdapter(List<User> users) {
         if (users == null) users = new ArrayList<User>();
         this.users = users;
+        selectedItems = new SparseBooleanArray();
     }
 
     public void setPresenterProducerViewHolderClick(PresenterProducerViewHolderClick userViewHolderClick) {
@@ -41,8 +47,35 @@ public class PresenterProducerListAdapter  extends RecyclerView.Adapter<Presente
         this.users = users;
     }
 
-    public SparseBooleanArray getSelectedItems() {
-        return selectedItems;
+    public void addSelected(int index) {
+        selectedItems.put(index, true);
+        switch (selectionMode) {
+            case SINGLE_MODE:
+                selectedItems.delete(currentSelected);
+                currentSelected = index;
+                break;
+            case MULTIPLE_MODE:
+                break;
+        }
+        notifyDataSetChanged();
+    }
+
+    public void cleareSelected() {
+        selectedItems.clear();
+        switch (selectionMode) {
+            case SINGLE_MODE:
+                currentSelected = -1;
+                break;
+            case MULTIPLE_MODE:
+                break;
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setSelectionMode(int selectionMode) {
+        this.selectionMode = selectionMode;
+        selectedItems.clear();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -64,13 +97,24 @@ public class PresenterProducerListAdapter  extends RecyclerView.Adapter<Presente
                             if (userViewHolder.itemView.isClickable()) {
                                 userViewHolderClick.onItemClick(userViewHolder);
                                 if (selectedItems.get(userViewHolder.getAdapterPosition(), false)) {
-                                    selectedItems.delete(userViewHolder.getAdapterPosition());
-                                    userViewHolder.setSelected(false);
+                                    if (currentSelected != userViewHolder.getAdapterPosition() || selectionMode != SINGLE_MODE) {
+                                        selectedItems.delete(userViewHolder.getAdapterPosition());
+                                        userViewHolder.setSelected(false);
+                                    }
+
                                 } else {
                                     if (currentSelected >= 0) {
                                         ((PresenterProducerViewHolder) ((RecyclerView) v.getParent()).findViewHolderForAdapterPosition(currentSelected)).setSelected(false);
                                     }
-                                    selectedItems.delete(currentSelected);
+                                    switch (selectionMode) {
+                                        case SINGLE_MODE:
+                                            selectedItems.delete(currentSelected);
+                                            break;
+                                        case MULTIPLE_MODE:
+                                        default:
+                                            break;
+                                    }
+
                                     selectedItems.put(userViewHolder.getAdapterPosition(), true);
                                     userViewHolder.setSelected(true);
                                     currentSelected = userViewHolder.getAdapterPosition();

@@ -76,8 +76,8 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
         ControlFactory.getReviewSelectProgramController().startUseCase(this);
     }
 
-    public void selectPresenterProducer(User presenter, User producer) {
-        ControlFactory.getReviewSelectPresenterProducerController().startUseCase(this, presenter, producer);
+    public void selectPresenterProducer(User presenter, User producer, String field) {
+        ControlFactory.getReviewSelectPresenterProducerController().startUseCase(this, presenter, producer, field);
     }
 
     @Override
