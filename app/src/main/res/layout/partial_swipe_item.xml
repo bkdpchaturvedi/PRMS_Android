@@ -19,8 +19,8 @@
         android:drawableLeft="@android:drawable/ic_menu_edit"
         android:minWidth="0dp"
         android:padding="0dp"
-        android:tag="edit"
-        android:text="Edit"
+        android:tag="view"
+        android:text="View"
         android:textColor="@color/cardview_light_background" />
 
     <Button
@@ -47,6 +47,7 @@
         android:padding="0dp"
         android:tag="delete"
         android:text="delete"
+        android:visibility="gone"
         android:textColor="@color/cardview_light_background" />
 
 </LinearLayout>
