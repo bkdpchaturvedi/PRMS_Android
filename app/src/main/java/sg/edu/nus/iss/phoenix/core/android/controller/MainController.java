@@ -9,12 +9,14 @@ import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
 
 public class MainController {
     private static Application app = null;
-    private String username;
+    private static String userId;
     private MainScreen mainScreen;
 
     public static Application getApp() {
         return app;
     }
+    
+    public static String getUserId() {return userId;}
 
     public static void setApp(Application app) {
         MainController.app = app;
@@ -25,8 +27,8 @@ public class MainController {
         app.startActivity(intent);
     }
 
-    public void startUseCase(String username) {
-        this.username = username;
+    public void startUseCase(String userId) {
+        this.userId = userId;
 
         Intent intent = new Intent(MainController.getApp(), MainScreen.class);
         MainController.displayScreen(intent);
@@ -34,7 +36,7 @@ public class MainController {
 
     public void onDisplay(MainScreen mainScreen) {
         this.mainScreen = mainScreen;
-        mainScreen.showUsername(username);
+        mainScreen.showUsername(userId);
     }
 
     public void selectMaintainProgram() {
@@ -46,19 +48,19 @@ public class MainController {
     }
 
     public void maintainedProgram() {
-        startUseCase(username);
+        startUseCase(userId);
     }
 
     public void maintainedUser() {
-        startUseCase(username);
+        startUseCase(userId);
     }
 
     public void selectLogout() {
-        username = "<not logged in>";
+        userId = "<not logged in>";
         ControlFactory.getLoginController().logout();
     }
     public void maintainedSchedule() {
-        startUseCase(username);
+        startUseCase(userId);
     }
     public void selectMaintainSchedule() {
         // This is the placeholder for starting the Maintain Schedule use case.
@@ -68,10 +70,10 @@ public class MainController {
 
     // This is a dummy operation to test the invocation of Review Select Radio Program use case.
     public void selectedProgram(RadioProgram rpSelected) {
-        startUseCase(username);
+        startUseCase(userId);
     }
 
     public void selectedUser(User userSelected) {
-        startUseCase(username);
+        startUseCase(userId);
     }
 }

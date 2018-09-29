@@ -1,8 +1,11 @@
 package sg.edu.nus.iss.phoenix.schedule.android.ui;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -76,14 +80,14 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
                             .plusSeconds(currentProgramSlot.getDuration()
                             .getSeconds()).toString()
                     );
-        } else {
-            int visibility = View.VISIBLE;
-            if (currentProgramSlot.getDateOfProgram() == null) {
-                visibility = View.GONE;
-            }
-            findViewById(R.id.tv_programslot_dateofprogram_end_label).setVisibility(visibility);
-            findViewById(R.id.et_programslot_dateofprogram_end).setVisibility(visibility);
         }
+
+        int visibility = View.VISIBLE;
+        if (currentProgramSlot.getDateOfProgram() == null) {
+            visibility = View.GONE;
+        }
+        findViewById(R.id.tv_programslot_dateofprogram_end_label).setVisibility(visibility);
+        findViewById(R.id.et_programslot_dateofprogram_end).setVisibility(visibility);
     }
 
     public void selectRadioProgram(){
@@ -114,6 +118,10 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
 
     public void radioProgramSelected(RadioProgram radioProgram) {
         currentProgramSlot.setRadioProgram(radioProgram);
+        currentProgramSlot.setDuration(Duration.between (
+                LocalTime.MIN ,
+                LocalTime.parse (radioProgram.getRadioProgramDuration())
+        ));
         displayProgramSlot();
     }
 
@@ -128,7 +136,6 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_program_slot);
         currentProgramSlot = (ProgramSlot) getIntent().getSerializableExtra(ConstantHelper.PROGRAM_SLOT);
-
         setupControls();
     }
 
@@ -242,15 +249,19 @@ return true;
         }
         if (Duration.between(currentProgramSlot.getDateOfProgram()
                 .plusSeconds(currentProgramSlot.getDuration().getSeconds()).toLocalDateTime()
-                , DateHelper.getWeekEndDate(currentProgramSlot.getDateOfProgram().toLocalDate()))
-                .getSeconds() > 0) {
+                , DateHelper.getWeekEndDate(currentProgramSlot.getDateOfProgram().toLocalDate()).plusDays(1).atStartOfDay())
+                .getSeconds() < 0) {
             displayErrorMessage("Please set the end date of program not to cross the current week.");
             return false;
         }
         return true;
     }
 
-    private void displayErrorMessage(String message) {
+    public void displayErrorMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void displaySuccessMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
@@ -269,7 +280,7 @@ return true;
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (currentProgramSlot == null) {
+        if (currentProgramSlot.getAssignedBy() == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
         }
@@ -281,11 +292,14 @@ return true;
     public void onDateTimeSet(ZonedDateTime value, String field) {
         switch (field) {
             case START_DATETIME:
-                if (currentProgramSlot.getDuration() != null) {
-                    currentProgramSlot.setDuration(currentProgramSlot.getDuration()
-                            .plusSeconds(Duration.between(value
-                                    , currentProgramSlot.getDateOfProgram())
-                                    .getSeconds()));
+                if (currentProgramSlot.getDuration() != null && currentProgramSlot.getDateOfProgram() != null) {
+                    if (Duration.between(value, currentProgramSlot.getDateOfProgram().plusSeconds(currentProgramSlot.getDuration().getSeconds())).getSeconds() > 0) {
+                        currentProgramSlot.setDuration(currentProgramSlot.getDuration()
+                                .plusSeconds(Duration.between(value
+                                        , currentProgramSlot.getDateOfProgram())
+                                        .getSeconds()));
+                    }
+
                 }
                 currentProgramSlot.setDateOfProgram(value);
                 break;
@@ -300,7 +314,17 @@ return true;
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                validate();
+                if (validate()) {
+                    new AlertDialog.Builder(this)
+                            .setMessage("Are you sure want to save?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    Log.v(TAG, "Saving program slot " + currentProgramSlot.toString() + "...");
+                                    ControlFactory.getScheduleController().selectCreateProgramSlot(currentProgramSlot);
+                                }})
+                            .setNegativeButton(android.R.string.no, null).show();
+                }
+                break;
 //                if (currentProgramSlot == null) { // Newly created.
 //                    Log.v(TAG, "Saving program slot " + currentProgramSlot.toString() + "...");
 //                    RadioProgram rp = new RadioProgram(mRPNameEditText.getText().toString(),
@@ -313,7 +337,6 @@ return true;
 //                    currentProgramSlot.setRadioProgramDuration(mDurationEditText.getText().toString());
 //                    ControlFactory.getProgramController().selectUpdateProgram(currentProgramSlot);
 //                }
-                return true;
 //            // Respond to a click on the "Delete" menu option
 //            case R.id.action_delete:
 //                Log.v(TAG, "Deleting radio program " + currentProgramSlot.getRadioProgramName() + "...");
@@ -328,6 +351,7 @@ return true;
 
         return true;
     }
+
 
 //    @Override
 //    public void onBackPressed() {

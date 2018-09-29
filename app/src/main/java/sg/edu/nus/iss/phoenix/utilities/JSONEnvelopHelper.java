@@ -21,6 +21,31 @@ public class JSONEnvelopHelper {
 
     private static final String TAG = RetrieveUsersDelegate.class.getName();
 
+
+    public static JSONEnvelop<Boolean> parseEnvelopBoolean(String response) {
+        JSONEnvelop<Boolean> result = new JSONEnvelop<>();
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            result.setData(jsonObject.getBoolean("data"));
+            result.setError(parseError(jsonObject.getJSONObject("error")));
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return result;
+    }
+
+    public static JSONEnvelop<User> parseEnvelopUser(String response) {
+        JSONEnvelop<User> result = new JSONEnvelop<>();
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            result.setData(parseUser(jsonObject.getJSONObject("data")));
+            result.setError(parseError(jsonObject.getJSONObject("error")));
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return result;
+    }
+
     public static JSONEnvelop<List<User>> parseEnvelopUsers(String response) {
         JSONEnvelop<List<User>> result = new JSONEnvelop<>();
         try {
@@ -116,4 +141,5 @@ public class JSONEnvelopHelper {
         }
         return result;
     }
+
 }

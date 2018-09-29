@@ -79,4 +79,18 @@ public class ProgramSlot implements Serializable {
     private User producer;
     private String assignedBy;
 
+
+    @Override
+    public String toString() {
+        StringBuilder out = new StringBuilder();
+        out.append("\nAnnualScheudle class, mapping to table annual-scheudle\n");
+        out.append("Persistent attributes: \n");
+        out.append("dateOfProgram = ").append(this.dateOfProgram).append("\n");
+        out.append("duration = ").append(this.duration).append("\n");
+        out.append("radioProgram = ").append(this.radioProgram.getRadioProgramName()).append("\n");
+        out.append("presenter = ").append(this.presenter.getUserName()).append("\n");
+        out.append("producer = ").append(this.producer.getUserName()).append("\n");
+
+        return out.toString();
+    }
 }

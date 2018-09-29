@@ -17,6 +17,8 @@ import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ReviewSelectRadioProgramReturnable;
+import sg.edu.nus.iss.phoenix.restful.JSONEnvelop;
+import sg.edu.nus.iss.phoenix.schedule.android.delegate.CreateProgramSlotDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.RetrieveProgramSlotDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.android.ui.MaintainScheduleScreen;
@@ -73,6 +75,11 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
         MainController.displayScreen(intent);
     }
 
+    public void selectCreateProgramSlot(ProgramSlot programSlot) {
+        programSlot.setAssignedBy(MainController.getUserId());
+        new CreateProgramSlotDelegate(this).execute(programSlot);
+    }
+
     public void selectCopyProgramSlot(ProgramSlot programSlot) {
         Intent intent = new Intent(MainController.getApp(), MaintainScheduleScreen.class);
         intent.putExtra(ConstantHelper.PROGRAM_SLOT
@@ -107,5 +114,16 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
     @Override
     public void presenterProducerSelected(User presenter, User producer) {
         maintainScheduleScreen.presenterProducerSelected(presenter, producer);
+    }
+
+    public void programSlotCreated(JSONEnvelop<Boolean> response) {
+        if (response.getError() != null) {
+            maintainScheduleScreen.displayErrorMessage(response.getError().getError() + ": "+ response.getError().getDescription());
+        }
+        if (response.getData()) {
+            maintainScheduleScreen.displaySuccessMessage("Program slot has been successfully created.");
+        } else {
+            maintainScheduleScreen.displayErrorMessage("There is a problem upoing program slot creation.");
+        }
     }
 }
