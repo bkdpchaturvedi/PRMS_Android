@@ -9,6 +9,7 @@ import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.Role;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
+import sg.edu.nus.iss.phoenix.user.android.delegate.RetrieveRolesDelegate;
 import sg.edu.nus.iss.phoenix.user.android.delegate.UpdateUserDelegate;
 import sg.edu.nus.iss.phoenix.user.android.delegate.CreateUserDelegate;
 import sg.edu.nus.iss.phoenix.user.android.delegate.DeleteUserDelegate;
@@ -45,11 +46,13 @@ public class UserController {
 
     public void selectCreateUser() {
         user2edit = null;
+        new RetrieveRolesDelegate(this).execute();
         Intent intent = new Intent(MainController.getApp(), MaintainUserScreen.class);
         MainController.displayScreen(intent);
     }
 
     public void selectEditUser(User user) {
+        new RetrieveRolesDelegate(this).execute();
         user2edit = user;
         Log.v(TAG, "Editing user: " + user.getUserName() + "...");
 
