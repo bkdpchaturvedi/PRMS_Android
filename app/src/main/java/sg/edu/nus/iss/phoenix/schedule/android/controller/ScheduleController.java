@@ -3,6 +3,10 @@ package sg.edu.nus.iss.phoenix.schedule.android.controller;
 import android.content.Intent;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -34,14 +38,20 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
 
     public void onDisplayProgramListScreen(ScheduleProgramsListScreen scheduleProgramsListScreen) {
         this.scheduleProgramsListScreen = scheduleProgramsListScreen;
-        SimpleDateFormat format =new SimpleDateFormat("YYYY-mm-DDThh:MM:ss");
+       // SimpleDateFormat format =new SimpleDateFormat("YYYY-mm-DDThh:MM:ss");
         new RetrieveProgramSlotDelegate(this).execute("all");
     }
-    public void onDisplayProgramListScreen(ScheduleProgramsListScreen scheduleProgramsListScreen,Date date) {
+    public void onDisplayProgramListScreen(ScheduleProgramsListScreen scheduleProgramsListScreen,LocalDateTime date) {
         this.scheduleProgramsListScreen = scheduleProgramsListScreen;
-        SimpleDateFormat format =new SimpleDateFormat("YYYY-mm-DDThh:MM:ss");
-        new RetrieveProgramSlotDelegate(this).execute(format.format(date));
+       // SimpleDateFormat format =new SimpleDateFormat("YYYY-mm-DD hh:MM:ss");
+        new RetrieveProgramSlotDelegate(this).execute("?dateOfProgram="+date.toInstant(ZoneOffset.UTC).toString());
     }
+    public void onChangeDateRefersh(LocalDateTime date) {
+       // this.scheduleProgramsListScreen = scheduleProgramsListScreen;
+        // SimpleDateFormat format =new SimpleDateFormat("YYYY-mm-DD hh:MM:ss");
+        new RetrieveProgramSlotDelegate(this).execute("?dateOfProgram="+date.toInstant(ZoneOffset.UTC).toString());
+    }
+
 
     public void onDisplayMaintainScheduleScreen(MaintainScheduleScreen maintainScheduleScreen, ProgramSlot programSlot) {
         this.maintainScheduleScreen = maintainScheduleScreen;

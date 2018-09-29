@@ -1,5 +1,6 @@
 package sg.edu.nus.iss.phoenix.schedule.android.ui;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,14 +12,19 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,9 +64,18 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
 
         scheduleView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                Date d = new Date();
-                d.setTime(calendarView.getDate());
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int dayOfMonth) {
+                Date d = new Date(year,month,dayOfMonth);
+
+                Date dd = new Date();
+                dd.setTime(calendarView.getDate());
+
+
+
+
+                LocalDateTime lDate= LocalDateTime.of(year,month+1,dayOfMonth,0,0);
+                Log.i("calender",lDate.toString());
+                ControlFactory.getScheduleController().onChangeDateRefersh(lDate);
 
             }
         });
@@ -68,10 +83,11 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
         ArrayList<ProgramSlot> programSlots = new ArrayList<ProgramSlot>();
         mPSAdapter = new ProgramSlotAdapter(programSlots);
         recyclerView.setAdapter(mPSAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
 
-        final SwipeMenuTocuhHelper swipeMenuTocuhHelper = new SwipeMenuTocuhHelper(0, R.layout.partial_swipe_item) {
+
+ /*       final SwipeMenuTocuhHelper swipeMenuTocuhHelper = new SwipeMenuTocuhHelper(0, R.layout.partial_swipe_item) {
 
 
 
@@ -91,17 +107,18 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
                 }
             }
         };
+*/
 
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeMenuTocuhHelper);
-        itemTouchhelper.attachToRecyclerView(recyclerView);
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration()
+       /* recyclerView.addItemDecoration(new RecyclerView.ItemDecoration()
 
         {
             @Override
             public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
                 swipeMenuTocuhHelper.onDraw(c);
             }
-        });
+        });*/
+
+
 
     }
     @Override
@@ -119,8 +136,12 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
 
         Date d = new Date();
         d.setTime(this.scheduleView.getDate());
-        ControlFactory.getScheduleController().onDisplayProgramListScreen(this,d);
-        ControlFactory.getScheduleController().onDisplayProgramListScreen(this);
+
+       LocalDateTime lDate= d.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        ControlFactory.getScheduleController().onDisplayProgramListScreen(this,lDate);
+
+       // ControlFactory.getScheduleController().onDisplayProgramListScreen(this);
+
 
     }
 }
