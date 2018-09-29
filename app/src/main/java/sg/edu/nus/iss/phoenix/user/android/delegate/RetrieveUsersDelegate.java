@@ -82,8 +82,8 @@ public class RetrieveUsersDelegate extends AsyncTask<String, Void, String> {
                     ArrayList<Role> roles = new ArrayList<>();
                     JSONArray jArray = (JSONArray)userJson.get("roles");
                     if (jArray != null) {
-                        for (int a=0;a<jArray.length();a++){
-                            roles.add(new Role(jArray.getString(a)));
+                        for (int j=0;j<jArray.length();j++){
+                            roles.add(new Role(jArray.getJSONObject(j).getString("role")));
                         }
                     }
 

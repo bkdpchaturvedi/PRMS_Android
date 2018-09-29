@@ -80,9 +80,9 @@ public class RetrieveRolesDelegate extends AsyncTask<String, Void, String> {
                 for (int i = 0; i < roleArray.length(); i++) {
                     JSONObject roleJson = roleArray.getJSONObject(i);
                     String role = roleJson.getString("role");
-                    String accesPrivilege = roleJson.getString("accesPrivilege");
+                    String accessPrivilege = roleJson.getString("accessPrivilege");
 
-                    roles.add( new Role(role,accesPrivilege));
+                    roles.add( new Role(role,accessPrivilege));
                 }
             } catch (JSONException e) {
                 Log.v(TAG, e.getMessage());
