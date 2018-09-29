@@ -16,8 +16,8 @@
   -->
 <resources>
     <color name="colorPrimary">#3f51b5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimaryDark">#303f9f</color>
+    <color name="colorAccent">#ff4081</color>
     <color name="bg_login">#2634ae</color>
     <color name="bg_register">#2e3237</color>
     <color name="bg_main">#428bca</color>
@@ -32,4 +32,6 @@
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
     <color name="comment_light_background">#d6d6d6</color>
+    <color name="cardview_normal">#ffffff</color>
+    <color name="cardview_highlighted">#f4f7ff</color>
 </resources>

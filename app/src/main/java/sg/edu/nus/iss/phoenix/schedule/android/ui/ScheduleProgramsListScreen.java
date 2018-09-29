@@ -44,8 +44,7 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                ControlFactory.getScheduleController().selectCreateProgramSlot();
             }
         });
 
@@ -120,6 +119,8 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
 
         Date d = new Date();
         d.setTime(this.scheduleView.getDate());
-        ControlFactory.getScheduleController().onDisplayProgramSlotList(this,d);
+        ControlFactory.getScheduleController().onDisplayProgramListScreen(this,d);
+        ControlFactory.getScheduleController().onDisplayProgramListScreen(this);
+
     }
 }

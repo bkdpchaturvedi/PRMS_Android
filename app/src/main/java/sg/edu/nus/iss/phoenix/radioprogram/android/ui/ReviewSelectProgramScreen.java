@@ -104,5 +104,9 @@ public class ReviewSelectProgramScreen extends AppCompatActivity {
             mRPAdapter.add(radioPrograms.get(i));
         }
     }
+
+    public void unloadDispayScreen() {
+        finish();
+    }
 }
 

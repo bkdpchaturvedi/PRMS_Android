@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,7 +13,10 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.Role;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.user.android.controller.UserController;
 
@@ -47,7 +51,7 @@ public class CreateUserDelegate extends AsyncTask<User, Void, Boolean> {
             json.put("id", params[0].getId());
             json.put("name", params[0].getUserName());
             json.put("password", params[0].getUserPassword());
-            json.put("roles", params[0].getUserRoles());
+            json.put("roles",toJson(params[0].getRoles()));
         } catch (JSONException e) {
             Log.v(TAG, e.getMessage());
         }
@@ -86,5 +90,16 @@ public class CreateUserDelegate extends AsyncTask<User, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean result) {
         userController.userCreated(result.booleanValue());
+    }
+
+    private  JSONArray toJson(List<Role> list) throws JSONException {
+        JSONArray jsonArray = new JSONArray();
+        for (Role obj : list) {
+            JSONObject item = new JSONObject();
+            item.put("role",obj.getRole());
+            item.put("accessPrivilege",obj.getAccessPrivilege());
+            jsonArray.put(item);
+        }
+        return jsonArray;
     }
 }

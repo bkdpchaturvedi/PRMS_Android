@@ -2,53 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp"
     tools:context=".user.android.ui.MaintainUserScreen">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ID"
-            tools:text="ID" />
-        <EditText
-            android:id="@+id/maintain_user_id_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="User ID" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ID"
-            tools:text="ID" />
-        <EditText
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ID"
+        tools:text="ID" />
+
+    <EditText
+        android:id="@+id/maintain_user_id_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="User ID" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        tools:text="Name" />
+
+    <EditText
         android:id="@+id/maintain_user_name_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="User Name" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Password"
-            tools:text="Password" />
 
-        <EditText
-            android:id="@+id/maintain_user_password_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Password" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Roles"
-            tools:text="Roles" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        tools:text="Password" />
 
-        <EditText
-            android:id="@+id/maintain_user_roles_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Presenter"
-            tools:text="Presenter" />
+    <EditText
+        android:id="@+id/maintain_user_password_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Password" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Roles"
+        tools:text="Roles" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/maintain_user_roles_linear_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
     </LinearLayout>
+</LinearLayout>

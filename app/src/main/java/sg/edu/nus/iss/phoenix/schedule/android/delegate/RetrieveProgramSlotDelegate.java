@@ -15,19 +15,23 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.Role;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 
 import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
-public class RetrieveProgramSlotDelegate extends AsyncTask<String,Void,String> {
+public class RetrieveProgramSlotDelegate extends AsyncTask<String, Void, String> {
     private static final String TAG = RetrieveProgramSlotDelegate.class.getName();
 
     private ScheduleController scheduleController = null;
@@ -36,9 +40,10 @@ public class RetrieveProgramSlotDelegate extends AsyncTask<String,Void,String> {
 
         this.scheduleController = scheduleController;
     }
+
     @Override
     protected String doInBackground(String... params) {
-        Uri builtUri1 = Uri.parse( PRMS_BASE_URL_SCHEDULE).buildUpon().build();
+        Uri builtUri1 = Uri.parse(PRMS_BASE_URL_SCHEDULE).buildUpon().build();
         Uri builtUri = Uri.withAppendedPath(builtUri1, params[0]).buildUpon().build();
         Log.v(TAG, builtUri.toString());
         URL url = null;
@@ -79,28 +84,20 @@ public class RetrieveProgramSlotDelegate extends AsyncTask<String,Void,String> {
                 for (int i = 0; i < rpArray.length(); i++) {
                     JSONObject rpJson = rpArray.getJSONObject(i);
                     JSONObject rp = rpJson.getJSONObject("radioProgram");
-                    RadioProgram radioProgram=new RadioProgram(rp.getString("name"),"","");
+                    RadioProgram radioProgram = new RadioProgram(rp.getString("name"), "", "");
                     JSONObject presenterJson = rpJson.getJSONObject("presenter");
-                    User presenter =new User(presenterJson.getString("id"),"","","");
+                    User presenter = new User(presenterJson.getString("id"), "", "", new ArrayList<Role>());
                     JSONObject producerJson = rpJson.getJSONObject("producer");
-                    User producer =new User(producerJson.getString("id"),"","","");
+                    User producer = new User(producerJson.getString("id"), "", "", new ArrayList<Role>());
 
-                    String duration=rpJson.getString("duration");
-                    String dateOfProgram=rpJson.getString("dateOfProgram");
-                    String assignedBy=rpJson.getString("assignedBy");
+                    String duration = rpJson.getString("duration");
+                    String dateOfProgram = rpJson.getString("dateOfProgram");
+                    String assignedBy = rpJson.getString("assignedBy");
 
-                   ProgramSlot temProgramSlot=new ProgramSlot();
-                   temProgramSlot.setAssignedBy(assignedBy);
-                   // String dateString = "03/26/2012 11:49:00 AM";
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-mm-dd hh:mm:ss aa");
-                    Date convertedDate = new Date();
-                    try {
-                        convertedDate = dateFormat.parse(dateOfProgram);
-                    } catch (ParseException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                   temProgramSlot.setDateOfProgram(convertedDate);
+                    ProgramSlot temProgramSlot = new ProgramSlot();
+                    temProgramSlot.setAssignedBy(assignedBy);
+                    temProgramSlot.setDateOfProgram(ZonedDateTime.parse(dateOfProgram).withZoneSameInstant(ZoneId.systemDefault()));
+                    temProgramSlot.setDuration(Duration.parse(duration));
                     temProgramSlot.setPresenter(presenter);
                     temProgramSlot.setProducer(producer);
                     temProgramSlot.setRadioProgram(radioProgram);
