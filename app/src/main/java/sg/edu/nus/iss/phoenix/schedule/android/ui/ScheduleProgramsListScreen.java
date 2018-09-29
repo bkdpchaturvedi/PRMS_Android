@@ -118,7 +118,8 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-
-        ControlFactory.getScheduleController().onDisplayProgramSlotList(this);
+        Date d = new Date();
+        d.setTime(this.scheduleView.getDate());
+        ControlFactory.getScheduleController().onDisplayProgramSlotList(this,d);
     }
 }

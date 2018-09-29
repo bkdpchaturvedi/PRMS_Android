@@ -2,7 +2,9 @@ package sg.edu.nus.iss.phoenix.schedule.android.controller;
 
 import android.content.Intent;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
@@ -22,9 +24,10 @@ public class ScheduleController {
         MainController.displayScreen(intent);
     }
 
-    public void onDisplayProgramSlotList(ScheduleProgramsListScreen scheduleProgramsListScreen) {
+    public void onDisplayProgramSlotList(ScheduleProgramsListScreen scheduleProgramsListScreen, Date date) {
         this.scheduleProgramsListScreen = scheduleProgramsListScreen;
-        new RetrieveProgramSlotDelegate(this).execute("all");
+        SimpleDateFormat format =new SimpleDateFormat("YYYY-mm-DDThh:MM:ss");
+        new RetrieveProgramSlotDelegate(this).execute(format.format(date));
     }
 
     public void programSlotsRetrieved(ArrayList<ProgramSlot> programSlots) {
