@@ -36,7 +36,7 @@
         <activity android:name=".core.android.ui.MainScreen" />
         <activity android:name=".radioprogram.android.ui.ProgramListScreen" />
         <activity android:name=".radioprogram.android.ui.MaintainProgramScreen" />
-        <activity android:name=".radioprogram.android.ui.ReviewSelectProgramScreen" />
+        <activity android:name=".radioprogram.android.ui.ReviewSelectProgramScreen"  android:label="@string/SelectRadioProgramTitle"/>
         <activity
             android:name=".schedule.android.ui.ScheduleProgramsListScreen"
             android:label="@string/title_activity_schedule_programs_list_screen"></activity>
@@ -49,7 +49,7 @@
         <activity
             android:name=".schedule.android.ui.MaintainScheduleScreen"
             android:theme="@style/AppTheme"  android:label="@string/title_activity_Schedule_screen"/>
-        <activity android:name=".schedule.android.ui.PresenterProducerScreen"></activity>
+        <activity android:name=".schedule.android.ui.PresenterProducerScreen" android:label="@string/presenterproducerscreentitle"></activity>
     </application>
 
 </manifest>

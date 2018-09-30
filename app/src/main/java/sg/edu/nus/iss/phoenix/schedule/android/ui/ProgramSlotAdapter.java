@@ -70,19 +70,19 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
         TextView producer = holder.producer;
         producer.setText(currentPS.getProducer().getUserName());
         TextView presenter = holder.presenter;
-        radioPMName.setText(currentPS.getPresenter().getUserName());
+        presenter.setText(currentPS.getPresenter().getUserName());
         //TextView radioPMDesc = holder.radioPMDesc;
         //radioPMDesc.setText(currentPS.getRadioProgram().getRadioProgramDescription());
         TextView radioPSstartDuration = holder.radioPSstartDuration;
-        SimpleDateFormat formatter =new SimpleDateFormat("hh:mm");
+      //  SimpleDateFormat formatter =new SimpleDateFormat("hh:mm tt");
 
-       String startTime= DateTimeFormatter.ofPattern("hh:mm").format(currentPS.getDateOfProgram());
+       String startTime= DateTimeFormatter.ofPattern("HH:mm").format(currentPS.getDateOfProgram());
         radioPSstartDuration.setText(
                 startTime);
         TextView radioPSEndDuration = holder.radioPSEndDuration;
 
-        double durationinhours=((currentPS.getDuration().getSeconds()/60)/60);
-        radioPSEndDuration.setText(""+durationinhours);
+        long durationinhours=(currentPS.getDuration().toMinutes());
+        radioPSEndDuration.setText(""+durationinhours+"");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

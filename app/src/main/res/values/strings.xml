@@ -56,7 +56,10 @@
     <string name="filter">Filter</string>
     <string name="filter_by">Filter by</string>
     <string name="action_copy">Copy</string>
-    <string name="title_activity_Schedule_screen">Program Slot</string>
+    <string name="title_activity_Schedule_screen">Maintain Program Slot</string>
+    <string name="time">Time</string>
+    <string name="presenterproducerscreentitle">Select Producer/Presenter</string>
+    <string name="SelectRadioProgramTitle">Select Radio Program</string>
 
 
 </resources>
