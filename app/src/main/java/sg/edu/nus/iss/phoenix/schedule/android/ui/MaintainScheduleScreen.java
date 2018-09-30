@@ -9,20 +9,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Period;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.Date;
 
 import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ConstantHelper;
@@ -37,17 +32,18 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
     private static final String START_DATETIME = "START_DATETIME";
     private static final String END_DATETIME = "END_DATETIME";
 
-    private LocalDate originalDateOfProgram;
+    private ZonedDateTime originalDateOfProgram;
     private ProgramSlot currentProgramSlot;
 
 
     public void createProgramSlot(ProgramSlot programSlot) {
-        this.currentProgramSlot = programSlot;
+        currentProgramSlot = programSlot;
         displayProgramSlot();
     }
 
     public void editProgramSlot(ProgramSlot programSlot) {
-        this.currentProgramSlot = programSlot;
+        currentProgramSlot = programSlot;
+        originalDateOfProgram = currentProgramSlot.getDateOfProgram();
         displayProgramSlot();
     }
 
@@ -310,20 +306,29 @@ return true;
         displayProgramSlot();
     }
 
+    public void selectSaveProgramSlot() {
+        if (validate()) {
+            new AlertDialog.Builder(this)
+                    .setMessage("Are you sure want to save?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Log.v(TAG, "Creating program slot " + currentProgramSlot.toString() + "...");
+                            if (currentProgramSlot.getAssignedBy() != null) {
+                                ControlFactory.getScheduleController().selectCreateProgramSlot(currentProgramSlot);
+                            } else {
+
+                                ControlFactory.getScheduleController().selectUpdateProgramSlot(currentProgramSlot, originalDateOfProgram);
+                            }
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                if (validate()) {
-                    new AlertDialog.Builder(this)
-                            .setMessage("Are you sure want to save?")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    Log.v(TAG, "Saving program slot " + currentProgramSlot.toString() + "...");
-                                    ControlFactory.getScheduleController().selectCreateProgramSlot(currentProgramSlot);
-                                }})
-                            .setNegativeButton(android.R.string.no, null).show();
-                }
+                selectSaveProgramSlot();
                 break;
             case R.id.action_cancel:
                 onBackPressed();

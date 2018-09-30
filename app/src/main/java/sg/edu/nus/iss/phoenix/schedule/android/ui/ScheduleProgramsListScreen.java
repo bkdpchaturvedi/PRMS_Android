@@ -152,6 +152,6 @@ public class ScheduleProgramsListScreen extends AppCompatActivity implements Pro
     public void onItemClick(ProgramSlotAdapter.PSViewHolder viewHolder) {
         int position =viewHolder.getAdapterPosition();
         ProgramSlot programSlot = mPSAdapter.getProgramSlots().get(position);
-        ControlFactory.getScheduleController().selectEditProgramSlot(programSlot);
+        ControlFactory.getScheduleController().selectViewProgramSlot(programSlot);
     }
 }
