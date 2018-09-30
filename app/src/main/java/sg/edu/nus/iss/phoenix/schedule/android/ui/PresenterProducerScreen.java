@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextClock;
@@ -33,13 +34,16 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
     private User selectedPresenter;
     private User selectedProducer;
     private String field;
+    private ProgressBar pb_pp_loading_indicator=null;
 
     public void displayProducer(final List<User> producers) {
         presenterProducerListAdapter.setUsers(producers);
+
     }
 
     public void displayPresenter(final List<User> presenters) {
         presenterProducerListAdapter.setUsers(presenters);
+        pb_pp_loading_indicator.setVisibility(View.GONE);
     }
 
     private void setupControls() {
@@ -56,11 +60,13 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
 
     public void selectGetAllPresenters() {
         field = ConstantHelper.PRESENTERS;
+        pb_pp_loading_indicator.setVisibility(View.VISIBLE);
         ControlFactory.getReviewSelectPresenterProducerController().selectGetAllPresenters();
     }
 
     public void selectGetAllProducers() {
         field = ConstantHelper.PRODUCERS;
+        pb_pp_loading_indicator.setVisibility(View.VISIBLE);
         ControlFactory.getReviewSelectPresenterProducerController().selectGetAllProducers();
     }
 
@@ -114,6 +120,8 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
         }
         presenterProducerListAdapter.setUsers(presenters);
         presenterProducerListAdapter.notifyDataSetChanged();
+        pb_pp_loading_indicator.setVisibility(View.GONE);
+
     }
 
     public void displayProducers(List<User> producers) {
@@ -134,6 +142,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
         }
         presenterProducerListAdapter.setUsers(producers);
         presenterProducerListAdapter.notifyDataSetChanged();
+        pb_pp_loading_indicator.setVisibility(View.GONE);
     }
 
     @Override
@@ -143,6 +152,8 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
         selectedPresenter = (User) getIntent().getSerializableExtra(ConstantHelper.PRESENTER);
         selectedProducer = (User) getIntent().getSerializableExtra(ConstantHelper.PRODUCER);
         field = getIntent().getStringExtra(ConstantHelper.FIELD);
+        pb_pp_loading_indicator=(ProgressBar)findViewById(R.id.pb_pp_loading_indicator) ;
+
         setupControls();
     }
 
@@ -180,6 +191,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+
         switch (checkedId) {
             case R.id.rdo_reviewselectpresenterproducer_presenter:
                 selectGetAllPresenters();
