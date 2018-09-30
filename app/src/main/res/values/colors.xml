@@ -33,5 +33,5 @@
     <color name="btn_logut_bg">#ff6861</color>
     <color name="comment_light_background">#d6d6d6</color>
     <color name="cardview_normal">#ffffff</color>
-    <color name="cardview_highlighted">#f4f7ff</color>
+    <color name="cardview_highlighted">#ececec</color>
 </resources>
