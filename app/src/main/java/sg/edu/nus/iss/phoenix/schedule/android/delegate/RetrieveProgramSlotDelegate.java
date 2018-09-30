@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -35,6 +36,7 @@ public class RetrieveProgramSlotDelegate extends AsyncTask<String, Void, String>
     private static final String TAG = RetrieveProgramSlotDelegate.class.getName();
 
     private ScheduleController scheduleController = null;
+    private ZonedDateTime dateOfProgram;
 
     public RetrieveProgramSlotDelegate(ScheduleController scheduleController) {
 
@@ -44,7 +46,8 @@ public class RetrieveProgramSlotDelegate extends AsyncTask<String, Void, String>
     @Override
     protected String doInBackground(String... params) {
         Uri builtUri1 = Uri.parse(PRMS_BASE_URL_SCHEDULE).buildUpon().build();
-        Uri builtUri = Uri.withAppendedPath(builtUri1, params[0]).buildUpon().build();
+        Uri builtUri = Uri.withAppendedPath(builtUri1, "?dateOfProgram=" + URLEncoder.encode(params[0])).buildUpon().build();
+        dateOfProgram = ZonedDateTime.parse(params[0]);
         Log.v(TAG, builtUri.toString());
         URL url = null;
         try {
@@ -111,7 +114,7 @@ public class RetrieveProgramSlotDelegate extends AsyncTask<String, Void, String>
         }
 
         if (scheduleController != null)
-            scheduleController.programSlotsRetrieved(programSlots);
+            scheduleController.programSlotsRetrieved(dateOfProgram, programSlots);
 
     }
 }

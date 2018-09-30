@@ -8,8 +8,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 import sg.edu.nus.iss.phoenix.core.android.controller.ConstantHelper;
@@ -41,20 +43,12 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
 
     public void onDisplayProgramListScreen(ScheduleProgramsListScreen scheduleProgramsListScreen) {
         this.scheduleProgramsListScreen = scheduleProgramsListScreen;
-       // SimpleDateFormat format =new SimpleDateFormat("YYYY-mm-DDThh:MM:ss");
-        new RetrieveProgramSlotDelegate(this).execute("all");
-    }
-    public void onDisplayProgramListScreen(ScheduleProgramsListScreen scheduleProgramsListScreen,LocalDateTime date) {
-        this.scheduleProgramsListScreen = scheduleProgramsListScreen;
-       // SimpleDateFormat format =new SimpleDateFormat("YYYY-mm-DD hh:MM:ss");
-        new RetrieveProgramSlotDelegate(this).execute("?dateOfProgram="+date.toInstant(ZoneOffset.UTC).toString());
-    }
-    public void onChangeDateRefersh(LocalDateTime date) {
-       // this.scheduleProgramsListScreen = scheduleProgramsListScreen;
-        // SimpleDateFormat format =new SimpleDateFormat("YYYY-mm-DD hh:MM:ss");
-        new RetrieveProgramSlotDelegate(this).execute("?dateOfProgram="+date.toInstant(ZoneOffset.UTC).toString());
+       getProgramSlots( ZonedDateTime.now());
     }
 
+    private void getProgramSlots(ZonedDateTime date) {
+        new RetrieveProgramSlotDelegate(this).execute(date.toString());
+    }
 
     public void onDisplayMaintainScheduleScreen(MaintainScheduleScreen maintainScheduleScreen, ProgramSlot programSlot) {
         this.maintainScheduleScreen = maintainScheduleScreen;
@@ -65,8 +59,8 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
         }
     }
 
-    public void programSlotsRetrieved(ArrayList<ProgramSlot> programSlots) {
-        scheduleProgramsListScreen.showProgramSlots(programSlots);
+    public void programSlotsRetrieved(ZonedDateTime dateOfProgram, List<ProgramSlot> programSlots) {
+        scheduleProgramsListScreen.displayProgramSlots(dateOfProgram, programSlots);
 
     }
 
@@ -123,10 +117,20 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
 
     public void programSlotCreated(JSONEnvelop<Boolean> response) {
         if (response.getError() != null) {
-            maintainScheduleScreen.displayErrorMessage(response.getError().getError() + ": "+ response.getError().getDescription());
+            maintainScheduleScreen.displayErrorMessage(response.getError().getDescription());
         }
         if (response.getData() != null && response.getData()) {
             maintainScheduleScreen.displaySuccessMessage("Program slot has been successfully created.");
+        }
+    }
+
+    public void onUnloadMaintainScheduleScreen(ProgramSlot programSlot) {
+        selectViewProgramSlots(programSlot.getDateOfProgram());
+    }
+
+    public void selectViewProgramSlots(ZonedDateTime dateOfProgram) {
+        if (dateOfProgram != null) {
+            getProgramSlots(dateOfProgram);
         }
     }
 }
