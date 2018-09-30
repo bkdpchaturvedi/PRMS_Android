@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ReviewSelectRadioP
 import sg.edu.nus.iss.phoenix.restful.JSONEnvelop;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.CreateProgramSlotDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.RetrieveProgramSlotDelegate;
+import sg.edu.nus.iss.phoenix.schedule.android.delegate.UpdateProgramSlotDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.android.ui.MaintainScheduleScreen;
 import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduleProgramsListScreen;
@@ -35,7 +37,6 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
     private MaintainScheduleScreen maintainScheduleScreen;
 
     public void startUseCase() {
-        //rp2edit = null;
         Intent intent = new Intent(MainController.getApp(), ScheduleProgramsListScreen.class);
         MainController.displayScreen(intent);
     }
@@ -79,8 +80,10 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
         new CreateProgramSlotDelegate(this).execute(programSlot);
     }
 
-    public void selectEditProgramSlot(ProgramSlot programSlot) {
-        Log.d("EDITProgramSlot",programSlot.getDateOfProgram().toString());
+    public void selectViewProgramSlot(ProgramSlot programSlot) {
+        Intent intent = new Intent(MainController.getApp(), MaintainScheduleScreen.class);
+        intent.putExtra(ConstantHelper.PROGRAM_SLOT, programSlot);
+        MainController.displayScreen(intent);
     }
 
     public void selectCopyProgramSlot(ProgramSlot programSlot) {
@@ -124,7 +127,7 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
             maintainScheduleScreen.displayErrorMessage(response.getError().getDescription());
         }
         if (response.getData() != null && response.getData()) {
-            maintainScheduleScreen.displaySuccessMessage("Program slot has been successfully created.");
+            maintainScheduleScreen.displaySuccessMessage("Program slot has been created successfully");
             maintainScheduleScreen.unloadScreen();
         }
     }
@@ -136,6 +139,20 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
     public void selectViewProgramSlots(ZonedDateTime dateOfProgram) {
         if (dateOfProgram != null) {
             getProgramSlots(dateOfProgram);
+        }
+    }
+
+    public void selectUpdateProgramSlot(ProgramSlot programSlot, ZonedDateTime originalDateOfProgram) {
+        new UpdateProgramSlotDelegate(this).execute(new AbstractMap.SimpleEntry<>(originalDateOfProgram, programSlot));
+    }
+
+    public void programSlotUpdated(JSONEnvelop<Boolean> response) {
+        if (response.getError() != null) {
+            maintainScheduleScreen.displayErrorMessage(response.getError().getDescription());
+        }
+        if (response.getData() != null && response.getData()) {
+            maintainScheduleScreen.displaySuccessMessage("Program slot has been updated successfully.");
+            maintainScheduleScreen.unloadScreen();
         }
     }
 }

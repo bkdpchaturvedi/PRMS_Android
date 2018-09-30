@@ -23,8 +23,15 @@ import sg.edu.nus.iss.phoenix.R;
 
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.android.ui.adapter.PresenterProducerListAdapter;
 
 public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.PSViewHolder> {
+
+    private ProgramSlotViewHolderClick psViewHolderClick;
+
+    public void setProgramSlotViewHolderClick(ProgramSlotViewHolderClick psViewHolderClick) {
+        this.psViewHolderClick = psViewHolderClick;
+    }
 
     public List<ProgramSlot> getProgramSlots() {
         return programSlots;
@@ -49,11 +56,12 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
 
         // Return a new holder instance
         PSViewHolder viewHolder = new PSViewHolder(psView);
+
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(PSViewHolder holder, final int position) {
+    public void onBindViewHolder(final PSViewHolder holder, final int position) {
 
         ProgramSlot currentPS=programSlots.get(position);
 
@@ -72,22 +80,25 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
         radioPSstartDuration.setText(
                 startTime);
         TextView radioPSEndDuration = holder.radioPSEndDuration;
+
         double durationinhours=((currentPS.getDuration().getSeconds()/60)/60);
         radioPSEndDuration.setText(""+durationinhours);
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("AAA","Program Slot clicked");
-                ProgramSlot programSlot = programSlots.get(position);
-                ControlFactory.getScheduleController().selectEditProgramSlot(programSlot);
+                psViewHolderClick.onItemClick(holder);
             }
         });
+
     }
 
     @Override
     public int getItemCount() {
         return this.programSlots.size();
+    }
+
+    public interface  ProgramSlotViewHolderClick {
+        void onItemClick(ProgramSlotAdapter.PSViewHolder viewHolder);
     }
 
     public class PSViewHolder extends RecyclerView.ViewHolder{
