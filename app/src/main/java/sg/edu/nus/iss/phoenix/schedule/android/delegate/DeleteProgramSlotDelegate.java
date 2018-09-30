@@ -24,19 +24,19 @@ import sg.edu.nus.iss.phoenix.utilities.JSONHelper;
 
 import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
-public class UpdateProgramSlotDelegate extends AsyncTask<AbstractMap.SimpleEntry<ZonedDateTime, ProgramSlot>, Void, String> {
-    private static final String TAG = UpdateProgramSlotDelegate.class.getName();
+public class DeleteProgramSlotDelegate extends AsyncTask <ZonedDateTime, Void, String> {
+    private static final String TAG = DeleteProgramSlotDelegate.class.getName();
 
     private final ScheduleController scheduleController;
 
-    public UpdateProgramSlotDelegate(ScheduleController scheduleController) {
+    public DeleteProgramSlotDelegate(ScheduleController scheduleController) {
         this.scheduleController = scheduleController;
     }
 
     @Override
-    protected String doInBackground(AbstractMap.SimpleEntry<ZonedDateTime, ProgramSlot>... params) {
+    protected String doInBackground(ZonedDateTime... params) {
         Uri builtUri = Uri.parse(PRMS_BASE_URL_SCHEDULE).buildUpon().build();
-        builtUri = Uri.withAppendedPath(builtUri, URLEncoder.encode(params[0].getKey().toString())).buildUpon().build();
+        builtUri = Uri.withAppendedPath(builtUri, URLEncoder.encode(params[0].toString())).buildUpon().build();
         Log.v(TAG, builtUri.toString());
         URL url;
         try {
@@ -46,29 +46,22 @@ public class UpdateProgramSlotDelegate extends AsyncTask<AbstractMap.SimpleEntry
             return e.getMessage();
         }
 
-        JSONObject jsonProgramSlot = JSONHelper.toJSON(params[0].getValue());
-        Log.v(TAG, jsonProgramSlot.toString());
         HttpURLConnection httpURLConnection = null;
-        OutputStream dos = null;
         String jsonResponse = "";
         try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setInstanceFollowRedirects(false);
-            httpURLConnection.setRequestMethod("PUT");
+            httpURLConnection.setRequestMethod("DELETE");
             httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
-            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setUseCaches (false);
             httpURLConnection.setDoInput(true);
-            dos = httpURLConnection.getOutputStream();
-            dos.write(jsonProgramSlot.toString().getBytes());
-            Log.v(TAG, "Http PUT response " + httpURLConnection.getResponseCode());
+            Log.v(TAG, "Http DELETE response " + httpURLConnection.getResponseCode());
         } catch (IOException exception) {
             Log.v(TAG, exception.getMessage());
             jsonResponse = exception.getMessage();
         } finally {
-            if (dos != null) {
+            if (httpURLConnection != null) {
                 try {
-                    dos.flush();
-                    dos.close();
                     InputStreamReader inputStreamReader = new InputStreamReader(httpURLConnection.getInputStream());
                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                     String line = "";
@@ -89,7 +82,7 @@ public class UpdateProgramSlotDelegate extends AsyncTask<AbstractMap.SimpleEntry
     @Override
     protected void onPostExecute(String response) {
         if (scheduleController != null) {
-            scheduleController.programSlotUpdated(JSONEnvelopHelper.parseEnvelopBoolean(response));
+            scheduleController.programSlotDeleted(JSONEnvelopHelper.parseEnvelopBoolean(response));
         }
     }
 }

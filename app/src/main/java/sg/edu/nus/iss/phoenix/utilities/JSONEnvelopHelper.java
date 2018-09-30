@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.time.Duration;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -163,7 +164,7 @@ public class JSONEnvelopHelper {
                 RadioProgram radioProgram = parseRadioProgram(jsonObject.getJSONObject("radioProgram"));
                 User presenter = parseUser(jsonObject.getJSONObject("presenter"));
                 User producer = parseUser(jsonObject.getJSONObject("producer"));
-                ZonedDateTime dateOfProgram = ZonedDateTime.parse(jsonObject.getString("dateOfProgram"));
+                ZonedDateTime dateOfProgram = ZonedDateTime.parse(jsonObject.getString("dateOfProgram")).withZoneSameInstant(ZoneId.systemDefault());
                 Duration duration = Duration.parse(jsonObject.getString("duration"));
                 String assignedBy = jsonObject.getString("assignedBy");
                 result = new ProgramSlot(dateOfProgram, duration, radioProgram, presenter, producer, assignedBy);

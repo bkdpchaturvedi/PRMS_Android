@@ -23,6 +23,7 @@ import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ReviewSelectRadioProgramReturnable;
 import sg.edu.nus.iss.phoenix.restful.JSONEnvelop;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.CreateProgramSlotDelegate;
+import sg.edu.nus.iss.phoenix.schedule.android.delegate.DeleteProgramSlotDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.RetrieveProgramSlotDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.UpdateProgramSlotDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
@@ -154,5 +155,19 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
             maintainScheduleScreen.displaySuccessMessage("Program slot has been updated successfully.");
             maintainScheduleScreen.unloadScreen();
         }
+    }
+
+    public void programSlotDeleted(JSONEnvelop<Boolean> response) {
+        if (response.getError() != null) {
+            maintainScheduleScreen.displayErrorMessage(response.getError().getDescription());
+        }
+        if (response.getData() != null && response.getData()) {
+            maintainScheduleScreen.displaySuccessMessage("Program slot has been deleted successfully.");
+            maintainScheduleScreen.unloadScreen();
+        }
+    }
+
+    public void selectDeleteProgramSlot(ZonedDateTime dateOfProgram) {
+        new DeleteProgramSlotDelegate(this).execute(dateOfProgram);
     }
 }

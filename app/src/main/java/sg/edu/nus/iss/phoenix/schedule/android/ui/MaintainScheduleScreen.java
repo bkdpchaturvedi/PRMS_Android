@@ -313,7 +313,7 @@ return true;
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             Log.v(TAG, "Creating program slot " + currentProgramSlot.toString() + "...");
-                            if (currentProgramSlot.getAssignedBy() != null) {
+                            if (currentProgramSlot.getAssignedBy() == null) {
                                 ControlFactory.getScheduleController().selectCreateProgramSlot(currentProgramSlot);
                             } else {
 
@@ -333,31 +333,22 @@ return true;
             case R.id.action_cancel:
                 onBackPressed();
                 break;
-//                if (currentProgramSlot == null) { // Newly created.
-//                    Log.v(TAG, "Saving program slot " + currentProgramSlot.toString() + "...");
-//                    RadioProgram rp = new RadioProgram(mRPNameEditText.getText().toString(),
-//                            mRPDescEditText.getText().toString(), mDurationEditText.getText().toString());
-//                    ControlFactory.getProgramController().selectCreateProgram(rp);
-//                }
-//                else { // Edited.
-//                    Log.v(TAG, "Saving radio program " + currentProgramSlot.getRadioProgramName() + "...");
-//                    currentProgramSlot.setRadioProgramDescription(mRPDescEditText.getText().toString());
-//                    currentProgramSlot.setRadioProgramDuration(mDurationEditText.getText().toString());
-//                    ControlFactory.getProgramController().selectUpdateProgram(currentProgramSlot);
-//                }
-//            // Respond to a click on the "Delete" menu option
-//            case R.id.action_delete:
-//                Log.v(TAG, "Deleting radio program " + currentProgramSlot.getRadioProgramName() + "...");
-//                ControlFactory.getProgramController().selectDeleteProgram(currentProgramSlot);
-//                return true;
-//            // Respond to a click on the "Cancel" menu option
-//            case R.id.action_cancel:
-//                Log.v(TAG, "Canceling creating/editing radio program...");
-//                ControlFactory.getProgramController().selectCancelCreateEditProgram();
-//                return true;
+            case R.id.action_delete:
+                selectDeleteProgramSlot();
         }
 
         return true;
+    }
+
+    private void selectDeleteProgramSlot() {
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure want to delete?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Log.v(TAG, "Deleting program slot " + currentProgramSlot.toString() + "...");
+                        ControlFactory.getScheduleController().selectDeleteProgramSlot(originalDateOfProgram);
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
     }
 
     @Override
