@@ -134,4 +134,13 @@
         app:layout_constraintStart_toStartOf="@+id/rv_reviewselectpresenterproducer_list"
         app:layout_constraintTop_toTopOf="@+id/rv_reviewselectpresenterproducer_list" />
 
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:id="@+id/pb_pp_loading_indicator"
+        android:visibility="gone"
+        android:layout_height="wrap_content"  app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/rv_reviewselectpresenterproducer_list"
+        app:layout_constraintStart_toStartOf="@+id/rv_reviewselectpresenterproducer_list"
+        app:layout_constraintTop_toTopOf="@+id/rv_reviewselectpresenterproducer_list" />
+
 </android.support.constraint.ConstraintLayout>
