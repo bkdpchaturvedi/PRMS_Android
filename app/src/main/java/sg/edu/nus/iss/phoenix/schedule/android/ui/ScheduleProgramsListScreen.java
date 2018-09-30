@@ -138,6 +138,13 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
         ControlFactory.getScheduleController().maintainedSchedule();
     }
 
+    private void selectViewProgramSlots(ZonedDateTime dateOfProgram) {
+        tv_itemempty_value.setVisibility(View.GONE);
+        psbar.setVisibility(View.VISIBLE);
+        Log.i("calender",dateOfProgram.toString());
+        ControlFactory.getScheduleController().selectViewProgramSlots(dateOfProgram);
+    }
+
     public void displayProgramSlots(ZonedDateTime dateOfProgram, List<ProgramSlot> programSlots) {
         ((CalendarView) findViewById(R.id.scheduleCalender)).setDate(dateOfProgram.toInstant().toEpochMilli());
         mPSAdapter.setProgramSlots(programSlots);
