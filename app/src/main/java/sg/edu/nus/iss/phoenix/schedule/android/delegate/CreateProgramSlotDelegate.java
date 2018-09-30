@@ -7,9 +7,11 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -21,6 +23,7 @@ import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ProgramController;
 import sg.edu.nus.iss.phoenix.utilities.JSONEnvelopHelper;
+import sg.edu.nus.iss.phoenix.utilities.JSONHelper;
 
 import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
@@ -46,20 +49,11 @@ public class CreateProgramSlotDelegate extends AsyncTask<ProgramSlot, Void, Stri
             return e.getMessage();
         }
 
-        JSONObject json = new JSONObject();
-        try {
-            json.put("radioProgram", params[0].getRadioProgram().getRadioProgramName());
-            json.put("presenter", params[0].getPresenter().getId());
-            json.put("producer", params[0].getProducer().getId());
-            json.put("dateOfProgram", params[0].getDateOfProgram().toString());
-            json.put("duration", params[0].getDuration().toString());
-        } catch (JSONException e) {
-            Log.v(TAG, e.getMessage());
-        }
-
+        JSONObject jsonProgramSlot = JSONHelper.toJSON(params[0]);
+        Log.v(TAG, jsonProgramSlot.toString());
         HttpURLConnection httpURLConnection = null;
         OutputStream dos = null;
-        String jsonResp = null;
+        String jsonResponse = "";
         try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setInstanceFollowRedirects(false);
@@ -68,9 +62,16 @@ public class CreateProgramSlotDelegate extends AsyncTask<ProgramSlot, Void, Stri
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
             dos = httpURLConnection.getOutputStream();
-            dos.write(json.toString().getBytes());
+            dos.write(jsonProgramSlot.toString().getBytes());
             Log.v(TAG, "Http POST response " + httpURLConnection.getResponseCode());
-            jsonResp = httpURLConnection.getResponseMessage();
+            InputStreamReader inputStreamReader = new InputStreamReader(httpURLConnection.getInputStream());
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null) {
+                jsonResponse += line;
+            }
+            Log.v(TAG, jsonResponse);
+//            jsonResp = httpURLConnection.getResponseMessage();
 //            InputStream in = httpURLConnection.getInputStream();
 //            Scanner scanner = new Scanner(in);
 //            scanner.useDelimiter("\\A");
@@ -88,7 +89,7 @@ public class CreateProgramSlotDelegate extends AsyncTask<ProgramSlot, Void, Stri
             }
             if (httpURLConnection != null) httpURLConnection.disconnect();
         }
-       return jsonResp;
+       return jsonResponse;
     }
 
     @Override

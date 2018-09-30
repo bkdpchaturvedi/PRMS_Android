@@ -120,10 +120,8 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
         if (response.getError() != null) {
             maintainScheduleScreen.displayErrorMessage(response.getError().getError() + ": "+ response.getError().getDescription());
         }
-        if (response.getData()) {
+        if (response.getData() != null && response.getData()) {
             maintainScheduleScreen.displaySuccessMessage("Program slot has been successfully created.");
-        } else {
-            maintainScheduleScreen.displayErrorMessage("There is a problem upoing program slot creation.");
         }
     }
 }

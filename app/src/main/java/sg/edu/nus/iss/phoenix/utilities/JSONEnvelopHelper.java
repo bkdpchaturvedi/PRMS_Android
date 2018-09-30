@@ -22,12 +22,16 @@ public class JSONEnvelopHelper {
     private static final String TAG = RetrieveUsersDelegate.class.getName();
 
 
-    public static JSONEnvelop<Boolean> parseEnvelopBoolean(String response) {
+    public static JSONEnvelop<Boolean>  parseEnvelopBoolean(String response) {
         JSONEnvelop<Boolean> result = new JSONEnvelop<>();
         try {
             JSONObject jsonObject = new JSONObject(response);
-            result.setData(jsonObject.getBoolean("data"));
-            result.setError(parseError(jsonObject.getJSONObject("error")));
+            if (jsonObject.has("data")) {
+                result.setData(jsonObject.getBoolean("data"));
+            }
+            if (jsonObject.has("error")) {
+                result.setError(parseError(jsonObject.getJSONObject("error")));
+            }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
@@ -38,8 +42,12 @@ public class JSONEnvelopHelper {
         JSONEnvelop<User> result = new JSONEnvelop<>();
         try {
             JSONObject jsonObject = new JSONObject(response);
-            result.setData(parseUser(jsonObject.getJSONObject("data")));
-            result.setError(parseError(jsonObject.getJSONObject("error")));
+            if (jsonObject.has("data")) {
+                result.setData(parseUser(jsonObject.getJSONObject("data")));
+            }
+            if (jsonObject.has("error")) {
+                result.setError(parseError(jsonObject.getJSONObject("error")));
+            }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
@@ -50,8 +58,12 @@ public class JSONEnvelopHelper {
         JSONEnvelop<List<User>> result = new JSONEnvelop<>();
         try {
             JSONObject jsonObject = new JSONObject(response);
-            result.setData(parseUsers(jsonObject.getJSONArray("data")));
-            result.setError(parseError(jsonObject.getJSONObject("error")));
+            if (jsonObject.has("data")) {
+                result.setData(parseUsers(jsonObject.getJSONArray("data")));
+            }
+            if (jsonObject.has("error")) {
+                result.setError(parseError(jsonObject.getJSONObject("error")));
+            }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
