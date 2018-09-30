@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.phoenix.schedule.android.controller;
 
 import android.content.Intent;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -78,6 +79,10 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
     public void selectCreateProgramSlot(ProgramSlot programSlot) {
         programSlot.setAssignedBy(MainController.getUserId());
         new CreateProgramSlotDelegate(this).execute(programSlot);
+    }
+
+    public void selectEditProgramSlot(ProgramSlot programSlot) {
+        Log.d("EDITProgramSlot",programSlot.getDateOfProgram().toString());
     }
 
     public void selectCopyProgramSlot(ProgramSlot programSlot) {

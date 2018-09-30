@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 import sg.edu.nus.iss.phoenix.R;
 
+import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 
 public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.PSViewHolder> {
@@ -34,7 +36,6 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
         this.programSlots=programSlots;
     }
 
-
     @Override
     public PSViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -49,7 +50,7 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
     }
 
     @Override
-    public void onBindViewHolder(PSViewHolder holder, int position) {
+    public void onBindViewHolder(PSViewHolder holder, final int position) {
 
         ProgramSlot currentPS=programSlots.get(position);
 
@@ -66,10 +67,14 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
         TextView radioPSEndDuration = holder.radioPSEndDuration;
         radioPSEndDuration.setText(currentPS.getDateOfProgram().toString());
 
-
-
-
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("AAA","Program Slot clicked");
+                ProgramSlot programSlot = programSlots.get(position);
+                ControlFactory.getScheduleController().selectEditProgramSlot(programSlot);
+            }
+        });
     }
 
     @Override
@@ -93,6 +98,7 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
              this.radioPSEndDuration = (TextView) psView.findViewById(R.id.toTimeTextView);
              this.producer = (TextView)psView.findViewById(R.id.producerTextView);
              this.presenter = (TextView)psView.findViewById(R.id.presenterTextView);
+
         }
     }
 
