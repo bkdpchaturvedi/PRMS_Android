@@ -34,6 +34,7 @@ public class JSONEnvelopHelper {
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
+            result.setError(new Error("", e.getMessage()));
         }
         return result;
     }

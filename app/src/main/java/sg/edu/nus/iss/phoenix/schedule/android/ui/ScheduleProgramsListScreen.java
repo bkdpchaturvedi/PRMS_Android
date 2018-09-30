@@ -129,30 +129,28 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
         scheduleView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int dayOfMonth) {
-                tv_itemempty_value.setVisibility(View.GONE);
-                psbar.setVisibility(View.VISIBLE);
-                Date d = new Date(year,month,dayOfMonth);
-                Date dd = new Date();
-                dd.setTime(calendarView.getDate());
-                LocalDateTime lDate= LocalDateTime.of(year,month+1,dayOfMonth,0,0);
-                Log.i("calender",lDate.toString());
-
-                ControlFactory.getScheduleController().onChangeDateRefersh(lDate);
+                ZonedDateTime dateOfProgram = ZonedDateTime.of(year, month + 1, dayOfMonth, 0, 0, 0, 0, ZoneId.systemDefault());
+                selectViewProgramSlots(dateOfProgram);
 
             }
         });
-
-
-
     }
 
+    private void selectViewProgramSlots(ZonedDateTime dateOfProgram) {
+        tv_itemempty_value.setVisibility(View.GONE);
+        psbar.setVisibility(View.VISIBLE);
+        Log.i("calender",dateOfProgram.toString());
+        ControlFactory.getScheduleController().selectViewProgramSlots(dateOfProgram);
+    }
 
 
     @Override
     public void onBackPressed() {
         ControlFactory.getScheduleController().maintainedSchedule();
     }
-    public void showProgramSlots(ArrayList<ProgramSlot> programSlots) {
+
+    public void displayProgramSlots(ZonedDateTime dateOfProgram, List<ProgramSlot> programSlots) {
+        ((CalendarView) findViewById(R.id.scheduleCalender)).setDate(dateOfProgram.toInstant().toEpochMilli());
         mPSAdapter.setProgramSlots(programSlots);
        mPSAdapter.notifyDataSetChanged();
        if(mPSAdapter.getItemCount()>0)
@@ -169,15 +167,8 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
-        Date d = new Date();
-        d.setTime(this.scheduleView.getDate());
-
-       LocalDateTime lDate= d.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-       ControlFactory.getScheduleController().onDisplayProgramListScreen(this,lDate);
-
-       // ControlFactory.getScheduleController().onDisplayProgramListScreen(this);
-
-
+       ControlFactory.getScheduleController().onDisplayProgramListScreen(this);
+        tv_itemempty_value.setVisibility(View.GONE);
+        psbar.setVisibility(View.VISIBLE);
     }
 }

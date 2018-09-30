@@ -14,6 +14,7 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
 
@@ -21,15 +22,15 @@ import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 
 public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.PSViewHolder> {
 
-    public ArrayList<ProgramSlot> getProgramSlots() {
+    public List<ProgramSlot> getProgramSlots() {
         return programSlots;
     }
 
-    public void setProgramSlots(ArrayList<ProgramSlot> programSlots) {
+    public void setProgramSlots(List<ProgramSlot> programSlots) {
         this.programSlots = programSlots;
     }
 
-    ArrayList<ProgramSlot> programSlots;
+    List<ProgramSlot> programSlots;
     public ProgramSlotAdapter(ArrayList<ProgramSlot> programSlots) {
         this.programSlots=programSlots;
     }

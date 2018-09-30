@@ -64,25 +64,21 @@ public class CreateProgramSlotDelegate extends AsyncTask<ProgramSlot, Void, Stri
             dos = httpURLConnection.getOutputStream();
             dos.write(jsonProgramSlot.toString().getBytes());
             Log.v(TAG, "Http POST response " + httpURLConnection.getResponseCode());
-            InputStreamReader inputStreamReader = new InputStreamReader(httpURLConnection.getInputStream());
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String line = "";
-            while ((line = bufferedReader.readLine()) != null) {
-                jsonResponse += line;
-            }
-            Log.v(TAG, jsonResponse);
-//            jsonResp = httpURLConnection.getResponseMessage();
-//            InputStream in = httpURLConnection.getInputStream();
-//            Scanner scanner = new Scanner(in);
-//            scanner.useDelimiter("\\A");
-//            if (scanner.hasNext()) jsonResp = scanner.next();
         } catch (IOException exception) {
             Log.v(TAG, exception.getMessage());
+            jsonResponse = exception.getMessage();
         } finally {
             if (dos != null) {
                 try {
                     dos.flush();
                     dos.close();
+                    InputStreamReader inputStreamReader = new InputStreamReader(httpURLConnection.getInputStream());
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    String line = "";
+                    while ((line = bufferedReader.readLine()) != null) {
+                        jsonResponse += line;
+                    }
+                    Log.v(TAG, jsonResponse);
                 } catch (IOException exception) {
                     Log.v(TAG, exception.getMessage());
                 }

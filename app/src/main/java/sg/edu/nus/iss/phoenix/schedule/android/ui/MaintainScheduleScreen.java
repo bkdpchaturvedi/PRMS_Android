@@ -325,6 +325,9 @@ return true;
                             .setNegativeButton(android.R.string.no, null).show();
                 }
                 break;
+            case R.id.action_cancel:
+                onBackPressed();
+                break;
 //                if (currentProgramSlot == null) { // Newly created.
 //                    Log.v(TAG, "Saving program slot " + currentProgramSlot.toString() + "...");
 //                    RadioProgram rp = new RadioProgram(mRPNameEditText.getText().toString(),
@@ -352,10 +355,10 @@ return true;
         return true;
     }
 
-
-//    @Override
-//    public void onBackPressed() {
-//        Log.v(TAG, "Canceling creating/editing radio program...");
-//        ControlFactory.getProgramController().selectCancelCreateEditProgram();
-//    }
+    @Override
+    public void onBackPressed() {
+        Log.v(TAG, "Canceling creating/editing program slot...");
+        ControlFactory.getScheduleController().onUnloadMaintainScheduleScreen(currentProgramSlot);
+        finish();
+    }
 }
