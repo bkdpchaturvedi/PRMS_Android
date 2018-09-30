@@ -59,7 +59,7 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
     }
 
     @Override
-    public void onBindViewHolder(PSViewHolder holder, final int position) {
+    public void onBindViewHolder(final PSViewHolder holder, final int position) {
 
         ProgramSlot currentPS=programSlots.get(position);
 
@@ -75,7 +75,13 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
         radioPSstartDuration.setText(currentPS.getDateOfProgram().toString());
         TextView radioPSEndDuration = holder.radioPSEndDuration;
         radioPSEndDuration.setText(currentPS.getDateOfProgram().toString());
-        psViewHolderClick.onItemClick(holder);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                psViewHolderClick.onItemClick(holder);
+            }
+        });
+
     }
 
     @Override
