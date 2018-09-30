@@ -26,5 +26,5 @@ tools:context=".user.android.ui.UserListScreen">
     android:layout_alignParentBottom="true"
     android:layout_alignParentRight="true"
     android:layout_margin="@dimen/fab_margin"
-    android:src="@drawable/ic_create"/>
+    android:src="@drawable/ic_plus"/>
 </RelativeLayout>
