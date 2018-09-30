@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,15 +60,20 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
         TextView radioPMName = holder.radioPMName;
         radioPMName.setText(currentPS.getRadioProgram().getRadioProgramName());
         TextView producer = holder.producer;
-        producer.setText(currentPS.getProducer().getId());
+        producer.setText(currentPS.getProducer().getUserName());
         TextView presenter = holder.presenter;
-        radioPMName.setText(currentPS.getPresenter().getId());
-        TextView radioPMDesc = holder.radioPMDesc;
-        radioPMDesc.setText(currentPS.getRadioProgram().getRadioProgramDescription());
+        radioPMName.setText(currentPS.getPresenter().getUserName());
+        //TextView radioPMDesc = holder.radioPMDesc;
+        //radioPMDesc.setText(currentPS.getRadioProgram().getRadioProgramDescription());
         TextView radioPSstartDuration = holder.radioPSstartDuration;
-        radioPSstartDuration.setText(currentPS.getDateOfProgram().toString());
+        SimpleDateFormat formatter =new SimpleDateFormat("hh:mm");
+
+       String startTime= DateTimeFormatter.ofPattern("hh:mm").format(currentPS.getDateOfProgram());
+        radioPSstartDuration.setText(
+                startTime);
         TextView radioPSEndDuration = holder.radioPSEndDuration;
-        radioPSEndDuration.setText(currentPS.getDateOfProgram().toString());
+        double durationinhours=((currentPS.getDuration().getSeconds()/60)/60);
+        radioPSEndDuration.setText(""+durationinhours);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +93,7 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
     public class PSViewHolder extends RecyclerView.ViewHolder{
         TextView producer;
         TextView radioPMName;
-        TextView radioPMDesc;
+        //TextView radioPMDesc;
         TextView radioPSstartDuration;
         TextView radioPSEndDuration;
         TextView presenter;
@@ -94,7 +101,7 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
         public PSViewHolder(View psView) {
             super(psView);
              this.radioPMName = (TextView) psView.findViewById(R.id.programTitleTextView);
-             this.radioPMDesc = (TextView)psView.findViewById(R.id.rpDescTextView);
+            // this.radioPMDesc = (TextView)psView.findViewById(R.id.rpDescTextView);
              this.radioPSstartDuration = (TextView)psView.findViewById(R.id.fromTimeTextView);
              this.radioPSEndDuration = (TextView) psView.findViewById(R.id.toTimeTextView);
              this.producer = (TextView)psView.findViewById(R.id.producerTextView);
