@@ -21,8 +21,15 @@ import sg.edu.nus.iss.phoenix.R;
 
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.schedule.android.ui.adapter.PresenterProducerListAdapter;
 
 public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.PSViewHolder> {
+
+    private ProgramSlotViewHolderClick psViewHolderClick;
+
+    public void setProgramSlotViewHolderClick(ProgramSlotViewHolderClick psViewHolderClick) {
+        this.psViewHolderClick = psViewHolderClick;
+    }
 
     public List<ProgramSlot> getProgramSlots() {
         return programSlots;
@@ -47,6 +54,7 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
 
         // Return a new holder instance
         PSViewHolder viewHolder = new PSViewHolder(psView);
+
         return viewHolder;
     }
 
@@ -67,20 +75,16 @@ public class ProgramSlotAdapter extends RecyclerView.Adapter<ProgramSlotAdapter.
         radioPSstartDuration.setText(currentPS.getDateOfProgram().toString());
         TextView radioPSEndDuration = holder.radioPSEndDuration;
         radioPSEndDuration.setText(currentPS.getDateOfProgram().toString());
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("AAA","Program Slot clicked");
-                ProgramSlot programSlot = programSlots.get(position);
-                ControlFactory.getScheduleController().selectEditProgramSlot(programSlot);
-            }
-        });
+        psViewHolderClick.onItemClick(holder);
     }
 
     @Override
     public int getItemCount() {
         return this.programSlots.size();
+    }
+
+    public interface  ProgramSlotViewHolderClick {
+        void onItemClick(ProgramSlotAdapter.PSViewHolder viewHolder);
     }
 
     public class PSViewHolder extends RecyclerView.ViewHolder{
