@@ -15,19 +15,6 @@
         android:layout_height="match_parent"
         android:layout_margin="0dp"
         android:layout_weight="1"
-        android:background="@android:color/holo_blue_dark"
-        android:drawableLeft="@android:drawable/ic_menu_edit"
-        android:minWidth="0dp"
-        android:padding="0dp"
-        android:tag="view"
-        android:text="View"
-        android:textColor="@color/cardview_light_background" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_margin="0dp"
-        android:layout_weight="1"
         android:background="@android:color/holo_green_light"
         android:drawableLeft="@android:drawable/ic_menu_set_as"
         android:minWidth="0dp"

@@ -357,6 +357,10 @@ return true;
 
     @Override
     public void onBackPressed() {
+        unloadScreen();
+    }
+
+    public void unloadScreen() {
         Log.v(TAG, "Canceling creating/editing program slot...");
         ControlFactory.getScheduleController().onUnloadMaintainScheduleScreen(currentProgramSlot);
         finish();

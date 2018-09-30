@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -70,15 +71,15 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
         setupAdapter();
         setupRecyclerView();
         setupCalender();
-
     }
 
     private void setupAdapter() {
 
         ArrayList<ProgramSlot> programSlots = new ArrayList<ProgramSlot>();
-
-
         mPSAdapter = new ProgramSlotAdapter(programSlots);
+
+
+
     }
 
     private void setupRecyclerView() {
@@ -99,12 +100,8 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
             public void onClicked(Object tag, int position) {
                 ProgramSlot selectecPS = mPSAdapter.getProgramSlots().get(position);
                 switch (tag.toString()) {
-                    case "view":
-                        //implement view code
-                        break;
-
                     case "copy":
-                        //implement copy code
+                        ControlFactory.getScheduleController().selectCopyProgramSlot(selectecPS);
                         break;
                 }
             }
@@ -135,14 +132,6 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
             }
         });
     }
-
-    private void selectViewProgramSlots(ZonedDateTime dateOfProgram) {
-        tv_itemempty_value.setVisibility(View.GONE);
-        psbar.setVisibility(View.VISIBLE);
-        Log.i("calender",dateOfProgram.toString());
-        ControlFactory.getScheduleController().selectViewProgramSlots(dateOfProgram);
-    }
-
 
     @Override
     public void onBackPressed() {

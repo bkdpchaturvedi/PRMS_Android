@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.phoenix.schedule.android.controller;
 
 import android.content.Intent;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -58,9 +59,13 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
         }
     }
 
-    public void programSlotsRetrieved(ZonedDateTime dateOfProgram, List<ProgramSlot> programSlots) {
-        scheduleProgramsListScreen.displayProgramSlots(dateOfProgram, programSlots);
-
+    public void programSlotsRetrieved(ZonedDateTime dateOfProgram, JSONEnvelop<List<ProgramSlot>> response) {
+        if (response.getError() != null) {
+            maintainScheduleScreen.displayErrorMessage(response.getError().getDescription());
+        }
+        if (response.getData() != null) {
+            scheduleProgramsListScreen.displayProgramSlots(dateOfProgram, response.getData());
+        }
     }
 
     public void selectCreateProgramSlot() {
@@ -74,11 +79,15 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
         new CreateProgramSlotDelegate(this).execute(programSlot);
     }
 
+    public void selectEditProgramSlot(ProgramSlot programSlot) {
+        Log.d("EDITProgramSlot",programSlot.getDateOfProgram().toString());
+    }
+
     public void selectCopyProgramSlot(ProgramSlot programSlot) {
         Intent intent = new Intent(MainController.getApp(), MaintainScheduleScreen.class);
         intent.putExtra(ConstantHelper.PROGRAM_SLOT
                 , new ProgramSlot(
-                        programSlot.getDateOfProgram()
+                        null
                         , programSlot.getDuration()
                         , programSlot.getRadioProgram()
                         , programSlot.getPresenter()
@@ -116,6 +125,7 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
         }
         if (response.getData() != null && response.getData()) {
             maintainScheduleScreen.displaySuccessMessage("Program slot has been successfully created.");
+            maintainScheduleScreen.unloadScreen();
         }
     }
 

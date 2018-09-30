@@ -57,7 +57,8 @@ public class RetrievePresenterProducerDelegate extends AsyncTask<String, Void, S
             scanner.useDelimiter("\\A");
             if (scanner.hasNext()) jsonResp = scanner.next();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.v(TAG, e.getMessage());
+            jsonResp = e.getMessage();
         } finally {
             if (urlConnection != null) urlConnection.disconnect();
         }
