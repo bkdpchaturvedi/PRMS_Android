@@ -1,6 +1,8 @@
 package sg.edu.nus.iss.phoenix.core.android.controller.entity;
 
-public class Role {
+import java.io.Serializable;
+
+public class Role implements Serializable {
 
     private String role;
     private String accessPrivilege;

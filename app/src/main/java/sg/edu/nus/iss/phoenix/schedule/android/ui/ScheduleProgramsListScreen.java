@@ -104,7 +104,7 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
                         break;
 
                     case "copy":
-                        //implement copy code
+                        ControlFactory.getScheduleController().selectCopyProgramSlot(selectecPS);
                         break;
                 }
             }

@@ -8,13 +8,17 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import sg.edu.nus.iss.phoenix.core.android.controller.entity.RadioProgram;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.Role;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.restful.Error;
 import sg.edu.nus.iss.phoenix.restful.JSONEnvelop;
+import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.user.android.delegate.RetrieveUsersDelegate;
 
 public class JSONEnvelopHelper {
@@ -35,6 +39,38 @@ public class JSONEnvelopHelper {
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
             result.setError(new Error("", e.getMessage()));
+        }
+        return result;
+    }
+
+    public static JSONEnvelop<ProgramSlot> parseEnvelopProgramSlot(String response) {
+        JSONEnvelop<ProgramSlot> result = new JSONEnvelop<>();
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            if (jsonObject.has("data")) {
+                result.setData(parseProgramSlot(jsonObject.getJSONObject("data")));
+            }
+            if (jsonObject.has("error")) {
+                result.setError(parseError(jsonObject.getJSONObject("error")));
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return result;
+    }
+
+    public static JSONEnvelop<List<ProgramSlot>> parseEnvelopProgramSlots(String response) {
+        JSONEnvelop<List<ProgramSlot>> result = new JSONEnvelop<>();
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            if (jsonObject.has("data")) {
+                result.setData(parseProgramSlots(jsonObject.getJSONArray("data")));
+            }
+            if (jsonObject.has("error")) {
+                result.setError(parseError(jsonObject.getJSONObject("error")));
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
         }
         return result;
     }
@@ -67,6 +103,75 @@ public class JSONEnvelopHelper {
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
+        }
+        return result;
+    }
+
+    private static List<RadioProgram> parseRadioPrograms(JSONArray jsonArray) {
+        List<RadioProgram> result = new ArrayList<>();
+        if (jsonArray != null) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    result.add(parseRadioProgram(jsonArray.getJSONObject(i)));
+                } catch (JSONException e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        } else {
+            Log.v(TAG, "Empty JSON Array.");
+        }
+        return result;
+    }
+
+    private static RadioProgram parseRadioProgram(JSONObject jsonObject) {
+        RadioProgram result = null;
+        if (jsonObject != null) {
+            try {
+                String name = jsonObject.getString("name");
+                String description = jsonObject.getString("description");
+                String typicalDuration = jsonObject.getString("typicalDuration");
+                result = new RadioProgram(name, description, typicalDuration);
+            } catch (JSONException e) {
+                Log.v(TAG, e.getMessage());
+            }
+        } else {
+            Log.v(TAG, "Empty JSON Object.");
+        }
+        return result;
+    }
+
+    private static List<ProgramSlot> parseProgramSlots(JSONArray jsonArray) {
+        List<ProgramSlot> result = new ArrayList<>();
+        if (jsonArray != null) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    result.add(parseProgramSlot(jsonArray.getJSONObject(i)));
+                } catch (JSONException e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        } else {
+            Log.v(TAG, "Empty JSON Array.");
+        }
+        return result;
+    }
+
+    private static ProgramSlot parseProgramSlot(JSONObject jsonObject) {
+        ProgramSlot result = null;
+        if (jsonObject != null) {
+            try {
+                RadioProgram radioProgram = parseRadioProgram(jsonObject.getJSONObject("radioProgram"));
+                User presenter = parseUser(jsonObject.getJSONObject("presenter"));
+                User producer = parseUser(jsonObject.getJSONObject("producer"));
+                ZonedDateTime dateOfProgram = ZonedDateTime.parse(jsonObject.getString("dateOfProgram"));
+                Duration duration = Duration.parse(jsonObject.getString("duration"));
+                String assignedBy = jsonObject.getString("assignedBy");
+                result = new ProgramSlot(dateOfProgram, duration, radioProgram, presenter, producer, assignedBy);
+            } catch (JSONException e) {
+                Log.v(TAG, e.getMessage());
+            }
+        } else {
+            Log.v(TAG, "Empty JSON Object.");
         }
         return result;
     }
