@@ -38,7 +38,7 @@
     <string name="action_save">Save</string>
     <string name="action_delete">Delete</string>
     <string name="action_select">Select</string>
-    <string name="title_activity_schedule_programs_list_screen">ScheduleProgramsListScreen</string>
+    <string name="title_activity_schedule_programs_list_screen">Browse Program Slots</string>
     <string name="title_activity_user_list_screen">UserListScreen</string>
     <string name="title_activity_user_screen">UserScreen</string>
     <string name="no_records_found">No items found</string>
@@ -56,5 +56,7 @@
     <string name="filter">Filter</string>
     <string name="filter_by">Filter by</string>
     <string name="action_copy">Copy</string>
+    <string name="title_activity_Schedule_screen">Program Slot</string>
+
 
 </resources>

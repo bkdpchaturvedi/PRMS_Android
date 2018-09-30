@@ -48,7 +48,7 @@
             android:label="@string/title_activity_user_screen" />
         <activity
             android:name=".schedule.android.ui.MaintainScheduleScreen"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"  android:label="@string/title_activity_Schedule_screen"/>
         <activity android:name=".schedule.android.ui.PresenterProducerScreen"></activity>
     </application>
 
