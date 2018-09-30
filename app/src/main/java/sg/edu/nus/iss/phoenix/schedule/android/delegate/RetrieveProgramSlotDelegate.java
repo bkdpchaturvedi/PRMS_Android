@@ -29,6 +29,7 @@ import sg.edu.nus.iss.phoenix.core.android.controller.entity.Role;
 import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
+import sg.edu.nus.iss.phoenix.utilities.JSONEnvelopHelper;
 
 import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
@@ -76,45 +77,9 @@ public class RetrieveProgramSlotDelegate extends AsyncTask<String, Void, String>
     }
 
     @Override
-    protected void onPostExecute(String result) {
-        ArrayList<ProgramSlot> programSlots = new ArrayList<>();
-
-        if (result != null && !result.equals("")) {
-            try {
-                JSONObject reader = new JSONObject(result);
-                JSONArray rpArray = reader.getJSONArray("data");
-
-                for (int i = 0; i < rpArray.length(); i++) {
-                    JSONObject rpJson = rpArray.getJSONObject(i);
-                    JSONObject rp = rpJson.getJSONObject("radioProgram");
-                    RadioProgram radioProgram = new RadioProgram(rp.getString("name"), "", "");
-                    JSONObject presenterJson = rpJson.getJSONObject("presenter");
-                    User presenter = new User(presenterJson.getString("id"), "", "", new ArrayList<Role>());
-                    JSONObject producerJson = rpJson.getJSONObject("producer");
-                    User producer = new User(producerJson.getString("id"), "", "", new ArrayList<Role>());
-
-                    String duration = rpJson.getString("duration");
-                    String dateOfProgram = rpJson.getString("dateOfProgram");
-                    String assignedBy = rpJson.getString("assignedBy");
-
-                    ProgramSlot temProgramSlot = new ProgramSlot();
-                    temProgramSlot.setAssignedBy(assignedBy);
-                    temProgramSlot.setDateOfProgram(ZonedDateTime.parse(dateOfProgram).withZoneSameInstant(ZoneId.systemDefault()));
-                    temProgramSlot.setDuration(Duration.parse(duration));
-                    temProgramSlot.setPresenter(presenter);
-                    temProgramSlot.setProducer(producer);
-                    temProgramSlot.setRadioProgram(radioProgram);
-                    programSlots.add(temProgramSlot);
-                }
-            } catch (JSONException e) {
-                Log.v(TAG, e.getMessage());
-            }
-        } else {
-            Log.v(TAG, "JSON response error.");
-        }
-
+    protected void onPostExecute(String response) {
         if (scheduleController != null)
-            scheduleController.programSlotsRetrieved(dateOfProgram, programSlots);
+            scheduleController.programSlotsRetrieved(dateOfProgram, JSONEnvelopHelper.parseEnvelopProgramSlots(response));
 
     }
 }

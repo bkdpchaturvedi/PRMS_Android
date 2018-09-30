@@ -81,6 +81,7 @@ public class CreateProgramSlotDelegate extends AsyncTask<ProgramSlot, Void, Stri
                     Log.v(TAG, jsonResponse);
                 } catch (IOException exception) {
                     Log.v(TAG, exception.getMessage());
+                    jsonResponse = exception.getMessage();
                 }
             }
             if (httpURLConnection != null) httpURLConnection.disconnect();

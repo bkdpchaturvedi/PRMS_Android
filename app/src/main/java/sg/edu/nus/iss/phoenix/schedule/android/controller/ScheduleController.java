@@ -59,9 +59,13 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
         }
     }
 
-    public void programSlotsRetrieved(ZonedDateTime dateOfProgram, List<ProgramSlot> programSlots) {
-        scheduleProgramsListScreen.displayProgramSlots(dateOfProgram, programSlots);
-
+    public void programSlotsRetrieved(ZonedDateTime dateOfProgram, JSONEnvelop<List<ProgramSlot>> response) {
+        if (response.getError() != null) {
+            maintainScheduleScreen.displayErrorMessage(response.getError().getDescription());
+        }
+        if (response.getData() != null) {
+            scheduleProgramsListScreen.displayProgramSlots(dateOfProgram, response.getData());
+        }
     }
 
     public void selectCreateProgramSlot() {
@@ -83,7 +87,7 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
         Intent intent = new Intent(MainController.getApp(), MaintainScheduleScreen.class);
         intent.putExtra(ConstantHelper.PROGRAM_SLOT
                 , new ProgramSlot(
-                        programSlot.getDateOfProgram()
+                        null
                         , programSlot.getDuration()
                         , programSlot.getRadioProgram()
                         , programSlot.getPresenter()
@@ -121,6 +125,7 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
         }
         if (response.getData() != null && response.getData()) {
             maintainScheduleScreen.displaySuccessMessage("Program slot has been successfully created.");
+            maintainScheduleScreen.unloadScreen();
         }
     }
 

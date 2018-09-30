@@ -101,7 +101,7 @@ public class ScheduleProgramsListScreen extends AppCompatActivity {
                 ProgramSlot selectecPS = mPSAdapter.getProgramSlots().get(position);
                 switch (tag.toString()) {
                     case "copy":
-                        //implement copy code
+                        ControlFactory.getScheduleController().selectCopyProgramSlot(selectecPS);
                         break;
                 }
             }
