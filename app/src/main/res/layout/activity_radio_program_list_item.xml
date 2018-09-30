@@ -6,21 +6,21 @@
     android:state_pressed="true"
     android:state_selected="true">
     <TextView
-        android:id="@+id/list_item_user_id_text_view"
+        android:id="@+id/list_item_radio_program_duration_text_view"
         android:layout_width="fill_parent"
         android:layout_height="26dip"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="User ID"
+        android:text="Radio Program Name"
         android:textColor="@android:color/darker_gray"
         android:textSize="12sp"
         />
 
     <TextView
-        android:id="@+id/list_item_user_name_text_view"
+        android:id="@+id/list_item_radio_program_name_text_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/list_item_user_id_text_view"
+        android:layout_above="@id/list_item_radio_program_duration_text_view"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"

@@ -31,7 +31,6 @@ public class UserListScreen extends AppCompatActivity {
     //private EditText mRolesEditText;
     private ListView mListView;
     private UserAdapter mUserAdapter;
-    private User selectedUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +65,14 @@ public class UserListScreen extends AppCompatActivity {
                 Log.v(TAG, "User at position " + position + " clicked.");
                 User user = (User) adapterView.getItemAtPosition(position);
                 // Log.v(TAG, "User name is " + user.getUserName());
-                selectedUser = user;
-
-                for (int i = 0; i < mListView.getChildCount(); i++) {
-                    if(position == i ){
-                        mListView.getChildAt(i).setBackgroundColor(Color.LTGRAY);
-                    }else{
-                        mListView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
-                    }
-                }
+                ControlFactory.getUserController().selectEditUser(user);
+//                for (int i = 0; i < mListView.getChildCount(); i++) {
+//                    if(position == i ){
+//                        mListView.getChildAt(i).setBackgroundColor(Color.LTGRAY);
+//                    }else{
+//                        mListView.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+//                    }
+//                }
             }
         });
     }
@@ -96,25 +94,25 @@ public class UserListScreen extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // User clicked on a menu option in the app bar overflow menu
-        switch (item.getItemId()) {
-            // Respond to a click on the "View" menu option
-            case R.id.action_view:
-                if (selectedUser == null) {
-                    // Prompt for the selection of a user.
-                    Toast.makeText(this, "Select a user first! Use arrow keys on emulator", Toast.LENGTH_SHORT).show();
-                    Log.v(TAG, "There is no selected user.");
-                }
-                else {
-                    Log.v(TAG, "Viewing user: " + selectedUser.getUserName() + "...");
-                    ControlFactory.getUserController().selectEditUser(selectedUser);
-                }
-        }
-
-        return true;
-    }
+  //  @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // User clicked on a menu option in the app bar overflow menu
+//        switch (item.getItemId()) {
+//            // Respond to a click on the "View" menu option
+//            case R.id.action_view:
+//                if (selectedUser == null) {
+//                    // Prompt for the selection of a user.
+//                    Toast.makeText(this, "Select a user first! Use arrow keys on emulator", Toast.LENGTH_SHORT).show();
+//                    Log.v(TAG, "There is no selected user.");
+//                }
+//                else {
+//                    Log.v(TAG, "Viewing user: " + selectedUser.getUserName() + "...");
+//                    ControlFactory.getUserController().selectEditUser(selectedUser);
+//                }
+//        }
+//
+//        return true;
+//    }
 
     @Override
     public void onBackPressed() {

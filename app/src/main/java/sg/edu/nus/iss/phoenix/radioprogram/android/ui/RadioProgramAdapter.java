@@ -27,20 +27,17 @@ public class RadioProgramAdapter extends ArrayAdapter<RadioProgram> {
         View listItemView = convertView;
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.activity_radio_program, parent, false);
+                    R.layout.activity_radio_program_list_item, parent, false);
         }
         //    Word currentWord = getItem(position);
         RadioProgram currentRP = getItem(position);
 
-        EditText radioPMName = (EditText)listItemView.findViewById(R.id.maintain_program_name_text_view);
+        TextView radioPMName = (TextView)listItemView.findViewById(R.id.list_item_radio_program_name_text_view);
         radioPMName.setText(currentRP.getRadioProgramName(), TextView.BufferType.NORMAL);
         radioPMName.setKeyListener(null); // This disables editing.
 
-        EditText radioPMDesc = (EditText)listItemView.findViewById(R.id.maintain_program_desc_text_view);
-        radioPMDesc.setText(currentRP.getRadioProgramDescription(), TextView.BufferType.NORMAL);
-        radioPMDesc.setKeyListener(null);
 
-        EditText radioPMDuration = (EditText)listItemView.findViewById(R.id.maintain_program_duration_text_view);
+        TextView radioPMDuration = (TextView)listItemView.findViewById(R.id.list_item_radio_program_duration_text_view);
         radioPMDuration.setText(currentRP.getRadioProgramDuration(), TextView.BufferType.NORMAL);
         radioPMDuration.setKeyListener(null);
 
