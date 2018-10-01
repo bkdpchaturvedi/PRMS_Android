@@ -10,19 +10,23 @@ import android.support.v7.widget.helper.ItemTouchHelper.Callback;
 import android.view.MotionEvent;
 import android.view.View;
 
-import static android.support.v7.widget.helper.ItemTouchHelper.*;
+import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
+import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
+import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
 
 enum ButtonsState {
     GONE,
     LEFT_VISIBLE,
     RIGHT_VISIBLE
 }
+
 class SwipeMenuTocuhHelper extends Callback {
 
-    private boolean swipeBack = false;
-    private ButtonsState buttonShowedState = ButtonsState.GONE;
     private static final float buttonWidth = 300;
     RectF buttonInstance;
+    private boolean swipeBack = false;
+    private ButtonsState buttonShowedState = ButtonsState.GONE;
+
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         return makeMovementFlags(0, LEFT | RIGHT);
@@ -61,6 +65,7 @@ class SwipeMenuTocuhHelper extends Callback {
 
 
     }
+
     private void setTouchListener(final Canvas c,
                                   final RecyclerView recyclerView,
                                   final RecyclerView.ViewHolder viewHolder,
@@ -72,7 +77,7 @@ class SwipeMenuTocuhHelper extends Callback {
                 swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
                 if (swipeBack) {
                     if (dX < -buttonWidth) buttonShowedState = ButtonsState.RIGHT_VISIBLE;
-                    else if (dX > buttonWidth) buttonShowedState  = ButtonsState.LEFT_VISIBLE;
+                    else if (dX > buttonWidth) buttonShowedState = ButtonsState.LEFT_VISIBLE;
 
                     if (buttonShowedState != ButtonsState.GONE) {
                         setTouchDownListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -152,8 +157,7 @@ class SwipeMenuTocuhHelper extends Callback {
         buttonInstance = null;
         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
             buttonInstance = leftButton;
-        }
-        else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
+        } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
             buttonInstance = rightButton;
         }
     }
@@ -165,6 +169,6 @@ class SwipeMenuTocuhHelper extends Callback {
         p.setTextSize(textSize);
 
         float textWidth = p.measureText(text);
-        c.drawText(text, button.centerX()-(textWidth/2), button.centerY()+(textSize/2), p);
+        c.drawText(text, button.centerX() - (textWidth / 2), button.centerY() + (textSize / 2), p);
     }
 }

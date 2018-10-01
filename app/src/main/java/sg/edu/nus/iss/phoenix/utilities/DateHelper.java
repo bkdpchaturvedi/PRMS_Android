@@ -2,8 +2,8 @@ package sg.edu.nus.iss.phoenix.utilities;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
@@ -55,7 +55,7 @@ public class DateHelper {
         return getUTC(input, null);
     }
 
-    public static ZonedDateTime getUTC(String input, ChronoUnit truncate)  {
+    public static ZonedDateTime getUTC(String input, ChronoUnit truncate) {
         return ZonedDateTime.parse(input, DateTimeFormatter.ISO_DATE_TIME)
                 .truncatedTo(truncate)
                 .withZoneSameInstant(ZoneOffset.UTC);

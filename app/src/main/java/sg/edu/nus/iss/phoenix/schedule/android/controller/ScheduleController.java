@@ -6,7 +6,6 @@ import java.time.ZonedDateTime;
 import java.util.AbstractMap;
 import java.util.List;
 
-
 import sg.edu.nus.iss.phoenix.core.android.controller.ConstantHelper;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.core.android.controller.MainController;
@@ -37,7 +36,7 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
 
     public void onDisplayScheduledProgramListScreen(ScheduledProgramsListScreen scheduledProgramsListScreen) {
         this.scheduledProgramsListScreen = scheduledProgramsListScreen;
-       getProgramSlots( ZonedDateTime.now());
+        getProgramSlots(ZonedDateTime.now());
     }
 
     private void getProgramSlots(ZonedDateTime dateOfProgram) {

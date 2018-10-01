@@ -6,8 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -39,7 +37,7 @@ public class JSONEnvelopHelper {
         return true;
     }
 
-    public static JSONEnvelop<Boolean>  parseEnvelopBoolean(String response) {
+    public static JSONEnvelop<Boolean> parseEnvelopBoolean(String response) {
         JSONEnvelop<Boolean> result = new JSONEnvelop<>();
         if (!isJSON(response)) {
             result.setError(new Error("", response));
@@ -236,8 +234,8 @@ public class JSONEnvelopHelper {
                 String password = jsonObject.getString("password");
                 String id = jsonObject.getString("id");
                 String name = jsonObject.getString("name");
-                List<Role> roles = parseRoles (jsonObject.getJSONArray("roles"));
-                result = new User(id, name, password,roles);
+                List<Role> roles = parseRoles(jsonObject.getJSONArray("roles"));
+                result = new User(id, name, password, roles);
             } catch (JSONException e) {
                 Log.v(TAG, e.getMessage());
             }

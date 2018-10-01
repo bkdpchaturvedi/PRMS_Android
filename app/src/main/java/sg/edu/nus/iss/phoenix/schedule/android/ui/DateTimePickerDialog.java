@@ -2,10 +2,7 @@ package sg.edu.nus.iss.phoenix.schedule.android.ui;
 
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,53 +13,34 @@ import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Period;
 import java.time.ZonedDateTime;
-import java.time.chrono.ChronoLocalDate;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjuster;
 import java.util.ArrayList;
 import java.util.List;
 
 import sg.edu.nus.iss.phoenix.R;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-
 
 public class DateTimePickerDialog extends DialogFragment implements DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener {
 
     public static final String TAG = DateTimePickerDialog.class.getName();
-
-
-    public interface DateTimeSetListener {
-        void onDateTimeSet(ZonedDateTime value, String field);
-    }
-
     private DateTimeSetListener onDateTimeSetListener;
     private int minuteInterval = 1;
     private int hourInterval = 1;
-
     private ZonedDateTime selectedDateTime;
     private ZonedDateTime startDateTime;
     private ZonedDateTime endDateTime;
-
     private DatePicker datePicker;
     private TimePicker timePicker;
-
-    private  String field;
+    private String field;
 
     public DateTimePickerDialog() {
         super();
     }
 
     @SuppressLint("ValidFragment")
-    public DateTimePickerDialog(ZonedDateTime selectedDateTime, ZonedDateTime startDateTime, ZonedDateTime endDateTime, Integer hourInterval, Integer minuteInterval, String field)
-    {
+    public DateTimePickerDialog(ZonedDateTime selectedDateTime, ZonedDateTime startDateTime, ZonedDateTime endDateTime, Integer hourInterval, Integer minuteInterval, String field) {
         super();
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
@@ -85,7 +63,7 @@ public class DateTimePickerDialog extends DialogFragment implements DatePicker.O
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         view.findViewById(R.id.btn_datetimedialog_set).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (onDateTimeSetListener!=null) {
+                if (onDateTimeSetListener != null) {
                     onDateTimeSetListener.onDateTimeSet(selectedDateTime, field);
                 }
                 dismiss();
@@ -145,17 +123,16 @@ public class DateTimePickerDialog extends DialogFragment implements DatePicker.O
         setTimePickerInterval(timePicker, 0, 23, 1, 0, 59, minuteInterval);
     }
 
-
     @Override
     public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
         onDateTimeChanged();
     }
 
     private void refreshSelectedDateTime() {
-        Integer hour = Integer.valueOf(getDisplayValue( (NumberPicker) timePicker
+        Integer hour = Integer.valueOf(getDisplayValue((NumberPicker) timePicker
                 .findViewById(Resources.getSystem().getIdentifier("hour",
                         "id", "android"))));
-        Integer minute = Integer.valueOf(getDisplayValue( (NumberPicker) timePicker
+        Integer minute = Integer.valueOf(getDisplayValue((NumberPicker) timePicker
                 .findViewById(Resources.getSystem().getIdentifier("minute",
                         "id", "android"))));
         selectedDateTime = selectedDateTime.with(LocalDateTime.of(datePicker.getYear()
@@ -198,7 +175,7 @@ public class DateTimePickerDialog extends DialogFragment implements DatePicker.O
             numberPicker.setMinValue(0);
             if (numberPicker.getMaxValue() >= displayValues.size()) {
                 if (numberPicker.getValue() >= displayValues.size()) {
-                    newValue = ((displayValues.size() - 1)  - numberPicker.getMaxValue()) + numberPicker.getValue();
+                    newValue = ((displayValues.size() - 1) - numberPicker.getMaxValue()) + numberPicker.getValue();
                 } else {
                     newValue = displayValues.size() - 1;
                 }
@@ -207,7 +184,7 @@ public class DateTimePickerDialog extends DialogFragment implements DatePicker.O
                 numberPicker.setMaxValue(displayValues.size() - 1);
                 numberPicker.setDisplayedValues(displayValues.toArray(new String[0]));
             } else {
-                newValue = ((displayValues.size() - 1)  - numberPicker.getMaxValue()) + numberPicker.getValue();
+                newValue = ((displayValues.size() - 1) - numberPicker.getMaxValue()) + numberPicker.getValue();
                 numberPicker.setDisplayedValues(displayValues.toArray(new String[0]));
                 numberPicker.setMaxValue(displayValues.size() - 1);
                 numberPicker.setValue(newValue);
@@ -215,6 +192,10 @@ public class DateTimePickerDialog extends DialogFragment implements DatePicker.O
         } catch (Exception e) {
             Log.e(TAG, "Exception: " + e);
         }
+    }
+
+    public interface DateTimeSetListener {
+        void onDateTimeSet(ZonedDateTime value, String field);
     }
 
 }

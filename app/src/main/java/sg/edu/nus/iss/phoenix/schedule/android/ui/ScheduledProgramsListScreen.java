@@ -27,20 +27,20 @@ import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 
 public class ScheduledProgramsListScreen extends AppCompatActivity implements ProgramSlotAdapter.ProgramSlotViewHolderClick {
-    CalendarView scheduleView=null;
+    CalendarView scheduleView = null;
+    RecyclerView recyclerView = null;
+    TextView tv_itemempty_value = null;
+    ProgressBar psbar = null;
+    SwipeMenuTocuhHelper swipeMenuTocuhHelper = null;
     private ProgramSlotAdapter mPSAdapter;
     private ProgramSlot selectedPS = null;
-    RecyclerView recyclerView=null;
-    TextView tv_itemempty_value=null;
-    ProgressBar psbar=null;
 
-    SwipeMenuTocuhHelper swipeMenuTocuhHelper=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_programs_list_screen);
-       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-       // setSupportActionBar(toolbar);
+        // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.psfab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -49,15 +49,15 @@ public class ScheduledProgramsListScreen extends AppCompatActivity implements Pr
                 selectCreateProgramSlot();
             }
         });
-        tv_itemempty_value=(TextView) findViewById(R.id.tv_itemempty_value);
-        psbar=(ProgressBar)findViewById(R.id.psloadProgressbar);
+        tv_itemempty_value = (TextView) findViewById(R.id.tv_itemempty_value);
+        psbar = (ProgressBar) findViewById(R.id.psloadProgressbar);
 
         setupAdapter();
         setupRecyclerView();
         setupCalender();
     }
 
-    private  void selectCreateProgramSlot() {
+    private void selectCreateProgramSlot() {
         ControlFactory.getScheduleController().selectCreateProgramSlot();
     }
 
@@ -69,7 +69,7 @@ public class ScheduledProgramsListScreen extends AppCompatActivity implements Pr
     }
 
     private void setupRecyclerView() {
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.programSlotList);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.programSlotList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mPSAdapter);
@@ -79,7 +79,6 @@ public class ScheduledProgramsListScreen extends AppCompatActivity implements Pr
         itemTouchhelper.attachToRecyclerView(recyclerView);*/
 
         final SwipeControlHelperExisting swipeMenuTocuhHelper = new SwipeControlHelperExisting(0, R.layout.partial_swipe_item) {
-
 
 
             @Override
@@ -109,7 +108,7 @@ public class ScheduledProgramsListScreen extends AppCompatActivity implements Pr
         ControlFactory.getScheduleController().selectCopyProgramSlot(programSlot);
     }
 
-    private  void setupCalender() {
+    private void setupCalender() {
         Date d = new Date();
         scheduleView = (CalendarView) findViewById(R.id.scheduleCalender);
         scheduleView.setDate(d.getTime());
@@ -132,36 +131,33 @@ public class ScheduledProgramsListScreen extends AppCompatActivity implements Pr
     private void selectViewProgramSlots(ZonedDateTime dateOfProgram) {
         tv_itemempty_value.setVisibility(View.GONE);
         psbar.setVisibility(View.VISIBLE);
-        Log.i("calender",dateOfProgram.toString());
+        Log.i("calender", dateOfProgram.toString());
         ControlFactory.getScheduleController().selectViewProgramSlots(dateOfProgram);
     }
 
     public void displayProgramSlots(ZonedDateTime dateOfProgram, List<ProgramSlot> programSlots) {
         ((CalendarView) findViewById(R.id.scheduleCalender)).setDate(dateOfProgram.toInstant().toEpochMilli());
         mPSAdapter.setProgramSlots(programSlots);
-       mPSAdapter.notifyDataSetChanged();
-       if(mPSAdapter.getItemCount()>0)
-       {
-           tv_itemempty_value.setVisibility(View.GONE);
-       }
-       else
-       {
-           tv_itemempty_value.setVisibility(View.VISIBLE);
-       }
-       psbar.setVisibility(View.GONE);
+        mPSAdapter.notifyDataSetChanged();
+        if (mPSAdapter.getItemCount() > 0) {
+            tv_itemempty_value.setVisibility(View.GONE);
+        } else {
+            tv_itemempty_value.setVisibility(View.VISIBLE);
+        }
+        psbar.setVisibility(View.GONE);
     }
 
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-       ControlFactory.getScheduleController().onDisplayScheduledProgramListScreen(this);
+        ControlFactory.getScheduleController().onDisplayScheduledProgramListScreen(this);
         tv_itemempty_value.setVisibility(View.GONE);
         psbar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onItemClick(ProgramSlotAdapter.PSViewHolder viewHolder) {
-        int position =viewHolder.getAdapterPosition();
+        int position = viewHolder.getAdapterPosition();
         ProgramSlot programSlot = mPSAdapter.getProgramSlots().get(position);
         selectViewProgramSlot(programSlot);
     }

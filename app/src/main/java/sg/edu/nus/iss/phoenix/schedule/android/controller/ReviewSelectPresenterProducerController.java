@@ -1,7 +1,6 @@
 package sg.edu.nus.iss.phoenix.schedule.android.controller;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ import sg.edu.nus.iss.phoenix.schedule.android.ui.PresenterProducerScreen;
 
 public class ReviewSelectPresenterProducerController {
 
-    private  ReviewSelectPresenterProducerReturnable caller;
+    private ReviewSelectPresenterProducerReturnable caller;
     private PresenterProducerScreen presenterProducerScreen;
 
     public void startUseCase(ReviewSelectPresenterProducerReturnable caller, User presenter, User producer, String field) {
@@ -35,7 +34,7 @@ public class ReviewSelectPresenterProducerController {
 
     public void presentersRetrieved(JSONEnvelop<List<User>> response) {
         if (response.getError() != null) {
-            presenterProducerScreen.displayErrorMessage(response.getError().getError() + ": "+ response.getError().getDescription());
+            presenterProducerScreen.displayErrorMessage(response.getError().getError() + ": " + response.getError().getDescription());
         }
         if (response.getData() != null) {
             presenterProducerScreen.displayPresenters(response.getData());
@@ -44,7 +43,7 @@ public class ReviewSelectPresenterProducerController {
 
     public void producersRetrieved(JSONEnvelop<List<User>> response) {
         if (response.getError() != null) {
-            presenterProducerScreen.displayErrorMessage(response.getError().getError() + ": "+ response.getError().getDescription());
+            presenterProducerScreen.displayErrorMessage(response.getError().getError() + ": " + response.getError().getDescription());
         }
         if (response.getData() != null) {
             presenterProducerScreen.displayProducers(response.getData());

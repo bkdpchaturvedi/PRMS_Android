@@ -4,24 +4,18 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Scanner;
 
-import sg.edu.nus.iss.phoenix.restful.JSONEnvelop;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
-import sg.edu.nus.iss.phoenix.radioprogram.android.controller.ProgramController;
 import sg.edu.nus.iss.phoenix.utilities.JSONEnvelopHelper;
 import sg.edu.nus.iss.phoenix.utilities.JSONHelper;
 
@@ -39,7 +33,7 @@ public class CreateProgramSlotDelegate extends AsyncTask<ProgramSlot, Void, Stri
     @Override
     protected String doInBackground(ProgramSlot... params) {
         Uri builtUri = Uri.parse(PRMS_BASE_URL_SCHEDULE).buildUpon().build();
-        builtUri = Uri.withAppendedPath(builtUri,"").buildUpon().build();
+        builtUri = Uri.withAppendedPath(builtUri, "").buildUpon().build();
         Log.v(TAG, builtUri.toString());
         URL url;
         try {
@@ -86,7 +80,7 @@ public class CreateProgramSlotDelegate extends AsyncTask<ProgramSlot, Void, Stri
             }
             if (httpURLConnection != null) httpURLConnection.disconnect();
         }
-       return jsonResponse;
+        return jsonResponse;
     }
 
     @Override

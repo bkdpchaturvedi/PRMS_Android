@@ -1,8 +1,8 @@
 package sg.edu.nus.iss.phoenix.schedule.android.ui;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -31,7 +31,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
     private User selectedPresenter;
     private User selectedProducer;
     private String field;
-    private ProgressBar progressBar =null;
+    private ProgressBar progressBar = null;
 
     public void displayProducer(final List<User> producers) {
         presenterProducerListAdapter.setUsers(producers);
@@ -109,7 +109,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
                     .setVisibility(View.GONE);
             presenterProducerListAdapter.cleareSelected();
             if (selectedPresenter != null) {
-                for (int i =0; i<presenters.size(); i++) {
+                for (int i = 0; i < presenters.size(); i++) {
                     if (presenters.get(i).getId().equals(selectedPresenter.getId())) {
                         presenterProducerListAdapter.addSelected(i);
                     }
@@ -131,7 +131,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
                     .setVisibility(View.GONE);
             presenterProducerListAdapter.cleareSelected();
             if (selectedProducer != null) {
-                for (int i =0; i<producers.size(); i++) {
+                for (int i = 0; i < producers.size(); i++) {
                     if (producers.get(i).getId().equals(selectedProducer.getId())) {
                         presenterProducerListAdapter.addSelected(i);
                     }
@@ -153,7 +153,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
         selectedPresenter = (User) getIntent().getSerializableExtra(ConstantHelper.PRESENTER);
         selectedProducer = (User) getIntent().getSerializableExtra(ConstantHelper.PRODUCER);
         field = getIntent().getStringExtra(ConstantHelper.FIELD);
-        progressBar =(ProgressBar)findViewById(R.id.pb_pp_loading_indicator) ;
+        progressBar = (ProgressBar) findViewById(R.id.pb_pp_loading_indicator);
 
         setupControls();
     }

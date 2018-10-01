@@ -4,28 +4,22 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ReviewSelectPresenterProducerController;
 import sg.edu.nus.iss.phoenix.utilities.JSONEnvelopHelper;
 
-import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_USER;
 
 public class RetrievePresenterProducerDelegate extends AsyncTask<String, Void, String> {
 
-    private String param = "";
     private static final String TAG = RetrieveProgramSlotDelegate.class.getName();
+    private String param = "";
     private ReviewSelectPresenterProducerController reviewSelectPresenterProducerController = null;
 
     public RetrievePresenterProducerDelegate(ReviewSelectPresenterProducerController reviewSelectPresenterProducerController) {
@@ -35,7 +29,7 @@ public class RetrievePresenterProducerDelegate extends AsyncTask<String, Void, S
 
     @Override
     protected String doInBackground(String... params) {
-        this.param  = params[0];
+        this.param = params[0];
         Uri builtUri1 = Uri.parse(PRMS_BASE_URL_USER).buildUpon().build();
         Uri builtUri = Uri.withAppendedPath(builtUri1, param).buildUpon().build();
         Log.v(TAG, builtUri.toString());

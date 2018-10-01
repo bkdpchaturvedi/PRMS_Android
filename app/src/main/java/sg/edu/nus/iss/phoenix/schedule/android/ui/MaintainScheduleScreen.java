@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -85,9 +84,9 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
 
         if (currentProgramSlot.getDateOfProgram() != null && currentProgramSlot.getDuration() != null) {
             etDateOfProgramEnd.setText(currentProgramSlot.getDateOfProgram()
-                            .plusSeconds(currentProgramSlot.getDuration()
+                    .plusSeconds(currentProgramSlot.getDuration()
                             .getSeconds()).toString()
-                    );
+            );
         }
 
         int visibility = View.VISIBLE;
@@ -98,7 +97,7 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
         etDateOfProgramEnd.setVisibility(visibility);
     }
 
-    private void selectRadioProgram(){
+    private void selectRadioProgram() {
         ControlFactory.getScheduleController().selectRadioProgram(currentProgramSlot.getRadioProgram());
     }
 
@@ -126,9 +125,9 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
 
     public void radioProgramSelected(RadioProgram radioProgram) {
         currentProgramSlot.setRadioProgram(radioProgram);
-        currentProgramSlot.setDuration(Duration.between (
-                LocalTime.MIN ,
-                LocalTime.parse (radioProgram.getRadioProgramDuration())
+        currentProgramSlot.setDuration(Duration.between(
+                LocalTime.MIN,
+                LocalTime.parse(radioProgram.getRadioProgramDuration())
         ));
         displayProgramSlot();
     }
@@ -225,7 +224,7 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
     }
 
     private boolean validateFormat() {
-return true;
+        return true;
     }
 
     private boolean validate() {
@@ -258,7 +257,7 @@ return true;
             return false;
         }
         if (Duration.between(currentProgramSlot.getDateOfProgram()
-                .plusSeconds(currentProgramSlot.getDuration().getSeconds()).toLocalDateTime()
+                        .plusSeconds(currentProgramSlot.getDuration().getSeconds()).toLocalDateTime()
                 , DateHelper.getWeekEndDate(currentProgramSlot.getDateOfProgram().toLocalDate()).plusDays(1).atStartOfDay())
                 .getSeconds() < 0) {
             displayErrorMessage("Please set the end date of program not to cross the current week.");
@@ -333,7 +332,8 @@ return true;
 
                                 ControlFactory.getScheduleController().selectUpdateProgramSlot(currentProgramSlot, originalDateOfProgram);
                             }
-                        }})
+                        }
+                    })
                     .setNegativeButton(android.R.string.no, null).show();
         }
     }
@@ -361,7 +361,8 @@ return true;
                     public void onClick(DialogInterface dialog, int whichButton) {
                         Log.v(TAG, "Deleting program slot " + currentProgramSlot.toString() + "...");
                         ControlFactory.getScheduleController().selectDeleteProgramSlot(originalDateOfProgram);
-                    }})
+                    }
+                })
                 .setNegativeButton(android.R.string.no, null).show();
     }
 

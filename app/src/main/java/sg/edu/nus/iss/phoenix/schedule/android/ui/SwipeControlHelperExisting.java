@@ -18,41 +18,22 @@ import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
 public class SwipeControlHelperExisting extends ItemTouchHelper.Callback {
 
 
-    enum ButtonsState {
-        GONE,
-        LEFT_VISIBLE,
-        RIGHT_VISIBLE
-    }
-
     private boolean swipeBack = false;
-
     private ButtonsState buttonShowedState = ButtonsState.GONE;
-
     private RectF buttonInstance = null;
-
     private RecyclerView.ViewHolder currentItemViewHolder = null;
-
     private int swipeFlags;
-
     //    private SwipeControllerActions buttonsActions = null;
     private float leftRevealWidth = 0;
     private float rightRevealWidth = 0;
-
     private int leftRevealResource = 0;
     private int rightRevealResource = 0;
-
-//    public SwipeController(SwipeControllerActions buttonsActions) {
-//        this.buttonsActions = buttonsActions;
-//    }
-
     public SwipeControlHelperExisting(@LayoutRes int leftRevealResource, @LayoutRes int rightRevealResource) {
         if (leftRevealResource != 0 && rightRevealResource == 0) {
             this.swipeFlags = RIGHT;
-        }
-        else if (rightRevealResource != 0 && leftRevealResource == 0) {
+        } else if (rightRevealResource != 0 && leftRevealResource == 0) {
             this.swipeFlags = LEFT;
-        }
-        else if (rightRevealResource != 0 && leftRevealResource != 0) {
+        } else if (rightRevealResource != 0 && leftRevealResource != 0) {
             this.swipeFlags = LEFT | RIGHT;
         }
         this.rightRevealResource = rightRevealResource;
@@ -61,9 +42,13 @@ public class SwipeControlHelperExisting extends ItemTouchHelper.Callback {
 //        this.rightRevealWidth = 370;
     }
 
+//    public SwipeController(SwipeControllerActions buttonsActions) {
+//        this.buttonsActions = buttonsActions;
+//    }
+
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        return makeMovementFlags(0,  swipeFlags);
+        return makeMovementFlags(0, swipeFlags);
     }
 
     @Override
@@ -90,11 +75,12 @@ public class SwipeControlHelperExisting extends ItemTouchHelper.Callback {
         setupRevealWidth(viewHolder);
         if (actionState == ACTION_STATE_SWIPE) {
             if (buttonShowedState != ButtonsState.GONE) {
-                if (buttonShowedState == ButtonsState.LEFT_VISIBLE) dX = Math.max(dX, leftRevealWidth);
-                if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) dX = Math.min(dX, -rightRevealWidth);
+                if (buttonShowedState == ButtonsState.LEFT_VISIBLE)
+                    dX = Math.max(dX, leftRevealWidth);
+                if (buttonShowedState == ButtonsState.RIGHT_VISIBLE)
+                    dX = Math.min(dX, -rightRevealWidth);
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            }
-            else {
+            } else {
                 setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         }
@@ -112,7 +98,7 @@ public class SwipeControlHelperExisting extends ItemTouchHelper.Callback {
                 swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
                 if (swipeBack) {
                     if (dX < -rightRevealWidth) buttonShowedState = ButtonsState.RIGHT_VISIBLE;
-                    else if (dX > leftRevealWidth) buttonShowedState  = ButtonsState.LEFT_VISIBLE;
+                    else if (dX > leftRevealWidth) buttonShowedState = ButtonsState.LEFT_VISIBLE;
 
                     if (buttonShowedState != ButtonsState.GONE) {
                         setTouchDownListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -153,12 +139,13 @@ public class SwipeControlHelperExisting extends ItemTouchHelper.Callback {
 
                     if (buttonInstance != null && buttonInstance.contains(event.getX(), event.getY())) {
                         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
-                            View view = getHitView(getInflated(leftRevealResource, viewHolder),event.getX(), event.getY());
-                            if (view != null) onClicked(view.getTag(), viewHolder.getAdapterPosition());
-                        }
-                        else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
-                            View view = getHitView(getInflated(rightRevealResource, viewHolder),event.getX(), event.getY());
-                            if (view != null) onClicked(view.getTag(), viewHolder.getAdapterPosition());
+                            View view = getHitView(getInflated(leftRevealResource, viewHolder), event.getX(), event.getY());
+                            if (view != null)
+                                onClicked(view.getTag(), viewHolder.getAdapterPosition());
+                        } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
+                            View view = getHitView(getInflated(rightRevealResource, viewHolder), event.getX(), event.getY());
+                            if (view != null)
+                                onClicked(view.getTag(), viewHolder.getAdapterPosition());
                         }
                     }
 
@@ -205,27 +192,26 @@ public class SwipeControlHelperExisting extends ItemTouchHelper.Callback {
         buttonInstance = null;
         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
             buttonInstance = new RectF(canvas.getClipBounds());
-        }
-        else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
+        } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
             buttonInstance = new RectF(canvas.getClipBounds());
         }
     }
 
-    private  void setupRevealWidth(RecyclerView.ViewHolder viewHolder) {
+    private void setupRevealWidth(RecyclerView.ViewHolder viewHolder) {
         rightRevealWidth = getRevealWidth(getInflated(rightRevealResource, viewHolder), true);
         leftRevealWidth = getRevealWidth(getInflated(leftRevealResource, viewHolder), false);
     }
+
     private float getRevealWidth(View view, Boolean right) {
         float result = 0;
         if (view instanceof LinearLayout) {
             LinearLayout linearLayout = (LinearLayout) ((LinearLayout) view).getChildAt(0);
             if (right) result = linearLayout.getWidth();
-            for (int i = 0 ; i < linearLayout.getChildCount(); i++) {
+            for (int i = 0; i < linearLayout.getChildCount(); i++) {
                 if (right) {
                     if (linearLayout.getChildAt(i).getVisibility() == View.VISIBLE && linearLayout.getChildAt(i).getLeft() < result)
                         result = linearLayout.getChildAt(i).getLeft();
-                }
-                else {
+                } else {
                     if (linearLayout.getChildAt(i).getVisibility() == View.VISIBLE && linearLayout.getChildAt(i).getRight() > result)
                         result = linearLayout.getChildAt(i).getRight();
                 }
@@ -238,15 +224,16 @@ public class SwipeControlHelperExisting extends ItemTouchHelper.Callback {
     private View getHitView(View view, float x, float y) {
         if (view instanceof LinearLayout) {
             LinearLayout linearLayout = (LinearLayout) ((LinearLayout) view).getChildAt(0);
-            for (int i = 0 ; i < linearLayout.getChildCount(); i++) {
-                Rect rect= new Rect();
+            for (int i = 0; i < linearLayout.getChildCount(); i++) {
+                Rect rect = new Rect();
                 linearLayout.getChildAt(i).getHitRect(rect);
                 if (rect.contains((int) x - view.getLeft(), (int) y - view.getTop()))
                     return linearLayout.getChildAt(i);
             }
         }
-        return  null;
+        return null;
     }
+
     private LinearLayout getInflated(@LayoutRes int layoutResource, RecyclerView.ViewHolder viewHolder) {
         if (layoutResource != 0) {
             View itemView = viewHolder.itemView;
@@ -266,12 +253,21 @@ public class SwipeControlHelperExisting extends ItemTouchHelper.Callback {
         return null;
     }
 
-    public void onRevealInflated(View view, int position) {}
-    public void onClicked(Object tag, int position) {}
+    public void onRevealInflated(View view, int position) {
+    }
+
+    public void onClicked(Object tag, int position) {
+    }
 
     public void onDraw(Canvas c) {
         if (currentItemViewHolder != null) {
             drawButtons(c, currentItemViewHolder);
         }
+    }
+
+    enum ButtonsState {
+        GONE,
+        LEFT_VISIBLE,
+        RIGHT_VISIBLE
     }
 }

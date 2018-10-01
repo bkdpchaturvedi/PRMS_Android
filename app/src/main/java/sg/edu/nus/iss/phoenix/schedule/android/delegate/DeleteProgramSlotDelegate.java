@@ -4,27 +4,21 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.time.ZonedDateTime;
-import java.util.AbstractMap;
 
 import sg.edu.nus.iss.phoenix.schedule.android.controller.ScheduleController;
-import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.utilities.JSONEnvelopHelper;
-import sg.edu.nus.iss.phoenix.utilities.JSONHelper;
 
 import static sg.edu.nus.iss.phoenix.core.android.delegate.DelegateHelper.PRMS_BASE_URL_SCHEDULE;
 
-public class DeleteProgramSlotDelegate extends AsyncTask <ZonedDateTime, Void, String> {
+public class DeleteProgramSlotDelegate extends AsyncTask<ZonedDateTime, Void, String> {
     private static final String TAG = DeleteProgramSlotDelegate.class.getName();
 
     private final ScheduleController scheduleController;
@@ -53,7 +47,7 @@ public class DeleteProgramSlotDelegate extends AsyncTask <ZonedDateTime, Void, S
             httpURLConnection.setInstanceFollowRedirects(false);
             httpURLConnection.setRequestMethod("DELETE");
             httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
-            httpURLConnection.setUseCaches (false);
+            httpURLConnection.setUseCaches(false);
             httpURLConnection.setDoInput(true);
             Log.v(TAG, "Http DELETE response " + httpURLConnection.getResponseCode());
         } catch (IOException exception) {
@@ -76,7 +70,7 @@ public class DeleteProgramSlotDelegate extends AsyncTask <ZonedDateTime, Void, S
             }
             if (httpURLConnection != null) httpURLConnection.disconnect();
         }
-       return jsonResponse;
+        return jsonResponse;
     }
 
     @Override

@@ -14,7 +14,7 @@ import sg.edu.nus.iss.phoenix.core.android.controller.entity.User;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 
 public class JSONHelper {
-    private static final String TAG =  JSONHelper.class.getName();
+    private static final String TAG = JSONHelper.class.getName();
 
     public static JSONObject toJSON(ProgramSlot programSlot) {
         JSONObject result = new JSONObject();
@@ -65,7 +65,7 @@ public class JSONHelper {
     public static JSONArray toJSON(List<Role> roles) {
         JSONArray result = new JSONArray();
         if (roles != null) {
-            for (Role role: roles) {
+            for (Role role : roles) {
                 if (role != null) {
                     result.put(toJSON(role));
                 }
