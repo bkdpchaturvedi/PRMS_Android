@@ -59,7 +59,7 @@ public class MainController {
         userId = "<not logged in>";
         ControlFactory.getLoginController().logout();
     }
-    public void maintainedSchedule() {
+    public void scheduleMaintained() {
         startUseCase(userId);
     }
     public void selectMaintainSchedule() {

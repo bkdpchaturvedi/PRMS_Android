@@ -91,8 +91,8 @@ public class DateTimePickerDialog extends DialogFragment implements DatePicker.O
                 dismiss();
             }
         });
-        datePicker = (DatePicker) view.findViewById(R.id.dp_datetimedialog);
-        timePicker = (TimePicker) view.findViewById(R.id.tp_datetimedialog);
+        datePicker = view.findViewById(R.id.dp_datetimedialog);
+        timePicker = view.findViewById(R.id.tp_datetimedialog);
         datePicker.setOnDateChangedListener(this);
         timePicker.setOnTimeChangedListener(this);
         timePicker.setIs24HourView(true);

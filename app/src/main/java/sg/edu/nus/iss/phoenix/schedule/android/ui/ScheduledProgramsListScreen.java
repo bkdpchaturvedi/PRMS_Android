@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.CalendarView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import sg.edu.nus.iss.phoenix.R;
 import sg.edu.nus.iss.phoenix.core.android.controller.ControlFactory;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 
-public class ScheduleProgramsListScreen extends AppCompatActivity implements ProgramSlotAdapter.ProgramSlotViewHolderClick {
+public class ScheduledProgramsListScreen extends AppCompatActivity implements ProgramSlotAdapter.ProgramSlotViewHolderClick {
     CalendarView scheduleView=null;
     private ProgramSlotAdapter mPSAdapter;
     private ProgramSlot selectedPS = null;
@@ -44,7 +46,7 @@ public class ScheduleProgramsListScreen extends AppCompatActivity implements Pro
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ControlFactory.getScheduleController().selectCreateProgramSlot();
+                selectCreateProgramSlot();
             }
         });
         tv_itemempty_value=(TextView) findViewById(R.id.tv_itemempty_value);
@@ -53,6 +55,10 @@ public class ScheduleProgramsListScreen extends AppCompatActivity implements Pro
         setupAdapter();
         setupRecyclerView();
         setupCalender();
+    }
+
+    private  void selectCreateProgramSlot() {
+        ControlFactory.getScheduleController().selectCreateProgramSlot();
     }
 
     private void setupAdapter() {
@@ -81,7 +87,7 @@ public class ScheduleProgramsListScreen extends AppCompatActivity implements Pro
                 ProgramSlot selectecPS = mPSAdapter.getProgramSlots().get(position);
                 switch (tag.toString()) {
                     case "copy":
-                        ControlFactory.getScheduleController().selectCopyProgramSlot(selectecPS);
+                        selectCopyProgramSlot(selectecPS);
                         break;
                 }
             }
@@ -98,6 +104,11 @@ public class ScheduleProgramsListScreen extends AppCompatActivity implements Pro
             }
         });
     }
+
+    private void selectCopyProgramSlot(ProgramSlot programSlot) {
+        ControlFactory.getScheduleController().selectCopyProgramSlot(programSlot);
+    }
+
     private  void setupCalender() {
         Date d = new Date();
         scheduleView = (CalendarView) findViewById(R.id.scheduleCalender);
@@ -115,7 +126,7 @@ public class ScheduleProgramsListScreen extends AppCompatActivity implements Pro
 
     @Override
     public void onBackPressed() {
-        ControlFactory.getScheduleController().maintainedSchedule();
+        ControlFactory.getScheduleController().scheduleMaintained();
     }
 
     private void selectViewProgramSlots(ZonedDateTime dateOfProgram) {
@@ -143,7 +154,7 @@ public class ScheduleProgramsListScreen extends AppCompatActivity implements Pro
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-       ControlFactory.getScheduleController().onDisplayProgramListScreen(this);
+       ControlFactory.getScheduleController().onDisplayScheduledProgramListScreen(this);
         tv_itemempty_value.setVisibility(View.GONE);
         psbar.setVisibility(View.VISIBLE);
     }
@@ -152,6 +163,14 @@ public class ScheduleProgramsListScreen extends AppCompatActivity implements Pro
     public void onItemClick(ProgramSlotAdapter.PSViewHolder viewHolder) {
         int position =viewHolder.getAdapterPosition();
         ProgramSlot programSlot = mPSAdapter.getProgramSlots().get(position);
+        selectViewProgramSlot(programSlot);
+    }
+
+    private void selectViewProgramSlot(ProgramSlot programSlot) {
         ControlFactory.getScheduleController().selectViewProgramSlot(programSlot);
+    }
+
+    public void displayErrorMessage(String message) {
+        Toast.makeText(this, "ERROR: " + message, Toast.LENGTH_SHORT).show();
     }
 }

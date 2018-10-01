@@ -37,14 +37,18 @@ public class ReviewSelectPresenterProducerController {
         if (response.getError() != null) {
             presenterProducerScreen.displayErrorMessage(response.getError().getError() + ": "+ response.getError().getDescription());
         }
-        presenterProducerScreen.displayPresenters(response.getData());
+        if (response.getData() != null) {
+            presenterProducerScreen.displayPresenters(response.getData());
+        }
     }
 
     public void producersRetrieved(JSONEnvelop<List<User>> response) {
         if (response.getError() != null) {
             presenterProducerScreen.displayErrorMessage(response.getError().getError() + ": "+ response.getError().getDescription());
         }
-        presenterProducerScreen.displayProducers(response.getData());
+        if (response.getData() != null) {
+            presenterProducerScreen.displayProducers(response.getData());
+        }
     }
 
     public void selectGetAllPresenters() {

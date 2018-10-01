@@ -32,6 +32,14 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
     private static final String START_DATETIME = "START_DATETIME";
     private static final String END_DATETIME = "END_DATETIME";
 
+    private EditText etRadioProgramName;
+    private TextView tvRadioProgramDescription;
+    private EditText etPresenterName;
+    private EditText etProducerName;
+    private EditText etDateOfProgramStart;
+    private EditText etDateOfProgramEnd;
+    private TextView tvDateOfProgramEndLabel;
+
     private ZonedDateTime originalDateOfProgram;
     private ProgramSlot currentProgramSlot;
 
@@ -47,32 +55,36 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
         displayProgramSlot();
     }
 
+    private void setupLabels() {
+        etRadioProgramName = ((EditText) findViewById(R.id.et_programslot_radioprogram_name));
+        tvRadioProgramDescription = ((TextView) findViewById(R.id.tv_programslot_radioprogram_description));
+        etPresenterName = ((EditText) findViewById(R.id.et_programslot_presenter_name));
+        etProducerName = ((EditText) findViewById(R.id.et_programslot_producer_name));
+        etDateOfProgramStart = ((EditText) findViewById(R.id.et_programslot_dateofprogram_start));
+        etDateOfProgramEnd = ((EditText) findViewById(R.id.et_programslot_dateofprogram_end));
+        tvDateOfProgramEndLabel = ((TextView) findViewById(R.id.tv_programslot_dateofprogram_end_label));
+    }
+
     private void displayProgramSlot() {
         if (currentProgramSlot.getRadioProgram() != null) {
-            ((EditText) findViewById(R.id.et_programslot_radioprogram_name))
-                    .setText(currentProgramSlot.getRadioProgram().getRadioProgramName());
-            ((TextView) findViewById(R.id.tv_programslot_radioprogram_description))
-                    .setText(currentProgramSlot.getRadioProgram().getRadioProgramDescription());
+            etRadioProgramName.setText(currentProgramSlot.getRadioProgram().getRadioProgramName());
+            tvRadioProgramDescription.setText(currentProgramSlot.getRadioProgram().getRadioProgramDescription());
         }
 
         if (currentProgramSlot.getPresenter() != null) {
-            ((EditText) findViewById(R.id.et_programslot_presenter_name))
-                    .setText(currentProgramSlot.getPresenter().getUserName());
+            etPresenterName.setText(currentProgramSlot.getPresenter().getUserName());
         }
 
         if (currentProgramSlot.getProducer() != null) {
-            ((EditText) findViewById(R.id.et_programslot_producer_name))
-                    .setText(currentProgramSlot.getProducer().getUserName());
+            etProducerName.setText(currentProgramSlot.getProducer().getUserName());
         }
 
         if (currentProgramSlot.getDateOfProgram() != null) {
-            ((EditText) findViewById(R.id.et_programslot_dateofprogram_start))
-                    .setText(currentProgramSlot.getDateOfProgram().toString());
+            etDateOfProgramStart.setText(currentProgramSlot.getDateOfProgram().toString());
         }
 
         if (currentProgramSlot.getDateOfProgram() != null && currentProgramSlot.getDuration() != null) {
-            ((EditText) findViewById(R.id.et_programslot_dateofprogram_end))
-                    .setText(currentProgramSlot.getDateOfProgram()
+            etDateOfProgramEnd.setText(currentProgramSlot.getDateOfProgram()
                             .plusSeconds(currentProgramSlot.getDuration()
                             .getSeconds()).toString()
                     );
@@ -82,15 +94,15 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
         if (currentProgramSlot.getDateOfProgram() == null) {
             visibility = View.GONE;
         }
-        findViewById(R.id.tv_programslot_dateofprogram_end_label).setVisibility(visibility);
-        findViewById(R.id.et_programslot_dateofprogram_end).setVisibility(visibility);
+        tvDateOfProgramEndLabel.setVisibility(visibility);
+        etDateOfProgramEnd.setVisibility(visibility);
     }
 
-    public void selectRadioProgram(){
+    private void selectRadioProgram(){
         ControlFactory.getScheduleController().selectRadioProgram(currentProgramSlot.getRadioProgram());
     }
 
-    public void selectPresenterProducer(String field) {
+    private void selectPresenterProducer(String field) {
         ControlFactory.getScheduleController().selectPresenterProducer(currentProgramSlot.getPresenter(), currentProgramSlot.getProducer(), field);
     }
 
@@ -132,10 +144,13 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_program_slot);
         currentProgramSlot = (ProgramSlot) getIntent().getSerializableExtra(ConstantHelper.PROGRAM_SLOT);
-        setupControls();
+        setupRadioProgramControls();
+        setupPresenterProducerControls();
+        setupDateOfProgramControls();
+        setupLabels();
     }
 
-    private void setupControls() {
+    private void setupRadioProgramControls() {
 
         findViewById(R.id.et_programslot_radioprogram_name).setOnClickListener(
                 new View.OnClickListener() {
@@ -145,7 +160,9 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
                     }
                 }
         );
+    }
 
+    private void setupPresenterProducerControls() {
         findViewById(R.id.et_programslot_presenter_name).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -163,7 +180,9 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
                     }
                 }
         );
+    }
 
+    private void setupDateOfProgramControls() {
         findViewById(R.id.et_programslot_dateofprogram_start).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -199,11 +218,6 @@ public class MaintainScheduleScreen extends AppCompatActivity implements DateTim
                                     , currentProgramSlot.getDateOfProgram()
                                     , DateHelper.getWeekEndDate(currentProgramSlot.getDateOfProgram()
                                             .toLocalDate()).plusDays(1).atStartOfDay(ZoneOffset.systemDefault()));
-                        } else {
-//                            showDateTimePickerDialog(END_DATETIME
-//                                    , null
-//                                    , null
-//                                    , null);
                         }
                     }
                 }
@@ -254,7 +268,7 @@ return true;
     }
 
     public void displayErrorMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ERROR: " + message, Toast.LENGTH_SHORT).show();
     }
 
     public void displaySuccessMessage(String message) {
@@ -357,7 +371,7 @@ return true;
     }
 
     public void unloadScreen() {
-        Log.v(TAG, "Canceling creating/editing program slot...");
+        Log.v(TAG, "Canceling/finishing of creating/editing program slot...");
         ControlFactory.getScheduleController().onUnloadMaintainScheduleScreen(currentProgramSlot);
         finish();
     }

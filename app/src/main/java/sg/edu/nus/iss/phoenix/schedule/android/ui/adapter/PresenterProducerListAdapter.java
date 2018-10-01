@@ -104,7 +104,10 @@ public class PresenterProducerListAdapter  extends RecyclerView.Adapter<Presente
 
                                 } else {
                                     if (currentSelected >= 0) {
-                                        ((PresenterProducerViewHolder) ((RecyclerView) v.getParent()).findViewHolderForAdapterPosition(currentSelected)).setSelected(false);
+                                        PresenterProducerViewHolder currentPresenterProducerViewHolder = (PresenterProducerViewHolder) ((RecyclerView) v.getParent()).findViewHolderForAdapterPosition(currentSelected);
+                                        if (currentPresenterProducerViewHolder != null) {
+                                            currentPresenterProducerViewHolder.setSelected(false);
+                                        }
                                     }
                                     switch (selectionMode) {
                                         case SINGLE_MODE:

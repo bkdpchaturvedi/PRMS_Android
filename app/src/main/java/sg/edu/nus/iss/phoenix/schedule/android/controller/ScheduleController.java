@@ -1,17 +1,9 @@
 package sg.edu.nus.iss.phoenix.schedule.android.controller;
 
 import android.content.Intent;
-import android.util.Log;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -28,28 +20,28 @@ import sg.edu.nus.iss.phoenix.schedule.android.delegate.RetrieveProgramSlotDeleg
 import sg.edu.nus.iss.phoenix.schedule.android.delegate.UpdateProgramSlotDelegate;
 import sg.edu.nus.iss.phoenix.schedule.android.entity.ProgramSlot;
 import sg.edu.nus.iss.phoenix.schedule.android.ui.MaintainScheduleScreen;
-import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduleProgramsListScreen;
+import sg.edu.nus.iss.phoenix.schedule.android.ui.ScheduledProgramsListScreen;
 
 public class ScheduleController implements ReviewSelectRadioProgramReturnable, ReviewSelectPresenterProducerReturnable {
 
     private static final String TAG = ScheduleController.class.getName();
 
-    private ScheduleProgramsListScreen scheduleProgramsListScreen;
+    private ScheduledProgramsListScreen scheduledProgramsListScreen;
     private MaintainScheduleScreen maintainScheduleScreen;
 
     public void startUseCase() {
-        Intent intent = new Intent(MainController.getApp(), ScheduleProgramsListScreen.class);
+        Intent intent = new Intent(MainController.getApp(), ScheduledProgramsListScreen.class);
         MainController.displayScreen(intent);
     }
 
 
-    public void onDisplayProgramListScreen(ScheduleProgramsListScreen scheduleProgramsListScreen) {
-        this.scheduleProgramsListScreen = scheduleProgramsListScreen;
+    public void onDisplayScheduledProgramListScreen(ScheduledProgramsListScreen scheduledProgramsListScreen) {
+        this.scheduledProgramsListScreen = scheduledProgramsListScreen;
        getProgramSlots( ZonedDateTime.now());
     }
 
-    private void getProgramSlots(ZonedDateTime date) {
-        new RetrieveProgramSlotDelegate(this).execute(date.toString());
+    private void getProgramSlots(ZonedDateTime dateOfProgram) {
+        new RetrieveProgramSlotDelegate(this).execute(dateOfProgram);
     }
 
     public void onDisplayMaintainScheduleScreen(MaintainScheduleScreen maintainScheduleScreen, ProgramSlot programSlot) {
@@ -63,10 +55,10 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
 
     public void programSlotsRetrieved(ZonedDateTime dateOfProgram, JSONEnvelop<List<ProgramSlot>> response) {
         if (response.getError() != null) {
-            maintainScheduleScreen.displayErrorMessage(response.getError().getDescription());
+            scheduledProgramsListScreen.displayErrorMessage(response.getError().getDescription());
         }
         if (response.getData() != null) {
-            scheduleProgramsListScreen.displayProgramSlots(dateOfProgram, response.getData());
+            scheduledProgramsListScreen.displayProgramSlots(dateOfProgram, response.getData());
         }
     }
 
@@ -77,8 +69,13 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
     }
 
     public void selectCreateProgramSlot(ProgramSlot programSlot) {
-        programSlot.setAssignedBy(MainController.getUserId());
-        new CreateProgramSlotDelegate(this).execute(programSlot);
+        new CreateProgramSlotDelegate(this).execute(new ProgramSlot(
+                programSlot.getDateOfProgram()
+                , programSlot.getDuration()
+                , programSlot.getRadioProgram()
+                , programSlot.getPresenter()
+                , programSlot.getProducer()
+                , MainController.getUserId()));
     }
 
     public void selectViewProgramSlot(ProgramSlot programSlot) {
@@ -101,8 +98,8 @@ public class ScheduleController implements ReviewSelectRadioProgramReturnable, R
     }
 
 
-    public void maintainedSchedule() {
-        ControlFactory.getMainController().maintainedSchedule();
+    public void scheduleMaintained() {
+        ControlFactory.getMainController().scheduleMaintained();
     }
 
     public void selectRadioProgram(RadioProgram radioProgram) {

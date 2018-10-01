@@ -26,9 +26,25 @@ public class JSONEnvelopHelper {
 
     private static final String TAG = RetrieveUsersDelegate.class.getName();
 
+    private static boolean isJSON(String response) {
+        try {
+            new JSONObject(response);
+        } catch (JSONException exception) {
+            try {
+                new JSONArray(response);
+            } catch (JSONException exception1) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public static JSONEnvelop<Boolean>  parseEnvelopBoolean(String response) {
         JSONEnvelop<Boolean> result = new JSONEnvelop<>();
+        if (!isJSON(response)) {
+            result.setError(new Error("", response));
+            return result;
+        }
         try {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.has("data")) {
@@ -46,6 +62,10 @@ public class JSONEnvelopHelper {
 
     public static JSONEnvelop<ProgramSlot> parseEnvelopProgramSlot(String response) {
         JSONEnvelop<ProgramSlot> result = new JSONEnvelop<>();
+        if (!isJSON(response)) {
+            result.setError(new Error("", response));
+            return result;
+        }
         try {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.has("data")) {
@@ -56,12 +76,17 @@ public class JSONEnvelopHelper {
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
+            result.setError(new Error("", e.getMessage()));
         }
         return result;
     }
 
     public static JSONEnvelop<List<ProgramSlot>> parseEnvelopProgramSlots(String response) {
         JSONEnvelop<List<ProgramSlot>> result = new JSONEnvelop<>();
+        if (!isJSON(response)) {
+            result.setError(new Error("", response));
+            return result;
+        }
         try {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.has("data")) {
@@ -72,12 +97,17 @@ public class JSONEnvelopHelper {
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
+            result.setError(new Error("", e.getMessage()));
         }
         return result;
     }
 
     public static JSONEnvelop<User> parseEnvelopUser(String response) {
         JSONEnvelop<User> result = new JSONEnvelop<>();
+        if (!isJSON(response)) {
+            result.setError(new Error("", response));
+            return result;
+        }
         try {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.has("data")) {
@@ -88,12 +118,17 @@ public class JSONEnvelopHelper {
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
+            result.setError(new Error("", e.getMessage()));
         }
         return result;
     }
 
     public static JSONEnvelop<List<User>> parseEnvelopUsers(String response) {
         JSONEnvelop<List<User>> result = new JSONEnvelop<>();
+        if (!isJSON(response)) {
+            result.setError(new Error("", response));
+            return result;
+        }
         try {
             JSONObject jsonObject = new JSONObject(response);
             if (jsonObject.has("data")) {
@@ -104,6 +139,7 @@ public class JSONEnvelopHelper {
             }
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
+            result.setError(new Error("", e.getMessage()));
         }
         return result;
     }

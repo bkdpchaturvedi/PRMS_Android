@@ -11,11 +11,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +31,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
     private User selectedPresenter;
     private User selectedProducer;
     private String field;
-    private ProgressBar pb_pp_loading_indicator=null;
+    private ProgressBar progressBar =null;
 
     public void displayProducer(final List<User> producers) {
         presenterProducerListAdapter.setUsers(producers);
@@ -43,7 +40,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
 
     public void displayPresenter(final List<User> presenters) {
         presenterProducerListAdapter.setUsers(presenters);
-        pb_pp_loading_indicator.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void setupControls() {
@@ -60,13 +57,17 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
 
     public void selectGetAllPresenters() {
         field = ConstantHelper.PRESENTERS;
-        pb_pp_loading_indicator.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        ((TextView) findViewById(R.id.tv_reviewselectpresenterproducer_norecoundfound))
+                .setVisibility(View.GONE);
         ControlFactory.getReviewSelectPresenterProducerController().selectGetAllPresenters();
     }
 
     public void selectGetAllProducers() {
         field = ConstantHelper.PRODUCERS;
-        pb_pp_loading_indicator.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        ((TextView) findViewById(R.id.tv_reviewselectpresenterproducer_norecoundfound))
+                .setVisibility(View.GONE);
         ControlFactory.getReviewSelectPresenterProducerController().selectGetAllProducers();
     }
 
@@ -95,7 +96,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
     }
 
     public void displayErrorMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "ERROR: " + message, Toast.LENGTH_SHORT).show();
     }
 
     public void displaySuccessMessage(String message) {
@@ -120,7 +121,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
         }
         presenterProducerListAdapter.setUsers(presenters);
         presenterProducerListAdapter.notifyDataSetChanged();
-        pb_pp_loading_indicator.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
 
     }
 
@@ -142,7 +143,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
         }
         presenterProducerListAdapter.setUsers(producers);
         presenterProducerListAdapter.notifyDataSetChanged();
-        pb_pp_loading_indicator.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -152,7 +153,7 @@ public class PresenterProducerScreen extends AppCompatActivity implements RadioG
         selectedPresenter = (User) getIntent().getSerializableExtra(ConstantHelper.PRESENTER);
         selectedProducer = (User) getIntent().getSerializableExtra(ConstantHelper.PRODUCER);
         field = getIntent().getStringExtra(ConstantHelper.FIELD);
-        pb_pp_loading_indicator=(ProgressBar)findViewById(R.id.pb_pp_loading_indicator) ;
+        progressBar =(ProgressBar)findViewById(R.id.pb_pp_loading_indicator) ;
 
         setupControls();
     }
